@@ -12,11 +12,13 @@ Uso:
 import argparse
 import json
 import logging
+import re
 import time
+import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
-
-import feedparser
 
 # ---------------------------------------------------------------------------
 # Configuração
@@ -25,7 +27,8 @@ import feedparser
 RSS_URL = "https://rss.uol.com.br/feed/politica.xml"
 OUTPUT_FILE = Path("uol_politica_noticias.json")
 LOG_FILE = Path("uol_politics_news.log")
-MAX_SAVED_ITEMS = 500  # limite de notícias mantidas no arquivo
+MAX_SAVED_ITEMS = 500
+REQUEST_TIMEOUT = 15
 
 logging.basicConfig(
     level=logging.INFO,
@@ -43,31 +46,44 @@ log = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 
-def fetch_news(url: str) -> list[dict]:
-    """Busca e parseia o feed RSS retornando lista de notícias."""
-    log.info("Buscando feed: %s", url)
-    feed = feedparser.parse(url)
+def fetch_feed_xml(url: str) -> str:
+    """Faz download do feed RSS e retorna o conteúdo como string."""
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": "Mozilla/5.0 (compatible; UOLPoliticsBot/1.0)"},
+    )
+    with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
+        return resp.read().decode("utf-8", errors="replace")
 
-    if feed.bozo:
-        raise ValueError(f"Erro ao parsear feed RSS: {feed.bozo_exception}")
+
+def parse_feed(xml_content: str) -> list[dict]:
+    """Parseia o XML RSS e extrai os campos relevantes de cada item."""
+    root = ET.fromstring(xml_content)
+    channel = root.find("channel")
+    if channel is None:
+        raise ValueError("Feed RSS inválido: elemento <channel> não encontrado.")
 
     items = []
-    for entry in feed.entries:
-        published_raw = entry.get("published_parsed") or entry.get("updated_parsed")
-        published = (
-            datetime(*published_raw[:6], tzinfo=timezone.utc).isoformat()
-            if published_raw
-            else None
-        )
+    for item in channel.findall("item"):
+
+        def text(tag: str) -> str:
+            el = item.find(tag)
+            return (el.text or "").strip() if el is not None else ""
+
+        pub_date_raw = text("pubDate")
+        try:
+            published = parsedate_to_datetime(pub_date_raw).isoformat() if pub_date_raw else None
+        except Exception:
+            published = pub_date_raw or None
 
         items.append(
             {
-                "titulo": entry.get("title", "").strip(),
-                "link": entry.get("link", "").strip(),
-                "resumo": _clean_html(entry.get("summary", "")),
+                "titulo": text("title"),
+                "link": text("link"),
+                "resumo": _clean_html(text("description")),
                 "publicado_em": published,
-                "autor": entry.get("author", "").strip(),
-                "tags": [t.get("term", "") for t in entry.get("tags", [])],
+                "autor": text("{http://purl.org/dc/elements/1.1/}creator") or text("author"),
+                "categoria": text("category"),
             }
         )
 
@@ -102,8 +118,6 @@ def save(path: Path, data: dict) -> None:
 
 
 def _clean_html(text: str) -> str:
-    """Remove tags HTML simples do texto."""
-    import re
     return re.sub(r"<[^>]+>", "", text).strip()
 
 
@@ -114,8 +128,10 @@ def _clean_html(text: str) -> str:
 
 def update_once() -> None:
     """Executa uma rodada completa de atualização."""
+    log.info("Buscando feed: %s", RSS_URL)
     try:
-        fresh = fetch_news(RSS_URL)
+        xml_content = fetch_feed_xml(RSS_URL)
+        fresh = parse_feed(xml_content)
         data = load_existing(OUTPUT_FILE)
         merged, added = merge_news(data["noticias"], fresh)
 
