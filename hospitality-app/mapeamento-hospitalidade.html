@@ -317,9 +317,6 @@
     <div class="gs-save-row" style="margin-top:1rem;">
       <button class="btn-gs btn-gs-save" onclick="gsSave()">Salvar</button>
     </div>
-    <div style="text-align:center;margin-bottom:30px;">
-      <a href="#" onclick="gsResetUrl();return false;" style="font-size:0.75rem;color:#9ca3af;text-decoration:underline;">reconfigurar planilha</a>
-    </div>
   </div>
 </div>
 
@@ -722,28 +719,18 @@ function restartApp() {
 initStep0();
 
 // ===== GOOGLE SHEETS =====
-var GS_KEY = 'hosp_gs_url';
-function gsGetUrl() { try { return localStorage.getItem(GS_KEY) || ''; } catch(e) { return ''; } }
-function gsSetUrl(u) { try { localStorage.setItem(GS_KEY, u); } catch(e) {} }
-function gsResetUrl() { try { localStorage.removeItem(GS_KEY); } catch(e) {} gsToast('Planilha desconfigurada. Clique em Salvar para configurar novamente.', ''); }
+var GS_URL = 'https://script.google.com/macros/s/AKfycbxhsOG5I0wkOtyX4WUI-OkNIDXa3PXroUW9kFbq4OmSwKTgL1Zgy9U172M92eDJuPm5/exec';
 function gsToast(msg, type) { var t = document.getElementById('gsToast'); if (!t) return; t.textContent = msg; t.className = 'gs-toast gs-toast--show' + (type ? ' gs-toast--' + type : ''); clearTimeout(t._timer); t._timer = setTimeout(function() { t.className = 'gs-toast'; }, 4000); }
 function gsSave() {
-  var url = gsGetUrl();
-  if (!url) {
-    url = window.prompt('Cole aqui a URL do Google Apps Script para salvar os resultados na sua planilha:\n\n(Será memorizada neste navegador — você só precisa fazer isso uma vez.)');
-    if (!url || !url.trim()) return;
-    gsSetUrl(url.trim());
-    url = url.trim();
-  }
   var c = calcCentroids(); var qId = getQuadrant(c.xBar, c.yBar); var qObj = QUADRANTS[qId];
   var axNames = ['culturalAlignment','managerialPractices','interpersonalClimate','structuralAccessibility','responsiveness'];
   var axes = {};
   for (var i = 0; i < 5; i++) { axes[axNames[i]] = { internal: Math.round(c.empScores[i]), external: Math.round(c.custScores[i]) }; }
   var data = { app: 'opendata', companyName: state.company, sector: state.sector, internalCentroid: Math.round(c.yBar), externalCentroid: Math.round(c.xBar), quadrant: qObj ? qObj.name : qId, axes: axes };
   gsToast('Salvando na planilha…', '');
-  fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
+  fetch(GS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
     .then(function() { gsToast('✅ Salvo na planilha do Google Sheets!', 'success'); })
-    .catch(function() { gsToast('❌ Falha de rede. Verifique a URL do Apps Script.', 'error'); });
+    .catch(function() { gsToast('❌ Falha de rede.', 'error'); });
 }
 </script>
 
