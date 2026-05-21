@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapeamento de Hospitalidade — Framework Silva et al.</title>
+<style>
+  :root {
+    --accent: #0d9488;
+    --accent-dark: #0f766e;
+    --accent-light: #ccfbf1;
+    --accent-mid: #5eead4;
+    --bg: #f0fdfa;
+    --surface: #ffffff;
+    --surface2: #f8fffe;
+    --border: #99f6e4;
+    --text: #134e4a;
+    --text-muted: #5eead4;
+    --text-secondary: #0f766e;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --q1: #d1fae5;
+    --q2: #dbeafe;
+    --q3: #fef9c3;
+    --q4: #fee2e2;
+    --radius: 12px;
+    --shadow: 0 2px 12px rgba(13,148,136,0.10);
+    --shadow-lg: 0 6px 32px rgba(13,148,136,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 60%, #14b8a6 100%);
+    color: white;
+    padding: 22px 20px 18px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+  .app-header h1 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  .app-header p {
+    font-size: 0.82rem;
+    opacity: 0.88;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: white;
+    padding: 10px 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+  }
+  .progress-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: var(--accent-light);
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+  .progress-bar-fill {
+    height: 6px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+    border-radius: 3px;
+    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* MAIN CONTENT */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-desc {
+    font-size: 0.88rem;
+    color: #4b5563;
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+
+  /* FORM */
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 7px;
+  }
+  .form-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--surface2);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--accent); background: white; }
+  .form-select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--surface2);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230d9488' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .form-select:focus { border-color: var(--accent); background-color: white; }
+
+  /* AXIS CARDS */
+  .axis-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .axis-card.complete {
+    border-color: var(--accent);
+    box-shadow: 0 2px 12px rgba(13,148,136,0.18);
+  }
+  .axis-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .axis-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .axis-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .axis-check {
+    margin-left: auto;
+    color: var(--accent);
+    font-size: 1.2rem;
+    display: none;
+  }
+  .axis-card.complete .axis-check { display: inline; }
+  .axis-desc {
+    font-size: 0.83rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    padding-left: 46px;
+  }
+
+  /* SELECTOR GROUPS */
+  .selector-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 7px;
+    margin-top: 12px;
+  }
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .btn-sel {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-sel:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent-dark);
+  }
+  .btn-sel.selected {
+    background: var(--accent);
+    border-color: var(--accent-dark);
+    color: white;
+    font-weight: 600;
+  }
+
+  /* RATING BUTTONS (stars style) */
+  .btn-rating {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 44px;
+    text-align: center;
+  }
+  .btn-rating:hover {
+    border-color: #f59e0b;
+    background: #fef9c3;
+    color: #92400e;
+  }
+  .btn-rating.selected {
+    background: #f59e0b;
+    border-color: #d97706;
+    color: white;
+  }
+
+  /* NAVIGATION */
+  .nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 14px 16px;
+    background: white;
+    border-top: 1px solid var(--border);
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    box-shadow: 0 -3px 12px rgba(13,148,136,0.08);
+  }
+  .btn-nav {
+    padding: 11px 24px;
+    border-radius: 9px;
+    font-size: 0.93rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    border: none;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .btn-back {
+    background: var(--surface2);
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border);
+  }
+  .btn-back:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent-dark); }
+  .btn-next {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: white;
+    box-shadow: 0 2px 8px rgba(13,148,136,0.3);
+  }
+  .btn-next:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(13,148,136,0.4); }
+  .btn-next:disabled {
+    background: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .nav-counter {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* RESULTS */
+  .results-hero {
+    background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 100%);
+    color: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .results-hero h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+  .results-hero p { font-size: 0.85rem; opacity: 0.9; }
+
+  .gauges-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .gauge-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 18px 12px 14px;
+    text-align: center;
+  }
+  .gauge-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .gauge-value {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-top: 2px;
+    line-height: 1;
+  }
+  .gauge-value.internal { color: var(--blue); }
+  .gauge-value.external { color: var(--green); }
+  .gauge-sub { font-size: 0.75rem; color: #6b7280; margin-top: 3px; }
+
+  .matrix-section {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .section-title::before {
+    content: '';
+    width: 4px; height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* AXIS BARS */
+  .axis-bars {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .bar-row {
+    margin-bottom: 16px;
+  }
+  .bar-row:last-child { margin-bottom: 0; }
+  .bar-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+  }
+  .bar-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .bar-scores { font-size: 0.78rem; color: #6b7280; }
+  .bar-track {
+    width: 100%;
+    height: 9px;
+    background: #f3f4f6;
+    border-radius: 5px;
+    margin-bottom: 4px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 9px;
+    border-radius: 5px;
+    width: 0;
+    transition: width 0.7s cubic-bezier(.4,0,.2,1);
+  }
+  .bar-fill.internal { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+  .bar-fill.external { background: linear-gradient(90deg, #34d399, #059669); }
+  .bar-legend {
+    display: flex;
+    gap: 14px;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .legend-dot.internal { background: #2563eb; }
+  .legend-dot.external { background: #059669; }
+
+  /* QUADRANT CARD */
+  .quadrant-card {
+    border-radius: var(--radius);
+    border: 2px solid;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .quadrant-card.q1 { background: #f0fdf4; border-color: #86efac; }
+  .quadrant-card.q2 { background: #eff6ff; border-color: #93c5fd; }
+  .quadrant-card.q3 { background: #fefce8; border-color: #fde047; }
+  .quadrant-card.q4 { background: #fef2f2; border-color: #fca5a5; }
+  .quadrant-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .quadrant-card.q1 .quadrant-name { color: #15803d; }
+  .quadrant-card.q2 .quadrant-name { color: #1d4ed8; }
+  .quadrant-card.q3 .quadrant-name { color: #a16207; }
+  .quadrant-card.q4 .quadrant-name { color: #b91c1c; }
+  .quadrant-desc {
+    font-size: 0.87rem;
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .quadrant-impl {
+    font-size: 0.83rem;
+    color: #4b5563;
+    line-height: 1.55;
+  }
+  .quadrant-impl strong { color: #374151; }
+
+  /* PRIORITIES */
+  .priorities-list {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .priority-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .priority-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .priority-badge {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .priority-content {}
+  .priority-axis { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .priority-gap {
+    font-size: 0.78rem;
+    color: #6b7280;
+    margin-bottom: 5px;
+  }
+  .priority-gap .gap-num {
+    font-weight: 700;
+    color: var(--danger);
+  }
+  .priority-rec { font-size: 0.82rem; color: #4b5563; line-height: 1.5; }
+
+  /* FOOTER NOTE */
+  .footnote {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 30px;
+  }
+  .footnote p {
+    font-size: 0.78rem;
+    color: #6b7280;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .footnote p:last-child { margin-bottom: 0; }
+  .footnote strong { color: #374151; }
+
+  /* RESTART */
+  .btn-restart {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    background: var(--surface);
+    border: 1.5px solid var(--accent);
+    color: var(--accent-dark);
+    border-radius: 9px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    margin-bottom: 30px;
+  }
+  .btn-restart:hover { background: var(--accent-light); }
+
+  /* STEP 0 HERO */
+  .step0-hero {
+    text-align: center;
+    padding: 28px 0 10px;
+  }
+  .step0-hero .icon-big {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .step0-hero h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .step0-hero p {
+    font-size: 0.88rem;
+    color: #6b7280;
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .step0-hero .framework-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 20px;
+  }
+  .framework-pill {
+    font-size: 0.75rem;
+    padding: 4px 11px;
+    border-radius: 99px;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    font-weight: 600;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .gauges-row { grid-template-columns: 1fr; }
+    .btn-sel, .btn-rating { font-size: 0.78rem; padding: 7px 10px; }
+    .app-header h1 { font-size: 1.15rem; }
+    .gauge-value { font-size: 1.6rem; }
+  }
+
+  /* ANIMATION */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .screen.active .container > * {
+    animation: fadeInUp 0.35s ease both;
+  }
+  .screen.active .container > *:nth-child(2) { animation-delay: 0.05s; }
+  .screen.active .container > *:nth-child(3) { animation-delay: 0.1s; }
+  .screen.active .container > *:nth-child(4) { animation-delay: 0.15s; }
+  .screen.active .container > *:nth-child(5) { animation-delay: 0.2s; }
+
+  .complete-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+/* ─── Google Sheets Integration ─────────────────────────────── */
+.gs-save-row{display:flex;justify-content:center;gap:.7rem;margin:1.2rem 0 .5rem}
+.btn-gs{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s}
+.btn-gs-save{background:#16a34a;color:#fff}
+.btn-gs-save:hover{background:#15803d;transform:translateY(-1px)}
+.btn-gs-config{background:#e2e8f0;color:#475569;padding:.65rem .9rem}
+.btn-gs-config:hover{background:#cbd5e1}
+.gs-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.gs-modal{background:#fff;border-radius:12px;padding:1.8rem;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.gs-modal h3{font-size:1.1rem;margin-bottom:.5rem;color:#0f172a}
+.gs-modal p{font-size:.82rem;color:#64748b;margin-bottom:1rem;line-height:1.6}
+.gs-modal input{width:100%;border:1.5px solid #e2e8f0;border-radius:8px;padding:.6rem .9rem;font-size:.9rem;font-family:inherit;outline:none;margin-bottom:1rem;box-sizing:border-box}
+.gs-modal input:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.15)}
+.gs-modal-btns{display:flex;gap:.7rem;justify-content:flex-end}
+.gs-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:.7rem 1.4rem;border-radius:8px;font-size:.85rem;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;z-index:2000;white-space:nowrap;pointer-events:none}
+.gs-toast--show{opacity:1;transform:translateX(-50%) translateY(0)}
+.gs-toast--success{background:#16a34a}
+.gs-toast--error{background:#dc2626}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <h1>Mapeamento de Hospitalidade em Organizações</h1>
+  <p>Framework baseado em Silva, Wada, Ferro et al. — Universidade Anhembi Morumbi</p>
+</div>
+
+<!-- PROGRESS (hidden on step 0 and results) -->
+<div class="progress-wrap" id="progressWrap" style="display:none;">
+  <div class="progress-labels">
+    <span id="progressLabel">Perspectiva Interna</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- SCREEN 0: IDENTIFICAÇÃO -->
+<div class="screen active" id="screen0">
+  <div class="container">
+    <div class="step0-hero">
+      <span class="icon-big">&#127968;</span>
+      <h2>Diagnóstico de Hospitalidade Organizacional</h2>
+      <p>Ferramenta de mapeamento baseada em dados abertos da web, avaliando hospitalidade interna (colaboradores) e externa (clientes) em 5 eixos analíticos.</p>
+      <div class="framework-pills">
+        <span class="framework-pill">Alinhamento Cultural</span>
+        <span class="framework-pill">Práticas Gerenciais</span>
+        <span class="framework-pill">Clima Interpessoal</span>
+        <span class="framework-pill">Acessibilidade Estrutural</span>
+        <span class="framework-pill">Capacidade de Resposta</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">&#128203; Identificação da Organização</div>
+      <div class="card-desc">Informe os dados da organização que será avaliada. As pontuações são relativas ao corte setorial de 50 pontos, conforme o framework metodológico do artigo.</div>
+      <div class="form-group">
+        <label for="companyName">Nome da organização</label>
+        <input type="text" class="form-input" id="companyName" placeholder="Ex.: Hotel Bela Vista, Clínica São Lucas..." />
+      </div>
+      <div class="form-group">
+        <label for="sectorSelect">Setor de atuação</label>
+        <select class="form-select" id="sectorSelect">
+          <option value="">Selecione o setor...</option>
+          <option value="Alimentação">Alimentação &amp; Restaurantes</option>
+          <option value="Saúde">Saúde &amp; Bem-estar</option>
+          <option value="Bancário/Financeiro">Bancário / Financeiro</option>
+          <option value="Educação">Educação</option>
+          <option value="Aviação">Aviação &amp; Transporte</option>
+          <option value="Hospitalidade/Hotelaria">Hospitalidade / Hotelaria</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="padding: 0 0 80px;">
+      <button class="btn-restart" id="btnStep0Next" onclick="goToStep1()" disabled style="background: var(--accent); color: white; border-color: var(--accent-dark);">
+        Iniciar Mapeamento &#8594;
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 1: PERSPECTIVA INTERNA -->
+<div class="screen" id="screen1">
+  <div class="container">
+    <div class="card" style="background: var(--blue-light); border-color: #93c5fd;">
+      <div class="card-title" style="color: #1d4ed8;">&#128101; Perspectiva Interna — Colaboradores</div>
+      <div class="card-desc" style="color: #1e40af;">
+        Baseie-se em avaliações de plataformas como <strong>Glassdoor</strong> e <strong>Indeed</strong>. Para cada eixo, indique com que frequência o tema aparece nas avaliações e a nota média atribuída pelos colaboradores.
+      </div>
+    </div>
+
+    <div id="internalAxes"></div>
+
+    <div style="height: 80px;"></div>
+  </div>
+</div>
+
+<!-- SCREEN 2: PERSPECTIVA EXTERNA -->
+<div class="screen" id="screen2">
+  <div class="container">
+    <div class="card" style="background: var(--green-light); border-color: #6ee7b7;">
+      <div class="card-title" style="color: #065f46;">&#11088; Perspectiva Externa — Clientes</div>
+      <div class="card-desc" style="color: #064e3b;">
+        Baseie-se em avaliações de plataformas como <strong>Reclame Aqui</strong> e <strong>Google Reviews</strong>. Para cada eixo, indique como os clientes percebem a organização nessa dimensão.
+      </div>
+    </div>
+
+    <div id="externalAxes"></div>
+
+    <div style="height: 80px;"></div>
+  </div>
+</div>
+
+<!-- SCREEN 3: RESULTADOS -->
+<div class="screen" id="screen3">
+  <div class="container">
+    <div class="results-hero">
+      <h2 id="resultsTitle">Diagnóstico Concluído</h2>
+      <p id="resultsSubtitle">Mapeamento de Hospitalidade Organizacional</p>
+    </div>
+
+    <!-- GAUGES -->
+    <div class="gauges-row">
+      <div class="gauge-card">
+        <div class="gauge-title">&#128101; Centroide Interno (Ȳ)</div>
+        <svg width="160" height="90" viewBox="0 0 160 90" style="display:block;margin:0 auto;">
+          <path d="M 16 80 A 64 64 0 0 1 144 80" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>
+          <path d="M 16 80 A 64 64 0 0 1 144 80" fill="none" stroke="#2563eb" stroke-width="12" stroke-linecap="round"
+                stroke-dasharray="201" stroke-dashoffset="201" id="gaugeInternal"
+                style="transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)"/>
+          <text x="80" y="75" text-anchor="middle" font-size="13" fill="#6b7280" font-family="inherit">0–100</text>
+        </svg>
+        <div class="gauge-value internal" id="gaugeInternalVal">—</div>
+        <div class="gauge-sub">Média dos 5 eixos internos</div>
+      </div>
+      <div class="gauge-card">
+        <div class="gauge-title">&#11088; Centroide Externo (X̄)</div>
+        <svg width="160" height="90" viewBox="0 0 160 90" style="display:block;margin:0 auto;">
+          <path d="M 16 80 A 64 64 0 0 1 144 80" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>
+          <path d="M 16 80 A 64 64 0 0 1 144 80" fill="none" stroke="#059669" stroke-width="12" stroke-linecap="round"
+                stroke-dasharray="201" stroke-dashoffset="201" id="gaugeExternal"
+                style="transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)"/>
+          <text x="80" y="75" text-anchor="middle" font-size="13" fill="#6b7280" font-family="inherit">0–100</text>
+        </svg>
+        <div class="gauge-value external" id="gaugeExternalVal">—</div>
+        <div class="gauge-sub">Média dos 5 eixos externos</div>
+      </div>
+    </div>
+
+    <!-- MATRIX -->
+    <div class="matrix-section">
+      <div class="section-title">Matriz de Tipologia 2×2</div>
+      <svg id="matrixSvg" width="320" height="320" viewBox="0 0 320 320" style="max-width:100%;"></svg>
+      <div style="display:flex;gap:14px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+        <span style="font-size:0.73rem;color:#15803d;font-weight:600;">&#9632; Convergência I-E</span>
+        <span style="font-size:0.73rem;color:#1d4ed8;font-weight:600;">&#9632; Predominância Interna</span>
+        <span style="font-size:0.73rem;color:#a16207;font-weight:600;">&#9632; Predominância Externa</span>
+        <span style="font-size:0.73rem;color:#b91c1c;font-weight:600;">&#9632; Baixa Intensidade</span>
+      </div>
+    </div>
+
+    <!-- AXIS BARS -->
+    <div class="axis-bars">
+      <div class="section-title">Pontuação por Eixo</div>
+      <div class="bar-legend">
+        <span><span class="legend-dot internal"></span> Perspectiva Interna</span>
+        <span><span class="legend-dot external"></span> Perspectiva Externa</span>
+      </div>
+      <div id="axisBars"></div>
+    </div>
+
+    <!-- QUADRANT INTERPRETATION -->
+    <div id="quadrantCard"></div>
+
+    <!-- PRIORITIES -->
+    <div class="priorities-list">
+      <div class="section-title">Prioridades de Ação</div>
+      <div id="prioritiesList"></div>
+    </div>
+
+    <!-- FOOTNOTE -->
+    <div class="footnote">
+      <p><strong>Referência metodológica:</strong> Silva, R. C., Wada, E. K., Ferro, R., Cavenaghi, A., et al. Mapping hospitality in organizations through open web data: An indicator-based approach. Universidade Anhembi Morumbi. (<em>No prelo / International Journal of Contemporary Hospitality Management</em>)</p>
+      <p><strong>Nota metodológica:</strong> As pontuações seguem as fórmulas do artigo: perspectiva interna calculada como 100 × [0,5 × freq + 0,5 × intensidade], onde freq ∈ {0,15; 0,40; 0,65; 0,90} e intensidade = (nota − 1)/4. Perspectiva externa atribuída diretamente pela escala ordinal (10/30/50/70/90). O corte setorial de referência é 50 pontos. A tipologia 2×2 é determinada pelos centroides Ȳ (interno) e X̄ (externo) em relação ao corte.</p>
+    </div>
+
+    <button class="btn-restart" onclick="restartApp()">&#8635; Realizar novo mapeamento</button>
+    <div class="gs-save-row" style="margin-top:1rem;">
+      <button class="btn-gs btn-gs-save" onclick="gsSaveOpenData()">&#128202; Salvar no Google Sheets</button>
+      <button class="btn-gs btn-gs-config" onclick="gsOpenModal()" title="Configurar URL">&#9881;&#65039;</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION BAR -->
+<div class="nav-bar" id="navBar" style="display:none;">
+  <button class="btn-nav btn-back" id="btnBack" onclick="navBack()">&#8592; Voltar</button>
+  <span class="nav-counter" id="navCounter"></span>
+  <button class="btn-nav btn-next" id="btnNext" onclick="navNext()">Próximo &#8594;</button>
+</div>
+
+<script>
+// ===== DATA =====
+var AXES = [
+  {
+    id: 0,
+    name: "Alinhamento Cultural",
+    icon: "&#127775;",
+    descInternal: "Avalia se os valores declarados pela organização se refletem nas práticas cotidianas. Colaboradores observam coerência entre discurso e prática, ética organizacional, políticas de inclusão e diversidade, e o compromisso real da liderança com os valores institucionais.",
+    descExternal: "Avalia se os clientes percebem que a organização pratica o que promete. Reflete-se na autenticidade da experiência, alinhamento entre marketing e realidade, respeito à diversidade de clientes e coerência nos canais de comunicação.",
+    recInternal: "Promover auditorias de cultura organizacional, alinhar comunicação interna com valores declarados e criar canais de denúncia seguros.",
+    recExternal: "Revisar comunicação de marketing, garantir que promessas de marca sejam operacionalizadas e coletar feedback sistemático dos clientes sobre percepção de valores."
+  },
+  {
+    id: 1,
+    name: "Práticas Gerenciais",
+    icon: "&#128084;",
+    descInternal: "Abrange a qualidade da liderança exercida, práticas de reconhecimento e feedback, grau de autonomia concedida aos colaboradores, equidade no tratamento e transparência nos processos de promoção e avaliação de desempenho.",
+    descExternal: "Reflete como a gestão impacta a experiência do cliente: eficiência no atendimento, consistência no serviço, capacitação visível da equipe, resolução de problemas e postura dos gestores em situações de conflito.",
+    recInternal: "Implementar programas estruturados de reconhecimento, treinamento de liderança situacional e processos transparentes de avaliação de desempenho.",
+    recExternal: "Capacitar gestores para situações de atendimento, criar protocolos claros de escalonamento e garantir presença gerencial nos pontos críticos da experiência do cliente."
+  },
+  {
+    id: 2,
+    name: "Clima Interpessoal",
+    icon: "&#129309;",
+    descInternal: "Mede a qualidade das relações entre colaboradores: presença de colaboração e espírito de equipe, respeito mútuo, segurança psicológica para expressão de ideias, ausência de assédio e relações tóxicas, e sentimento de pertencimento.",
+    descExternal: "Reflete como o clima interno é percebido pelos clientes através das interações: cordialidade genuína, calor humano, consistência no tratamento, disposição em ajudar além do básico e ausência de tensões visíveis na equipe.",
+    recInternal: "Realizar pesquisas de clima organizacional regulares, implementar políticas anti-assédio robustas e criar espaços formais para integração e construção de confiança entre equipes.",
+    recExternal: "Monitorar avaliações de atendimento, criar programas de hospitalidade que cultivem genuíno cuidado com o cliente e alinhar clima interno positivo com a experiência de serviço."
+  },
+  {
+    id: 3,
+    name: "Acessibilidade Estrutural",
+    icon: "&#127959;",
+    descInternal: "Avalia a disponibilidade e qualidade de sistemas, ferramentas, infraestrutura e recursos que os colaboradores necessitam para desempenhar suas funções. Inclui acesso à informação, ergonomia, tecnologia, processos e suporte operacional.",
+    descExternal: "Reflete a facilidade com que clientes acessam produtos, serviços e suporte: clareza de canais, disponibilidade de atendimento, acessibilidade física e digital, fluidez de processos e redução de barreiras na jornada do cliente.",
+    recInternal: "Mapear lacunas de ferramentas e sistemas, investir em infraestrutura adequada e simplificar processos internos que geram retrabalho ou frustração operacional.",
+    recExternal: "Auditar a jornada do cliente, remover pontos de fricção, ampliar canais de atendimento e garantir acessibilidade para diferentes perfis de usuário."
+  },
+  {
+    id: 4,
+    name: "Capacidade de Resposta",
+    icon: "&#9889;",
+    descInternal: "Mede a agilidade organizacional na resolução de problemas internos: velocidade de resposta da liderança às demandas dos colaboradores, eficácia na tomada de decisão, comunicação interna e capacidade de adaptação a mudanças.",
+    descExternal: "Avalia a velocidade e eficácia com que a organização responde às demandas, reclamações e necessidades dos clientes: tempo de resposta, taxa de resolução, follow-up, comunicação proativa em situações de falha e recuperação de serviço.",
+    recInternal: "Estabelecer SLAs internos para resposta a demandas de colaboradores, criar protocolos de comunicação em crises e empoderar líderes intermediários para decisões ágeis.",
+    recExternal: "Monitorar ativamente plataformas de reclamação, estabelecer metas de tempo de resposta, treinar equipes de atendimento em resolução eficaz e criar processos de recuperação de serviço estruturados."
+  }
+];
+
+var FREQ_MAP = {
+  "Raro": 0.15,
+  "Ocasional": 0.40,
+  "Frequente": 0.65,
+  "Muito Frequente": 0.90
+};
+
+var CUST_MAP = {
+  "Muito Problemático": 10,
+  "Problemático": 30,
+  "Misto": 50,
+  "Bom": 70,
+  "Muito Bom": 90
+};
+
+var QUADRANTS = {
+  q1: {
+    cls: "q1",
+    name: "Convergência Interna-Externa",
+    emoji: "&#129395;",
+    desc: "A organização apresenta alta hospitalidade percebida tanto por colaboradores quanto por clientes. Os valores e práticas de acolhimento internos se traduzem efetivamente na experiência do cliente, criando um ciclo virtuoso sustentável.",
+    impl: "<strong>Implicação gerencial:</strong> Manter e institucionalizar as práticas que geraram essa convergência. Documentar processos exemplares, replicar para novas unidades e usar como referência em processos seletivos. Atenção para não deixar cair o padrão com crescimento acelerado."
+  },
+  q2: {
+    cls: "q2",
+    name: "Predominância Interna",
+    emoji: "&#128101;",
+    desc: "Os colaboradores percebem alta hospitalidade interna, mas esse valor não está sendo suficientemente externalizado para os clientes. Há uma 'hospitalidade represada' que não chega ao ponto de contato com o cliente.",
+    impl: "<strong>Implicação gerencial:</strong> Investigar os gaps de translação do valor interno para a experiência do cliente. Revisar processos de atendimento, treinamento de linha de frente, sistemas de suporte ao cliente e possíveis barreiras estruturais que impedem que o clima positivo interno se manifeste na experiência externa."
+  },
+  q3: {
+    cls: "q3",
+    name: "Predominância Externa",
+    emoji: "&#9888;",
+    desc: "Os clientes percebem boa hospitalidade, mas internamente os colaboradores não vivenciam a mesma cultura de acolhimento. Há risco de esgotamento (burnout) e insustentabilidade no médio prazo, pois o serviço depende de esforço excessivo dos colaboradores.",
+    impl: "<strong>Implicação gerencial:</strong> Prioridade urgente em práticas de gestão de pessoas, clima organizacional e condições de trabalho. A experiência positiva do cliente está sendo sustentada por colaboradores sobrecarregados ou insatisfeitos — modelo de risco elevado para retenção de talentos e qualidade de serviço no longo prazo."
+  },
+  q4: {
+    cls: "q4",
+    name: "Baixa Intensidade Relacional",
+    emoji: "&#128680;",
+    desc: "Tanto colaboradores quanto clientes apresentam baixa percepção de hospitalidade. A organização enfrenta desafios sistêmicos que afetam simultaneamente o ambiente interno e a entrega de valor ao cliente.",
+    impl: "<strong>Implicação gerencial:</strong> Intervenção sistêmica necessária com prioridade máxima. Recomenda-se diagnóstico organizacional aprofundado, revisão da estratégia de pessoas e clientes, e plano de transformação cultural com métricas claras e acompanhamento trimestral."
+  }
+};
+
+// ===== STATE =====
+var state = {
+  step: 0,
+  company: "",
+  sector: "",
+  internal: [], // [{freq, rating}] length 5
+  external: []  // [{level}] length 5
+};
+
+// Initialize state arrays
+for (var i = 0; i < 5; i++) {
+  state.internal.push({ freq: null, rating: null });
+  state.external.push({ level: null });
+}
+
+// ===== STEP 0 =====
+function initStep0() {
+  var nameInput = document.getElementById("companyName");
+  var sectorInput = document.getElementById("sectorSelect");
+  var btn = document.getElementById("btnStep0Next");
+
+  function checkStep0() {
+    var ok = nameInput.value.trim().length > 0 && sectorInput.value !== "";
+    btn.disabled = !ok;
+  }
+
+  nameInput.addEventListener("input", checkStep0);
+  sectorInput.addEventListener("change", checkStep0);
+}
+
+function goToStep1() {
+  var nameInput = document.getElementById("companyName");
+  var sectorInput = document.getElementById("sectorSelect");
+  state.company = nameInput.value.trim();
+  state.sector = sectorInput.value;
+  showScreen(1);
+}
+
+// ===== RENDER AXES =====
+function renderInternalAxes() {
+  var container = document.getElementById("internalAxes");
+  container.innerHTML = "";
+
+  for (var i = 0; i < AXES.length; i++) {
+    (function(idx) {
+      var ax = AXES[idx];
+      var card = document.createElement("div");
+      card.className = "axis-card";
+      card.id = "int-card-" + idx;
+
+      var freqBtns = "";
+      var freqKeys = ["Raro", "Ocasional", "Frequente", "Muito Frequente"];
+      for (var k = 0; k < freqKeys.length; k++) {
+        var f = freqKeys[k];
+        var sel = state.internal[idx].freq === f ? " selected" : "";
+        freqBtns += '<button class="btn-sel' + sel + '" onclick="setIntFreq(' + idx + ', \'' + f + '\')">' + f + '</button>';
+      }
+
+      var ratingBtns = "";
+      for (var r = 1; r <= 5; r++) {
+        var rsel = state.internal[idx].rating === r ? " selected" : "";
+        ratingBtns += '<button class="btn-rating' + rsel + '" onclick="setIntRating(' + idx + ', ' + r + ')">' + r + ' &#9733;</button>';
+      }
+
+      var isComplete = state.internal[idx].freq !== null && state.internal[idx].rating !== null;
+      if (isComplete) card.className += " complete";
+
+      card.innerHTML =
+        '<div class="axis-header">' +
+          '<div class="axis-icon">' + ax.icon + '</div>' +
+          '<span class="axis-name">' + ax.name + '</span>' +
+          '<span class="axis-check">&#10003;</span>' +
+        '</div>' +
+        '<div class="axis-desc">' + ax.descInternal + '</div>' +
+        '<div class="selector-label">Frequência nas avaliações de colaboradores</div>' +
+        '<div class="btn-group">' + freqBtns + '</div>' +
+        '<div class="selector-label">Nota média dos colaboradores neste eixo (1–5)</div>' +
+        '<div class="btn-group">' + ratingBtns + '</div>';
+
+      container.appendChild(card);
+    })(i);
+  }
+  updateInternalNav();
+}
+
+function renderExternalAxes() {
+  var container = document.getElementById("externalAxes");
+  container.innerHTML = "";
+
+  for (var i = 0; i < AXES.length; i++) {
+    (function(idx) {
+      var ax = AXES[idx];
+      var card = document.createElement("div");
+      card.className = "axis-card";
+      card.id = "ext-card-" + idx;
+
+      var levelKeys = ["Muito Problemático", "Problemático", "Misto", "Bom", "Muito Bom"];
+      var levelBtns = "";
+      for (var k = 0; k < levelKeys.length; k++) {
+        var lv = levelKeys[k];
+        var sel = state.external[idx].level === lv ? " selected" : "";
+        levelBtns += '<button class="btn-sel' + sel + '" onclick="setExtLevel(' + idx + ', \'' + lv + '\')">' + lv + '</button>';
+      }
+
+      var isComplete = state.external[idx].level !== null;
+      if (isComplete) card.className += " complete";
+
+      card.innerHTML =
+        '<div class="axis-header">' +
+          '<div class="axis-icon">' + ax.icon + '</div>' +
+          '<span class="axis-name">' + ax.name + '</span>' +
+          '<span class="axis-check">&#10003;</span>' +
+        '</div>' +
+        '<div class="axis-desc">' + ax.descExternal + '</div>' +
+        '<div class="selector-label">Percepção geral dos clientes neste eixo</div>' +
+        '<div class="btn-group">' + levelBtns + '</div>';
+
+      container.appendChild(card);
+    })(i);
+  }
+  updateExternalNav();
+}
+
+// ===== SETTERS =====
+function setIntFreq(idx, freq) {
+  state.internal[idx].freq = freq;
+  // Update buttons
+  var card = document.getElementById("int-card-" + idx);
+  var btns = card.querySelectorAll(".btn-sel");
+  var freqKeys = ["Raro", "Ocasional", "Frequente", "Muito Frequente"];
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].className = "btn-sel" + (freqKeys[i] === freq ? " selected" : "");
+  }
+  updateAxisCardState("int-card-" + idx, state.internal[idx].freq !== null && state.internal[idx].rating !== null);
+  updateInternalNav();
+}
+
+function setIntRating(idx, rating) {
+  state.internal[idx].rating = rating;
+  // Update buttons
+  var card = document.getElementById("int-card-" + idx);
+  var btns = card.querySelectorAll(".btn-rating");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].className = "btn-rating" + ((i + 1) === rating ? " selected" : "");
+  }
+  updateAxisCardState("int-card-" + idx, state.internal[idx].freq !== null && state.internal[idx].rating !== null);
+  updateInternalNav();
+}
+
+function setExtLevel(idx, level) {
+  state.external[idx].level = level;
+  // Update buttons
+  var card = document.getElementById("ext-card-" + idx);
+  var btns = card.querySelectorAll(".btn-sel");
+  var levelKeys = ["Muito Problemático", "Problemático", "Misto", "Bom", "Muito Bom"];
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].className = "btn-sel" + (levelKeys[i] === level ? " selected" : "");
+  }
+  updateAxisCardState("ext-card-" + idx, state.external[idx].level !== null);
+  updateExternalNav();
+}
+
+function updateAxisCardState(cardId, complete) {
+  var card = document.getElementById(cardId);
+  if (complete) {
+    card.className = "axis-card complete";
+  } else {
+    card.className = "axis-card";
+  }
+}
+
+// ===== SCORE CALCULATIONS =====
+function calcEmpScore(idx) {
+  var freq = FREQ_MAP[state.internal[idx].freq];
+  var rating = state.internal[idx].rating;
+  if (freq === undefined || freq === null || rating === null) return null;
+  var intensity = (rating - 1) / 4;
+  return 100 * (0.5 * freq + 0.5 * intensity);
+}
+
+function calcCustScore(idx) {
+  var level = state.external[idx].level;
+  if (!level) return null;
+  return CUST_MAP[level];
+}
+
+function calcCentroids() {
+  var empScores = [];
+  var custScores = [];
+  for (var i = 0; i < 5; i++) {
+    empScores.push(calcEmpScore(i));
+    custScores.push(calcCustScore(i));
+  }
+  var yBar = 0, xBar = 0;
+  for (var i = 0; i < 5; i++) {
+    yBar += empScores[i];
+    xBar += custScores[i];
+  }
+  return {
+    yBar: yBar / 5,
+    xBar: xBar / 5,
+    empScores: empScores,
+    custScores: custScores
+  };
+}
+
+function getQuadrant(xBar, yBar) {
+  if (xBar >= 50 && yBar >= 50) return "q1";
+  if (xBar < 50 && yBar >= 50) return "q2";
+  if (xBar >= 50 && yBar < 50) return "q3";
+  return "q4";
+}
+
+// ===== NAVIGATION =====
+function countInternalDone() {
+  var n = 0;
+  for (var i = 0; i < 5; i++) {
+    if (state.internal[i].freq !== null && state.internal[i].rating !== null) n++;
+  }
+  return n;
+}
+
+function countExternalDone() {
+  var n = 0;
+  for (var i = 0; i < 5; i++) {
+    if (state.external[i].level !== null) n++;
+  }
+  return n;
+}
+
+function updateInternalNav() {
+  var done = countInternalDone();
+  var btn = document.getElementById("btnNext");
+  var counter = document.getElementById("navCounter");
+  btn.disabled = done < 5;
+  counter.textContent = done + " / 5 eixos";
+  updateProgress(1, done / 5);
+}
+
+function updateExternalNav() {
+  var done = countExternalDone();
+  var btn = document.getElementById("btnNext");
+  var counter = document.getElementById("navCounter");
+  btn.disabled = done < 5;
+  counter.textContent = done + " / 5 eixos";
+  updateProgress(2, done / 5);
+}
+
+function updateProgress(step, pct) {
+  var fill = document.getElementById("progressFill");
+  var pctLabel = document.getElementById("progressPct");
+  var label = document.getElementById("progressLabel");
+  var finalPct = Math.round(pct * 100);
+  if (step === 1) {
+    // step 1 = first half (0-50%)
+    fill.style.width = (pct * 50) + "%";
+    label.textContent = "Perspectiva Interna — Colaboradores";
+    pctLabel.textContent = finalPct + "% desta etapa";
+  } else if (step === 2) {
+    // step 2 = second half (50-100%)
+    fill.style.width = (50 + pct * 50) + "%";
+    label.textContent = "Perspectiva Externa — Clientes";
+    pctLabel.textContent = finalPct + "% desta etapa";
+  }
+}
+
+function navBack() {
+  if (state.step === 1) {
+    showScreen(0);
+  } else if (state.step === 2) {
+    showScreen(1);
+  }
+}
+
+function navNext() {
+  if (state.step === 1) {
+    showScreen(2);
+  } else if (state.step === 2) {
+    showScreen(3);
+    buildResults();
+  }
+}
+
+// ===== SHOW SCREEN =====
+function showScreen(n) {
+  var screens = document.querySelectorAll(".screen");
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].className = "screen";
+  }
+  document.getElementById("screen" + n).className = "screen active";
+  state.step = n;
+
+  var progressWrap = document.getElementById("progressWrap");
+  var navBar = document.getElementById("navBar");
+  var btnBack = document.getElementById("btnBack");
+  var btnNext = document.getElementById("btnNext");
+  var counter = document.getElementById("navCounter");
+
+  if (n === 0) {
+    progressWrap.style.display = "none";
+    navBar.style.display = "none";
+  } else if (n === 1) {
+    progressWrap.style.display = "block";
+    navBar.style.display = "flex";
+    btnBack.style.display = "flex";
+    btnNext.textContent = "Próximo →";
+    btnNext.onclick = navNext;
+    renderInternalAxes();
+    updateInternalNav();
+    window.scrollTo(0, 0);
+  } else if (n === 2) {
+    progressWrap.style.display = "block";
+    navBar.style.display = "flex";
+    btnBack.style.display = "flex";
+    btnNext.textContent = "Ver Resultados →";
+    btnNext.onclick = navNext;
+    renderExternalAxes();
+    updateExternalNav();
+    window.scrollTo(0, 0);
+  } else if (n === 3) {
+    progressWrap.style.display = "none";
+    navBar.style.display = "none";
+    window.scrollTo(0, 0);
+  }
+}
+
+// ===== BUILD RESULTS =====
+function buildResults() {
+  var data = calcCentroids();
+  var yBar = data.yBar;
+  var xBar = data.xBar;
+  var empScores = data.empScores;
+  var custScores = data.custScores;
+  var qKey = getQuadrant(xBar, yBar);
+
+  // Title
+  document.getElementById("resultsTitle").textContent = state.company || "Diagnóstico Concluído";
+  document.getElementById("resultsSubtitle").textContent = "Setor: " + (state.sector || "—") + " · Mapeamento de Hospitalidade Organizacional";
+
+  // Gauges
+  document.getElementById("gaugeInternalVal").textContent = yBar.toFixed(1);
+  document.getElementById("gaugeExternalVal").textContent = xBar.toFixed(1);
+
+  // Arc animation (total arc = 201 for semicircle)
+  var gaugeInt = document.getElementById("gaugeInternal");
+  var gaugeExt = document.getElementById("gaugeExternal");
+  // strokeDashoffset: 201 = empty, 0 = full; so offset = 201 * (1 - score/100)
+  setTimeout(function() {
+    gaugeInt.style.strokeDashoffset = String(201 * (1 - yBar / 100));
+    gaugeExt.style.strokeDashoffset = String(201 * (1 - xBar / 100));
+  }, 100);
+
+  // Matrix SVG
+  buildMatrix(xBar, yBar, qKey);
+
+  // Axis bars
+  buildAxisBars(empScores, custScores);
+
+  // Quadrant card
+  buildQuadrantCard(qKey);
+
+  // Priorities
+  buildPriorities(empScores, custScores);
+}
+
+function buildMatrix(xBar, yBar, qKey) {
+  var svg = document.getElementById("matrixSvg");
+  var W = 320, H = 320;
+  var pad = 36; // padding for labels
+  var inner = W - pad * 2; // 248
+
+  // Map score (0-100) to SVG coordinate
+  // X axis: external (xBar) — left=0, right=100
+  // Y axis: internal (yBar) — bottom=0, top=100
+  function toSvgX(score) { return pad + (score / 100) * inner; }
+  function toSvgY(score) { return pad + inner - (score / 100) * inner; }
+
+  var midX = toSvgX(50);
+  var midY = toSvgY(50);
+
+  var content = "";
+
+  // Quadrant fills
+  // Q1: X>=50, Y>=50 → top-right
+  content += '<rect x="' + midX + '" y="' + pad + '" width="' + (W - pad - midX) + '" height="' + (midY - pad) + '" fill="#d1fae5" opacity="0.7"/>';
+  // Q2: X<50, Y>=50 → top-left
+  content += '<rect x="' + pad + '" y="' + pad + '" width="' + (midX - pad) + '" height="' + (midY - pad) + '" fill="#dbeafe" opacity="0.7"/>';
+  // Q3: X>=50, Y<50 → bottom-right
+  content += '<rect x="' + midX + '" y="' + midY + '" width="' + (W - pad - midX) + '" height="' + (H - pad - midY) + '" fill="#fef9c3" opacity="0.7"/>';
+  // Q4: X<50, Y<50 → bottom-left
+  content += '<rect x="' + pad + '" y="' + midY + '" width="' + (midX - pad) + '" height="' + (H - pad - midY) + '" fill="#fee2e2" opacity="0.7"/>';
+
+  // Border
+  content += '<rect x="' + pad + '" y="' + pad + '" width="' + inner + '" height="' + inner + '" fill="none" stroke="#d1d5db" stroke-width="1.5"/>';
+
+  // Crosshair lines
+  content += '<line x1="' + midX + '" y1="' + pad + '" x2="' + midX + '" y2="' + (H - pad) + '" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5,3"/>';
+  content += '<line x1="' + pad + '" y1="' + midY + '" x2="' + (W - pad) + '" y2="' + midY + '" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5,3"/>';
+
+  // Axis labels
+  content += '<text x="' + (W / 2) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10" fill="#6b7280" font-family="inherit">Perspectiva Externa (X̄)</text>';
+  content += '<text x="10" y="' + (H / 2) + '" text-anchor="middle" font-size="10" fill="#6b7280" font-family="inherit" transform="rotate(-90, 10, ' + (H / 2) + ')">Perspectiva Interna (Ȳ)</text>';
+
+  // Corner mini labels
+  content += '<text x="' + (midX + 5) + '" y="' + (pad + 13) + '" font-size="8" fill="#15803d" font-family="inherit" font-weight="700">Convergência I-E</text>';
+  content += '<text x="' + (pad + 4) + '" y="' + (pad + 13) + '" font-size="8" fill="#1d4ed8" font-family="inherit" font-weight="700">Pred. Interna</text>';
+  content += '<text x="' + (midX + 5) + '" y="' + (H - pad - 4) + '" font-size="8" fill="#a16207" font-family="inherit" font-weight="700">Pred. Externa</text>';
+  content += '<text x="' + (pad + 4) + '" y="' + (H - pad - 4) + '" font-size="8" fill="#b91c1c" font-family="inherit" font-weight="700">Baixa Intensidade</text>';
+
+  // Scale ticks
+  content += '<text x="' + toSvgX(0) + '" y="' + (H - pad + 12) + '" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">0</text>';
+  content += '<text x="' + toSvgX(50) + '" y="' + (H - pad + 12) + '" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">50</text>';
+  content += '<text x="' + toSvgX(100) + '" y="' + (H - pad + 12) + '" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">100</text>';
+  content += '<text x="' + (pad - 5) + '" y="' + toSvgY(0) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">0</text>';
+  content += '<text x="' + (pad - 5) + '" y="' + toSvgY(50) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">50</text>';
+  content += '<text x="' + (pad - 5) + '" y="' + toSvgY(100) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">100</text>';
+
+  // Company point
+  var px = toSvgX(xBar);
+  var py = toSvgY(yBar);
+
+  // Glow ring
+  content += '<circle cx="' + px + '" cy="' + py + '" r="12" fill="white" opacity="0.7"/>';
+  content += '<circle cx="' + px + '" cy="' + py + '" r="9" fill="' + getQColor(qKey) + '" opacity="0.3"/>';
+  content += '<circle cx="' + px + '" cy="' + py + '" r="7" fill="' + getQColor(qKey) + '"/>';
+  content += '<circle cx="' + px + '" cy="' + py + '" r="7" fill="none" stroke="white" stroke-width="2"/>';
+
+  // Score labels near point
+  var labelX = px + 10;
+  var labelY = py - 10;
+  if (labelX > W - 70) labelX = px - 70;
+  if (labelY < pad + 14) labelY = py + 18;
+  content += '<rect x="' + (labelX - 2) + '" y="' + (labelY - 11) + '" width="60" height="16" rx="4" fill="white" opacity="0.9"/>';
+  content += '<text x="' + labelX + '" y="' + labelY + '" font-size="9.5" fill="#374151" font-family="inherit" font-weight="600">X̄=' + xBar.toFixed(1) + ' Ȳ=' + yBar.toFixed(1) + '</text>';
+
+  svg.innerHTML = content;
+}
+
+function getQColor(qKey) {
+  var colors = { q1: "#059669", q2: "#2563eb", q3: "#d97706", q4: "#dc2626" };
+  return colors[qKey] || "#6b7280";
+}
+
+function buildAxisBars(empScores, custScores) {
+  var container = document.getElementById("axisBars");
+  container.innerHTML = "";
+
+  for (var i = 0; i < AXES.length; i++) {
+    var ax = AXES[i];
+    var es = empScores[i];
+    var cs = custScores[i];
+
+    var row = document.createElement("div");
+    row.className = "bar-row";
+    row.innerHTML =
+      '<div class="bar-meta">' +
+        '<span class="bar-name">' + ax.icon + ' ' + ax.name + '</span>' +
+        '<span class="bar-scores"><span style="color:#2563eb;font-weight:700;">' + es.toFixed(1) + '</span> / <span style="color:#059669;font-weight:700;">' + cs.toFixed(1) + '</span></span>' +
+      '</div>' +
+      '<div class="bar-track"><div class="bar-fill internal" id="barInt' + i + '" style="width:0%"></div></div>' +
+      '<div class="bar-track"><div class="bar-fill external" id="barExt' + i + '" style="width:0%"></div></div>';
+
+    container.appendChild(row);
+  }
+
+  // Animate bars
+  setTimeout(function() {
+    for (var i = 0; i < 5; i++) {
+      (function(idx) {
+        var bInt = document.getElementById("barInt" + idx);
+        var bExt = document.getElementById("barExt" + idx);
+        if (bInt) bInt.style.width = empScores[idx].toFixed(1) + "%";
+        if (bExt) bExt.style.width = custScores[idx].toFixed(1) + "%";
+      })(i);
+    }
+  }, 200);
+}
+
+function buildQuadrantCard(qKey) {
+  var container = document.getElementById("quadrantCard");
+  var q = QUADRANTS[qKey];
+  container.innerHTML =
+    '<div class="quadrant-card ' + q.cls + '">' +
+      '<div class="quadrant-name">' + q.emoji + ' Quadrante: ' + q.name + '</div>' +
+      '<div class="quadrant-desc">' + q.desc + '</div>' +
+      '<div class="quadrant-impl">' + q.impl + '</div>' +
+    '</div>';
+}
+
+function buildPriorities(empScores, custScores) {
+  var container = document.getElementById("prioritiesList");
+
+  // Calculate gaps and sort
+  var gaps = [];
+  for (var i = 0; i < 5; i++) {
+    gaps.push({
+      idx: i,
+      gap: Math.abs(empScores[i] - custScores[i]),
+      empScore: empScores[i],
+      custScore: custScores[i],
+      direction: empScores[i] > custScores[i] ? "int" : "ext"
+    });
+  }
+  gaps.sort(function(a, b) { return b.gap - a.gap; });
+
+  var html = "";
+  for (var k = 0; k < gaps.length; k++) {
+    var g = gaps[k];
+    var ax = AXES[g.idx];
+    var gapTxt = g.gap.toFixed(1);
+    var dirLabel = g.direction === "int"
+      ? "Interno (" + g.empScore.toFixed(1) + ") supera Externo (" + g.custScore.toFixed(1) + ")"
+      : "Externo (" + g.custScore.toFixed(1) + ") supera Interno (" + g.empScore.toFixed(1) + ")";
+
+    var rec = g.direction === "int" ? ax.recExternal : ax.recInternal;
+    if (g.gap < 5) rec = "Eixo equilibrado. Mantenha o monitoramento contínuo para preservar o alinhamento entre as duas perspectivas.";
+
+    html +=
+      '<div class="priority-item">' +
+        '<div class="priority-badge">' + (k + 1) + '</div>' +
+        '<div class="priority-content">' +
+          '<div class="priority-axis">' + ax.icon + ' ' + ax.name + '</div>' +
+          '<div class="priority-gap">Gap: <span class="gap-num">' + gapTxt + ' pts</span> — ' + dirLabel + '</div>' +
+          '<div class="priority-rec">' + rec + '</div>' +
+        '</div>' +
+      '</div>';
+  }
+  container.innerHTML = html;
+}
+
+// ===== RESTART =====
+function restartApp() {
+  state.company = "";
+  state.sector = "";
+  for (var i = 0; i < 5; i++) {
+    state.internal[i] = { freq: null, rating: null };
+    state.external[i] = { level: null };
+  }
+  document.getElementById("companyName").value = "";
+  document.getElementById("sectorSelect").value = "";
+  document.getElementById("btnStep0Next").disabled = true;
+  // Reset gauges
+  document.getElementById("gaugeInternal").style.strokeDashoffset = "201";
+  document.getElementById("gaugeExternal").style.strokeDashoffset = "201";
+  showScreen(0);
+}
+
+// ===== INIT =====
+initStep0();
+
+// ─── Google Sheets Integration ───────────────────────────────
+var GS_KEY = 'hosp_gs_url';
+function gsGetUrl() { try { return localStorage.getItem(GS_KEY) || ''; } catch(e) { return ''; } }
+function gsSetUrl(u) { try { localStorage.setItem(GS_KEY, u); } catch(e) {} }
+function gsOpenModal() {
+  document.getElementById('gsUrlInput').value = gsGetUrl();
+  document.getElementById('gsModal').style.display = 'flex';
+}
+function gsConfigSave() {
+  var u = (document.getElementById('gsUrlInput').value || '').trim();
+  gsSetUrl(u);
+  document.getElementById('gsModal').style.display = 'none';
+  gsToast('URL configurada! Clique em Salvar novamente para enviar os dados.', 'success');
+}
+function gsToast(msg, type) {
+  var t = document.getElementById('gsToast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'gs-toast gs-toast--show' + (type ? ' gs-toast--' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.className = 'gs-toast'; }, 4000);
+}
+function gsPost(data) {
+  var url = gsGetUrl();
+  if (!url) { gsOpenModal(); return; }
+  gsToast('Enviando para a planilha…', '');
+  fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
+    .then(function() { gsToast('✅ Salvo na planilha do Google Sheets!', 'success'); })
+    .catch(function() { gsToast('❌ Falha de rede. Verifique a URL do Apps Script.', 'error'); });
+}
+
+function gsSaveOpenData() {
+  var c = calcCentroids();
+  var qId = getQuadrant(c.xBar, c.yBar);
+  var qObj = null;
+  for (var qi = 0; qi < QUADRANTS.length; qi++) { if (QUADRANTS[qi].cls === qId) { qObj = QUADRANTS[qi]; break; } }
+  var axNames = ['culturalAlignment','managerialPractices','interpersonalClimate','structuralAccessibility','responsiveness'];
+  var axes = {};
+  for (var i = 0; i < 5; i++) {
+    axes[axNames[i]] = { internal: Math.round(c.empScores[i]), external: Math.round(c.custScores[i]) };
+  }
+  gsPost({ app: 'opendata', companyName: state.company, sector: state.sector,
+    internalCentroid: Math.round(c.yBar), externalCentroid: Math.round(c.xBar),
+    quadrant: qObj ? qObj.name : qId, axes: axes });
+}
+</script>
+
+<div class="gs-modal-overlay" id="gsModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="gs-modal">
+    <h3>&#128202; Configurar Google Sheets</h3>
+    <p>Cole a URL de implantação do Google Apps Script. Ele deve estar implantado como <strong>App da Web</strong> com acesso permitido a <strong>Qualquer pessoa</strong>.<br><br>
+    Acesse o arquivo <em>"Apps Script - Salvar Resultados de Hospitalidade"</em> no seu Google Drive (pasta Indicadores de Hospitalidade nas Empresas), copie o c&#243;digo, crie um novo projeto em <a href="https://script.google.com" target="_blank" style="color:#16a34a">script.google.com</a> e implante como App da Web.</p>
+    <input type="url" id="gsUrlInput" placeholder="https://script.google.com/macros/s/..." />
+    <div class="gs-modal-btns">
+      <button class="btn-gs btn-gs-config" onclick="document.getElementById('gsModal').style.display='none'">Cancelar</button>
+      <button class="btn-gs btn-gs-save" onclick="gsConfigSave()">Salvar configura&#231;&#227;o</button>
+    </div>
+  </div>
+</div>
+<div class="gs-toast" id="gsToast"></div>
+</body>
+</html>

@@ -98,6 +98,25 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .error-msg { color: #ef4444; font-size: .82rem; margin-top: .3rem; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .fade-in { animation: fadeIn .35s ease forwards; }
+
+/* ─── Google Sheets Integration ─────────────────────────────── */
+.gs-save-row{display:flex;justify-content:center;gap:.7rem;margin:1.2rem 0 .5rem}
+.btn-gs{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s}
+.btn-gs-save{background:#16a34a;color:#fff}
+.btn-gs-save:hover{background:#15803d;transform:translateY(-1px)}
+.btn-gs-config{background:#e2e8f0;color:#475569;padding:.65rem .9rem}
+.btn-gs-config:hover{background:#cbd5e1}
+.gs-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.gs-modal{background:#fff;border-radius:12px;padding:1.8rem;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.gs-modal h3{font-size:1.1rem;margin-bottom:.5rem;color:#0f172a}
+.gs-modal p{font-size:.82rem;color:#64748b;margin-bottom:1rem;line-height:1.6}
+.gs-modal input{width:100%;border:1.5px solid #e2e8f0;border-radius:8px;padding:.6rem .9rem;font-size:.9rem;font-family:inherit;outline:none;margin-bottom:1rem;box-sizing:border-box}
+.gs-modal input:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.15)}
+.gs-modal-btns{display:flex;gap:.7rem;justify-content:flex-end}
+.gs-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:.7rem 1.4rem;border-radius:8px;font-size:.85rem;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;z-index:2000;white-space:nowrap;pointer-events:none}
+.gs-toast--show{opacity:1;transform:translateX(-50%) translateY(0)}
+.gs-toast--success{background:#16a34a}
+.gs-toast--error{background:#dc2626}
   </style>
 </head>
 <body>
@@ -559,6 +578,10 @@ function renderResults() {
     buildBreakdown(PERSONAL_SECTIONS, state.personalAnswers, `Fatores Pessoais — ${state.personName}`),
     buildBreakdown(ORG_SECTIONS, state.orgAnswers, `Fatores Organizacionais — ${state.companyName}`),
     noteEl,
+    h("div", { class:"gs-save-row" },
+      h("button", { class:"btn-gs btn-gs-save", onClick: gsSaveDawson }, "\u{1F4CA} Salvar no Google Sheets"),
+      h("button", { class:"btn-gs btn-gs-config", title:"Configurar URL", onClick: gsOpenModal }, "\u2699\uFE0F")
+    ),
     h("div", { class:"restart-row" },
       h("button", { class:"btn btn-secondary", onClick() {
         Object.assign(state, { step:0, personName:"", companyName:"", personalAnswers:{}, orgAnswers:{}, currentSectionIdx:0, mode:"personal" });
@@ -586,7 +609,68 @@ function render() {
   app.appendChild(container);
 }
 
+
+// ─── Google Sheets Integration ───────────────────────────────
+var GS_KEY = 'hosp_gs_url';
+function gsGetUrl() { try { return localStorage.getItem(GS_KEY) || ''; } catch(e) { return ''; } }
+function gsSetUrl(u) { try { localStorage.setItem(GS_KEY, u); } catch(e) {} }
+function gsOpenModal() {
+  document.getElementById('gsUrlInput').value = gsGetUrl();
+  document.getElementById('gsModal').style.display = 'flex';
+}
+function gsConfigSave() {
+  var u = (document.getElementById('gsUrlInput').value || '').trim();
+  gsSetUrl(u);
+  document.getElementById('gsModal').style.display = 'none';
+  gsToast('URL configurada! Clique em Salvar novamente para enviar os dados.', 'success');
+}
+function gsToast(msg, type) {
+  var t = document.getElementById('gsToast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'gs-toast gs-toast--show' + (type ? ' gs-toast--' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.className = 'gs-toast'; }, 4000);
+}
+function gsPost(data) {
+  var url = gsGetUrl();
+  if (!url) { gsOpenModal(); return; }
+  gsToast('Enviando para a planilha…', '');
+  fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
+    .then(function() { gsToast('✅ Salvo na planilha do Google Sheets!', 'success'); })
+    .catch(function() { gsToast('❌ Falha de rede. Verifique a URL do Apps Script.', 'error'); });
+}
+
+function gsSaveDawson() {
+  var ps = calcGroupScore(PERSONAL_SECTIONS, state.personalAnswers);
+  var cs = calcGroupScore(ORG_SECTIONS, state.orgAnswers);
+  var factors = {};
+  var allSec = PERSONAL_SECTIONS.concat(ORG_SECTIONS);
+  allSec.forEach(function(s) {
+    var isP = PERSONAL_SECTIONS.indexOf(s) >= 0;
+    var ans = isP ? state.personalAnswers : state.orgAnswers;
+    var secs = isP ? PERSONAL_SECTIONS : ORG_SECTIONS;
+    factors[s.id] = calcSectionScore(secs, ans, s.id);
+  });
+  gsPost({ app: 'dawson', personName: state.personName, companyName: state.companyName,
+    personScore: ps, personRating: getRating(ps).label,
+    companyScore: cs, companyRating: getRating(cs).label, factors: factors });
+}
 document.addEventListener("DOMContentLoaded", render);
 </script>
+
+<div class="gs-modal-overlay" id="gsModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="gs-modal">
+    <h3>&#128202; Configurar Google Sheets</h3>
+    <p>Cole a URL de implantação do Google Apps Script. Ele deve estar implantado como <strong>App da Web</strong> com acesso permitido a <strong>Qualquer pessoa</strong>.<br><br>
+    Acesse o arquivo <em>"Apps Script - Salvar Resultados de Hospitalidade"</em> no seu Google Drive (pasta Indicadores de Hospitalidade nas Empresas), copie o c&#243;digo, crie um novo projeto em <a href="https://script.google.com" target="_blank" style="color:#16a34a">script.google.com</a> e implante como App da Web.</p>
+    <input type="url" id="gsUrlInput" placeholder="https://script.google.com/macros/s/..." />
+    <div class="gs-modal-btns">
+      <button class="btn-gs btn-gs-config" onclick="document.getElementById('gsModal').style.display='none'">Cancelar</button>
+      <button class="btn-gs btn-gs-save" onclick="gsConfigSave()">Salvar configura&#231;&#227;o</button>
+    </div>
+  </div>
+</div>
+<div class="gs-toast" id="gsToast"></div>
 </body>
 </html>
