@@ -14,35 +14,24 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-  /* HEADER */
   .app-header { background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 60%, #14b8a6 100%); color: white; padding: 22px 20px 18px; text-align: center; box-shadow: var(--shadow-lg); }
   .app-header h1 { font-size: 1.45rem; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 4px; }
   .app-header p { font-size: 0.82rem; opacity: 0.88; }
-
-  /* PROGRESS */
   .progress-wrap { background: white; padding: 10px 20px 0; border-bottom: 1px solid var(--border); }
   .progress-labels { display: flex; justify-content: space-between; font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; }
   .progress-bar-bg { width: 100%; height: 6px; background: var(--accent-light); border-radius: 3px; margin-bottom: 10px; }
   .progress-bar-fill { height: 6px; background: linear-gradient(90deg, var(--accent), var(--accent-mid)); border-radius: 3px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
-
   .screen { display: none; } .screen.active { display: block; }
   .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
-
-  /* CARDS */
   .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 24px; margin-bottom: 20px; }
   .card-title { font-size: 1.05rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
   .card-desc { font-size: 0.88rem; color: #4b5563; line-height: 1.55; margin-bottom: 16px; }
-
-  /* FORM */
   .form-group { margin-bottom: 18px; }
   .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 7px; }
   .form-input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.95rem; color: var(--text); background: var(--surface2); transition: border-color 0.2s; outline: none; }
   .form-input:focus { border-color: var(--accent); background: white; }
   .form-select { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.95rem; color: var(--text); background: var(--surface2); cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230d9488' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
   .form-select:focus { border-color: var(--accent); background-color: white; }
-
-  /* AXIS CARDS */
   .axis-card { background: var(--surface); border-radius: var(--radius); border: 1.5px solid var(--border); box-shadow: var(--shadow); padding: 20px; margin-bottom: 18px; transition: border-color 0.2s, box-shadow 0.2s; }
   .axis-card.complete { border-color: var(--accent); box-shadow: 0 2px 12px rgba(13,148,136,0.18); }
   .axis-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
@@ -52,23 +41,9 @@
   .axis-card.complete .axis-check { display: inline; }
   .axis-desc { font-size: 0.83rem; color: #6b7280; line-height: 1.5; margin-bottom: 14px; padding-left: 46px; }
   .selector-label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 9px; margin-top: 4px; }
-
-  /* SCALE BUTTONS */
   .scale-group { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
   @media (max-width: 520px) { .scale-group { grid-template-columns: repeat(3, 1fr); } }
-  .btn-scale {
-    padding: 10px 6px 8px;
-    border-radius: 9px;
-    border: 1.5px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    font-size: 0.78rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-    line-height: 1.3;
-  }
+  .btn-scale { padding: 10px 6px 8px; border-radius: 9px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); font-size: 0.78rem; font-weight: 500; cursor: pointer; transition: all 0.15s; text-align: center; line-height: 1.3; }
   .btn-scale .scale-num { display: block; font-size: 1.05rem; font-weight: 700; margin-bottom: 3px; }
   .btn-scale:hover { border-color: var(--accent); background: var(--accent-light); color: var(--accent-dark); }
   .btn-scale.selected { background: var(--accent); border-color: var(--accent-dark); color: white; font-weight: 600; }
@@ -77,8 +52,6 @@
   .btn-scale.level-3.selected { background: #eab308; border-color: #ca8a04; color: #1c1917; }
   .btn-scale.level-4.selected { background: #22c55e; border-color: #16a34a; }
   .btn-scale.level-5.selected { background: #2563eb; border-color: #1d4ed8; }
-
-  /* NAVIGATION */
   .nav-bar { display: flex; justify-content: space-between; align-items: center; max-width: 720px; margin: 0 auto; padding: 14px 16px; background: white; border-top: 1px solid var(--border); position: sticky; bottom: 0; z-index: 100; box-shadow: 0 -3px 12px rgba(13,148,136,0.08); }
   .btn-nav { padding: 11px 24px; border-radius: 9px; font-size: 0.93rem; font-weight: 600; cursor: pointer; transition: all 0.18s; border: none; display: flex; align-items: center; gap: 7px; }
   .btn-back { background: var(--surface2); color: var(--text-secondary); border: 1.5px solid var(--border); }
@@ -87,8 +60,6 @@
   .btn-next:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(13,148,136,0.4); }
   .btn-next:disabled { background: #d1d5db; color: #9ca3af; cursor: not-allowed; box-shadow: none; }
   .nav-counter { font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; }
-
-  /* RESULTS */
   .results-hero { background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 100%); color: white; border-radius: var(--radius); padding: 24px; margin-bottom: 20px; text-align: center; }
   .results-hero h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
   .results-hero p { font-size: 0.85rem; opacity: 0.9; }
@@ -138,28 +109,20 @@
   .footnote p:last-child { margin-bottom: 0; } .footnote strong { color: #374151; }
   .btn-restart { display: block; width: 100%; padding: 13px; background: var(--surface); border: 1.5px solid var(--accent); color: var(--accent-dark); border-radius: 9px; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.18s; margin-bottom: 30px; }
   .btn-restart:hover { background: var(--accent-light); }
-
-  /* STEP 0 */
   .step0-hero { text-align: center; padding: 28px 0 10px; }
   .step0-hero .icon-big { font-size: 3rem; margin-bottom: 12px; display: block; }
   .step0-hero h2 { font-size: 1.35rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
   .step0-hero p { font-size: 0.88rem; color: #6b7280; line-height: 1.6; max-width: 500px; margin: 0 auto; }
   .framework-pills { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 16px; margin-bottom: 20px; }
   .framework-pill { font-size: 0.75rem; padding: 4px 11px; border-radius: 99px; background: var(--accent-light); color: var(--accent-dark); font-weight: 600; }
-
-  /* SCALE LEGEND */
   .scale-legend { display: flex; justify-content: space-between; font-size: 0.72rem; color: #9ca3af; margin-top: 6px; padding: 0 2px; }
-
-  /* ANIMATION */
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   .screen.active .container > * { animation: fadeInUp 0.35s ease both; }
   .screen.active .container > *:nth-child(2) { animation-delay: 0.05s; }
   .screen.active .container > *:nth-child(3) { animation-delay: 0.1s; }
   .screen.active .container > *:nth-child(4) { animation-delay: 0.15s; }
   .screen.active .container > *:nth-child(5) { animation-delay: 0.2s; }
-
-  /* GOOGLE SHEETS */
-  .gs-save-row{display:flex;justify-content:center;gap:.7rem;margin:1.2rem 0 .5rem}
+  .gs-save-row{display:flex;justify-content:center;margin:1.2rem 0 1.5rem}
   .btn-gs{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s}
   .btn-gs-save{background:#16a34a;color:#fff}
   .btn-gs-save:hover{background:#15803d;transform:translateY(-1px)}
@@ -181,7 +144,6 @@
   <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
 </div>
 
-<!-- TELA 0: IDENTIFICAÇÃO -->
 <div class="screen active" id="screen0">
   <div class="container">
     <div class="step0-hero">
@@ -215,49 +177,39 @@
       </div>
     </div>
     <div style="padding: 0 0 80px;">
-      <button class="btn-restart" id="btnStep0Next" onclick="goToStep1()" disabled style="background: var(--accent); color: white; border-color: var(--accent-dark);">
-        Iniciar Diagnóstico &#8594;
-      </button>
+      <button class="btn-restart" id="btnStep0Next" onclick="goToStep1()" disabled style="background: var(--accent); color: white; border-color: var(--accent-dark);">Iniciar Diagnóstico &#8594;</button>
     </div>
   </div>
 </div>
 
-<!-- TELA 1: PERSPECTIVA INTERNA -->
 <div class="screen" id="screen1">
   <div class="container">
     <div class="card" style="background: var(--blue-light); border-color: #93c5fd;">
       <div class="card-title" style="color: #1d4ed8;">&#128101; Perspectiva Interna — Colaboradores</div>
-      <div class="card-desc" style="color: #1e40af;">
-        Para cada eixo, avalie como os <strong>colaboradores</strong> vivenciam este aspecto na organização. Baseie-se no seu conhecimento do ambiente interno, pesquisas de clima, conversas com a equipe ou qualquer outra fonte disponível.
-      </div>
+      <div class="card-desc" style="color: #1e40af;">Para cada eixo, avalie como os <strong>colaboradores</strong> vivenciam este aspecto na organização. Baseie-se no seu conhecimento do ambiente interno, pesquisas de clima, conversas com a equipe ou qualquer outra fonte disponível.</div>
     </div>
     <div id="internalAxes"></div>
     <div style="height: 80px;"></div>
   </div>
 </div>
 
-<!-- TELA 2: PERSPECTIVA EXTERNA -->
 <div class="screen" id="screen2">
   <div class="container">
     <div class="card" style="background: var(--green-light); border-color: #6ee7b7;">
       <div class="card-title" style="color: #065f46;">&#11088; Perspectiva Externa — Clientes</div>
-      <div class="card-desc" style="color: #064e3b;">
-        Para cada eixo, avalie como os <strong>clientes</strong> percebem este aspecto da organização. Baseie-se em feedbacks recebidos, pesquisas de satisfação, canais de atendimento ou sua percepção geral sobre a experiência do cliente.
-      </div>
+      <div class="card-desc" style="color: #064e3b;">Para cada eixo, avalie como os <strong>clientes</strong> percebem este aspecto da organização. Baseie-se em feedbacks recebidos, pesquisas de satisfação, canais de atendimento ou sua percepção geral sobre a experiência do cliente.</div>
     </div>
     <div id="externalAxes"></div>
     <div style="height: 80px;"></div>
   </div>
 </div>
 
-<!-- TELA 3: RESULTADOS -->
 <div class="screen" id="screen3">
   <div class="container">
     <div class="results-hero">
       <h2 id="resultsTitle">Diagnóstico Concluído</h2>
       <p id="resultsSubtitle">Mapeamento de Hospitalidade Organizacional</p>
     </div>
-
     <div class="gauges-row">
       <div class="gauge-card">
         <div class="gauge-title">&#128101; Centroide Interno (Ȳ)</div>
@@ -280,7 +232,6 @@
         <div class="gauge-sub">Média dos 5 eixos externos</div>
       </div>
     </div>
-
     <div class="matrix-section">
       <div class="section-title">Matriz de Tipologia 2×2</div>
       <svg id="matrixSvg" width="320" height="320" viewBox="0 0 320 320" style="max-width:100%;"></svg>
@@ -291,7 +242,6 @@
         <span style="font-size:0.73rem;color:#b91c1c;font-weight:600;">&#9632; Baixa Intensidade</span>
       </div>
     </div>
-
     <div class="axis-bars">
       <div class="section-title">Pontuação por Eixo</div>
       <div class="bar-legend">
@@ -300,30 +250,22 @@
       </div>
       <div id="axisBars"></div>
     </div>
-
     <div id="quadrantCard"></div>
-
     <div class="priorities-list">
       <div class="section-title">Prioridades de Ação</div>
       <div id="prioritiesList"></div>
     </div>
-
     <div class="footnote">
       <p><strong>Referência metodológica:</strong> Silva, R. C., Wada, E. K., Ferro, R., Cavenaghi, A., et al. Mapping hospitality in organizations through open web data: An indicator-based approach. Universidade Anhembi Morumbi. (<em>No prelo / International Journal of Contemporary Hospitality Management</em>)</p>
       <p><strong>Nota metodológica:</strong> Cada eixo é avaliado em escala ordinal de 5 pontos (Crítico = 10, Fraco = 30, Moderado = 50, Bom = 70, Excelente = 90). Os centroides Ȳ (interno) e X̄ (externo) correspondem à média dos 5 eixos em cada perspectiva. O corte de referência é 50 pontos, determinando o quadrante da tipologia 2×2.</p>
     </div>
-
     <button class="btn-restart" onclick="restartApp()">&#8635; Realizar novo diagnóstico</button>
-    <div class="gs-save-row" style="margin-top:1rem;">
+    <div class="gs-save-row">
       <button class="btn-gs btn-gs-save" onclick="gsSave()">Salvar</button>
-    </div>
-    <div style="text-align:center;margin-bottom:30px;">
-      <a href="#" onclick="gsResetUrl();return false;" style="font-size:0.75rem;color:#9ca3af;text-decoration:underline;">reconfigurar planilha</a>
     </div>
   </div>
 </div>
 
-<!-- BARRA DE NAVEGAÇÃO -->
 <div class="nav-bar" id="navBar" style="display:none;">
   <button class="btn-nav btn-back" id="btnBack" onclick="navBack()">&#8592; Voltar</button>
   <span class="nav-counter" id="navCounter"></span>
@@ -331,397 +273,230 @@
 </div>
 
 <script>
-// ===== DADOS =====
 var AXES = [
-  {
-    id: 0, name: "Alinhamento Cultural", icon: "&#127775;",
-    descInternal: "Em que medida os valores declarados pela organização refletem-se nas práticas cotidianas dos colaboradores? Considere a coerência entre discurso e prática, a ética organizacional, as políticas de inclusão e o comprometimento real da liderança com os valores institucionais.",
-    descExternal: "Como os clientes percebem a autenticidade e a coerência da organização? Avalie se as promessas e a comunicação da marca correspondem à experiência real entregue, e se há respeito à diversidade dos clientes.",
-    recInternal: "Promover auditorias regulares de cultura organizacional, alinhar comunicação interna com os valores declarados e criar canais de escuta seguros para os colaboradores.",
-    recExternal: "Revisar a comunicação com clientes, garantir que as promessas da marca sejam operacionalizadas e coletar feedback sistemático sobre a percepção de valores."
-  },
-  {
-    id: 1, name: "Práticas Gerenciais", icon: "&#128084;",
-    descInternal: "Como os colaboradores percebem a qualidade da liderança? Considere as práticas de reconhecimento e feedback, o grau de autonomia concedido, a equidade no tratamento e a transparência nos processos de avaliação e promoção.",
-    descExternal: "Como a gestão impacta a experiência do cliente? Avalie a eficiência no atendimento, a consistência do serviço, a capacitação visível da equipe e a postura dos gestores em situações de conflito ou insatisfação.",
-    recInternal: "Implementar programas estruturados de reconhecimento, treinamento de liderança situacional e processos transparentes de avaliação de desempenho.",
-    recExternal: "Capacitar gestores para situações de atendimento ao cliente, criar protocolos claros de escalação e garantir presença gerencial nos pontos críticos da experiência."
-  },
-  {
-    id: 2, name: "Clima Interpessoal", icon: "&#129309;",
-    descInternal: "Como estão as relações entre os colaboradores? Avalie a qualidade da colaboração e do espírito de equipe, o respeito mútuo, a segurança psicológica para expressão de ideias e o sentimento de pertencimento na organização.",
-    descExternal: "Como o clima interno é percebido pelos clientes por meio das interações? Avalie a cordialidade genuína, o calor humano, a consistência no tratamento e a disposição da equipe em ajudar além do mínimo esperado.",
-    recInternal: "Realizar pesquisas de clima organizacional regulares, implementar políticas anti-assédio e criar espaços formais para integração e construção de confiança entre equipes.",
-    recExternal: "Monitorar feedbacks sobre o atendimento, criar programas que cultivem genuíno cuidado com o cliente e alinhar o clima interno positivo com a experiência de serviço."
-  },
-  {
-    id: 3, name: "Acessibilidade Estrutural", icon: "&#127959;",
-    descInternal: "Os colaboradores têm os recursos, ferramentas e infraestrutura necessários para realizar seu trabalho? Avalie o acesso à informação, a tecnologia disponível, a ergonomia e a qualidade dos processos e suporte operacional.",
-    descExternal: "Com que facilidade os clientes acessam produtos, serviços e suporte? Avalie a clareza dos canais disponíveis, a acessibilidade física e digital, a fluidez dos processos e a remoção de barreiras na jornada do cliente.",
-    recInternal: "Mapear lacunas de ferramentas e sistemas, investir em infraestrutura adequada e simplificar processos internos que geram retrabalho ou frustração operacional.",
-    recExternal: "Auditar a jornada do cliente, remover pontos de fricção, ampliar canais de atendimento e garantir acessibilidade para diferentes perfis de usuário."
-  },
-  {
-    id: 4, name: "Capacidade de Resposta", icon: "&#9889;",
-    descInternal: "Quão ágil é a organização para resolver problemas internos? Avalie a velocidade de resposta da liderança às demandas dos colaboradores, a eficácia na tomada de decisão e a capacidade de adaptação a mudanças.",
-    descExternal: "Com que velocidade e eficácia a organização responde às demandas e necessidades dos clientes? Avalie o tempo de resposta, a taxa de resolução, a comunicação proativa em falhas e a qualidade na recuperação do serviço.",
-    recInternal: "Estabelecer SLAs internos para resposta a demandas dos colaboradores, criar protocolos de comunicação em crises e empoderar líderes intermediários para decisões ágeis.",
-    recExternal: "Definir metas de tempo de resposta ao cliente, treinar equipes em resolução eficaz e criar processos estruturados de recuperação de serviço."
-  }
+  { id:0, name:"Alinhamento Cultural", icon:"&#127775;",
+    descInternal:"Em que medida os valores declarados pela organização refletem-se nas práticas cotidianas dos colaboradores? Considere a coerência entre discurso e prática, a ética organizacional, as políticas de inclusão e o comprometimento real da liderança com os valores institucionais.",
+    descExternal:"Como os clientes percebem a autenticidade e a coerência da organização? Avalie se as promessas e a comunicação da marca correspondem à experiência real entregue, e se há respeito à diversidade dos clientes.",
+    recInternal:"Promover auditorias regulares de cultura organizacional, alinhar comunicação interna com os valores declarados e criar canais de escuta seguros para os colaboradores.",
+    recExternal:"Revisar a comunicação com clientes, garantir que as promessas da marca sejam operacionalizadas e coletar feedback sistemático sobre a percepção de valores." },
+  { id:1, name:"Práticas Gerenciais", icon:"&#128084;",
+    descInternal:"Como os colaboradores percebem a qualidade da liderança? Considere as práticas de reconhecimento e feedback, o grau de autonomia concedido, a equidade no tratamento e a transparência nos processos de avaliação e promoção.",
+    descExternal:"Como a gestão impacta a experiência do cliente? Avalie a eficiência no atendimento, a consistência do serviço, a capacitação visível da equipe e a postura dos gestores em situações de conflito ou insatisfação.",
+    recInternal:"Implementar programas estruturados de reconhecimento, treinamento de liderança situacional e processos transparentes de avaliação de desempenho.",
+    recExternal:"Capacitar gestores para situações de atendimento ao cliente, criar protocolos claros de escalação e garantir presença gerencial nos pontos críticos da experiência." },
+  { id:2, name:"Clima Interpessoal", icon:"&#129309;",
+    descInternal:"Como estão as relações entre os colaboradores? Avalie a qualidade da colaboração e do espírito de equipe, o respeito mútuo, a segurança psicológica para expressão de ideias e o sentimento de pertencimento na organização.",
+    descExternal:"Como o clima interno é percebido pelos clientes por meio das interações? Avalie a cordialidade genuína, o calor humano, a consistência no tratamento e a disposição da equipe em ajudar além do mínimo esperado.",
+    recInternal:"Realizar pesquisas de clima organizacional regulares, implementar políticas anti-assédio e criar espaços formais para integração e construção de confiança entre equipes.",
+    recExternal:"Monitorar feedbacks sobre o atendimento, criar programas que cultivem genuíno cuidado com o cliente e alinhar o clima interno positivo com a experiência de serviço." },
+  { id:3, name:"Acessibilidade Estrutural", icon:"&#127959;",
+    descInternal:"Os colaboradores têm os recursos, ferramentas e infraestrutura necessários para realizar seu trabalho? Avalie o acesso à informação, a tecnologia disponível, a ergonomia e a qualidade dos processos e suporte operacional.",
+    descExternal:"Com que facilidade os clientes acessam produtos, serviços e suporte? Avalie a clareza dos canais disponíveis, a acessibilidade física e digital, a fluidez dos processos e a remoção de barreiras na jornada do cliente.",
+    recInternal:"Mapear lacunas de ferramentas e sistemas, investir em infraestrutura adequada e simplificar processos internos que geram retrabalho ou frustração operacional.",
+    recExternal:"Auditar a jornada do cliente, remover pontos de fricção, ampliar canais de atendimento e garantir acessibilidade para diferentes perfis de usuário." },
+  { id:4, name:"Capacidade de Resposta", icon:"&#9889;",
+    descInternal:"Quão ágil é a organização para resolver problemas internos? Avalie a velocidade de resposta da liderança às demandas dos colaboradores, a eficácia na tomada de decisão e a capacidade de adaptação a mudanças.",
+    descExternal:"Com que velocidade e eficácia a organização responde às demandas e necessidades dos clientes? Avalie o tempo de resposta, a taxa de resolução, a comunicação proativa em falhas e a qualidade na recuperação do serviço.",
+    recInternal:"Estabelecer SLAs internos para resposta a demandas dos colaboradores, criar protocolos de comunicação em crises e empoderar líderes intermediários para decisões ágeis.",
+    recExternal:"Definir metas de tempo de resposta ao cliente, treinar equipes em resolução eficaz e criar processos estruturados de recuperação de serviço." }
 ];
-
-var SCALE_MAP = { "Crítico": 10, "Fraco": 30, "Moderado": 50, "Bom": 70, "Excelente": 90 };
-var SCALE_KEYS = ["Crítico", "Fraco", "Moderado", "Bom", "Excelente"];
-
+var SCALE_MAP = { "Crítico":10, "Fraco":30, "Moderado":50, "Bom":70, "Excelente":90 };
+var SCALE_KEYS = ["Crítico","Fraco","Moderado","Bom","Excelente"];
 var QUADRANTS = {
-  q1: { cls: "q1", name: "Convergência Interna-Externa", emoji: "&#129395;",
-    desc: "A organização apresenta alta hospitalidade percebida tanto por colaboradores quanto por clientes. Os valores e práticas de acolhimento internos se traduzem efetivamente na experiência do cliente, criando um ciclo virtuoso sustentável.",
-    impl: "<strong>Implicação gerencial:</strong> Manter e institucionalizar as práticas que geraram essa convergência. Documentar processos exemplares, replicar para novas unidades e usar como referência em processos seletivos. Atenção para não deixar cair o padrão com crescimento acelerado." },
-  q2: { cls: "q2", name: "Predominância Interna", emoji: "&#128101;",
-    desc: "Os colaboradores vivenciam alta hospitalidade interna, mas esse valor não está sendo suficientemente externalizado para os clientes. Há uma 'hospitalidade represada' que não chega ao ponto de contato.",
-    impl: "<strong>Implicação gerencial:</strong> Investigar os gaps de translação do valor interno para a experiência do cliente. Revisar processos de atendimento, treinamento de linha de frente e sistemas de suporte que possam estar impedindo que o clima interno positivo se manifeste externamente." },
-  q3: { cls: "q3", name: "Predominância Externa", emoji: "&#9888;",
-    desc: "Os clientes percebem boa hospitalidade, mas internamente os colaboradores não vivenciam a mesma cultura de acolhimento. Há risco de esgotamento (burnout) e insustentabilidade no médio prazo.",
-    impl: "<strong>Implicação gerencial:</strong> Prioridade urgente em práticas de gestão de pessoas, clima organizacional e condições de trabalho. A experiência positiva do cliente pode estar sendo sustentada por colaboradores sobrecarregados — modelo de risco elevado para retenção de talentos." },
-  q4: { cls: "q4", name: "Baixa Intensidade Relacional", emoji: "&#128680;",
-    desc: "Tanto colaboradores quanto clientes apresentam baixa percepção de hospitalidade. A organização enfrenta desafios sistêmicos que afetam simultaneamente o ambiente interno e a entrega de valor ao cliente.",
-    impl: "<strong>Implicação gerencial:</strong> Intervenção sistêmica com prioridade máxima. Recomenda-se diagnóstico organizacional aprofundado, revisão da estratégia de pessoas e clientes, e plano de transformação cultural com métricas claras e acompanhamento trimestral." }
+  q1:{ cls:"q1", name:"Convergência Interna-Externa", emoji:"&#129395;",
+    desc:"A organização apresenta alta hospitalidade percebida tanto por colaboradores quanto por clientes. Os valores e práticas de acolhimento internos se traduzem efetivamente na experiência do cliente, criando um ciclo virtuoso sustentável.",
+    impl:"<strong>Implicação gerencial:</strong> Manter e institucionalizar as práticas que geraram essa convergência. Documentar processos exemplares, replicar para novas unidades e usar como referência em processos seletivos. Atenção para não deixar cair o padrão com crescimento acelerado." },
+  q2:{ cls:"q2", name:"Predominância Interna", emoji:"&#128101;",
+    desc:"Os colaboradores vivenciam alta hospitalidade interna, mas esse valor não está sendo suficientemente externalizado para os clientes. Há uma 'hospitalidade represada' que não chega ao ponto de contato.",
+    impl:"<strong>Implicação gerencial:</strong> Investigar os gaps de translação do valor interno para a experiência do cliente. Revisar processos de atendimento, treinamento de linha de frente e sistemas de suporte que possam estar impedindo que o clima interno positivo se manifeste externamente." },
+  q3:{ cls:"q3", name:"Predominância Externa", emoji:"&#9888;",
+    desc:"Os clientes percebem boa hospitalidade, mas internamente os colaboradores não vivenciam a mesma cultura de acolhimento. Há risco de esgotamento (burnout) e insustentabilidade no médio prazo.",
+    impl:"<strong>Implicação gerencial:</strong> Prioridade urgente em práticas de gestão de pessoas, clima organizacional e condições de trabalho. A experiência positiva do cliente pode estar sendo sustentada por colaboradores sobrecarregados — modelo de risco elevado para retenção de talentos." },
+  q4:{ cls:"q4", name:"Baixa Intensidade Relacional", emoji:"&#128680;",
+    desc:"Tanto colaboradores quanto clientes apresentam baixa percepção de hospitalidade. A organização enfrenta desafios sistêmicos que afetam simultaneamente o ambiente interno e a entrega de valor ao cliente.",
+    impl:"<strong>Implicação gerencial:</strong> Intervenção sistêmica com prioridade máxima. Recomenda-se diagnóstico organizacional aprofundado, revisão da estratégia de pessoas e clientes, e plano de transformação cultural com métricas claras e acompanhamento trimestral." }
 };
-
-var state = { step: 0, company: "", sector: "", internal: [], external: [] };
-for (var i = 0; i < 5; i++) {
-  state.internal.push({ level: null });
-  state.external.push({ level: null });
+var state = { step:0, company:"", sector:"", internal:[], external:[] };
+for (var i=0;i<5;i++){state.internal.push({level:null});state.external.push({level:null});}
+function initStep0(){
+  var ni=document.getElementById("companyName"),si=document.getElementById("sectorSelect"),btn=document.getElementById("btnStep0Next");
+  function chk(){btn.disabled=!(ni.value.trim().length>0&&si.value!="");}
+  ni.addEventListener("input",chk);si.addEventListener("change",chk);
 }
-
-function initStep0() {
-  var nameInput = document.getElementById("companyName");
-  var sectorInput = document.getElementById("sectorSelect");
-  var btn = document.getElementById("btnStep0Next");
-  function check() { btn.disabled = !(nameInput.value.trim().length > 0 && sectorInput.value !== ""); }
-  nameInput.addEventListener("input", check);
-  sectorInput.addEventListener("change", check);
-}
-
-function goToStep1() {
-  state.company = document.getElementById("companyName").value.trim();
-  state.sector = document.getElementById("sectorSelect").value;
-  showScreen(1);
-}
-
-function renderInternalAxes() {
-  var container = document.getElementById("internalAxes");
-  container.innerHTML = "";
-  for (var i = 0; i < AXES.length; i++) {
-    (function(idx) {
-      var ax = AXES[idx];
-      var card = document.createElement("div");
-      card.className = "axis-card" + (state.internal[idx].level !== null ? " complete" : "");
-      card.id = "int-card-" + idx;
-      var btns = "";
-      for (var k = 0; k < SCALE_KEYS.length; k++) {
-        var lv = SCALE_KEYS[k];
-        var sel = state.internal[idx].level === lv ? " selected" : "";
-        btns += '<button class="btn-scale level-' + (k+1) + sel + '" onclick="setIntLevel(' + idx + ', \'' + lv + '\')">';
-        btns += '<span class="scale-num">' + SCALE_MAP[lv] + '</span>' + lv + '</button>';
-      }
-      card.innerHTML =
-        '<div class="axis-header">'
-          + '<div class="axis-icon">' + ax.icon + '</div>'
-          + '<span class="axis-name">' + ax.name + '</span>'
-          + '<span class="axis-check">&#10003;</span>'
-        + '</div>'
-        + '<div class="axis-desc">' + ax.descInternal + '</div>'
-        + '<div class="selector-label">Avaliação — perspectiva dos colaboradores:</div>'
-        + '<div class="scale-group">' + btns + '</div>'
-        + '<div class="scale-legend"><span>Crítico</span><span>Fraco</span><span>Moderado</span><span>Bom</span><span>Excelente</span></div>';
-      container.appendChild(card);
-    })(i);
-  }
+function goToStep1(){state.company=document.getElementById("companyName").value.trim();state.sector=document.getElementById("sectorSelect").value;showScreen(1);}
+function renderInternalAxes(){
+  var c=document.getElementById("internalAxes");c.innerHTML="";
+  for(var i=0;i<AXES.length;i++){(function(idx){
+    var ax=AXES[idx],card=document.createElement("div");
+    card.className="axis-card"+(state.internal[idx].level!==null?" complete":"");card.id="int-card-"+idx;
+    var btns="";
+    for(var k=0;k<SCALE_KEYS.length;k++){var lv=SCALE_KEYS[k],sel=state.internal[idx].level===lv?" selected":"";
+      btns+='<button class="btn-scale level-'+(k+1)+sel+'" onclick="setIntLevel('+idx+',\''+lv+'\')"><span class="scale-num">'+SCALE_MAP[lv]+'</span>'+lv+'</button>';}
+    card.innerHTML='<div class="axis-header"><div class="axis-icon">'+ax.icon+'</div><span class="axis-name">'+ax.name+'</span><span class="axis-check">&#10003;</span></div>'
+      +'<div class="axis-desc">'+ax.descInternal+'</div>'
+      +'<div class="selector-label">Avaliação — perspectiva dos colaboradores:</div>'
+      +'<div class="scale-group">'+btns+'</div>'
+      +'<div class="scale-legend"><span>Crítico</span><span>Fraco</span><span>Moderado</span><span>Bom</span><span>Excelente</span></div>';
+    c.appendChild(card);
+  })(i);}
   updateInternalNav();
 }
-
-function renderExternalAxes() {
-  var container = document.getElementById("externalAxes");
-  container.innerHTML = "";
-  for (var i = 0; i < AXES.length; i++) {
-    (function(idx) {
-      var ax = AXES[idx];
-      var card = document.createElement("div");
-      card.className = "axis-card" + (state.external[idx].level !== null ? " complete" : "");
-      card.id = "ext-card-" + idx;
-      var btns = "";
-      for (var k = 0; k < SCALE_KEYS.length; k++) {
-        var lv = SCALE_KEYS[k];
-        var sel = state.external[idx].level === lv ? " selected" : "";
-        btns += '<button class="btn-scale level-' + (k+1) + sel + '" onclick="setExtLevel(' + idx + ', \'' + lv + '\')">';
-        btns += '<span class="scale-num">' + SCALE_MAP[lv] + '</span>' + lv + '</button>';
-      }
-      card.innerHTML =
-        '<div class="axis-header">'
-          + '<div class="axis-icon">' + ax.icon + '</div>'
-          + '<span class="axis-name">' + ax.name + '</span>'
-          + '<span class="axis-check">&#10003;</span>'
-        + '</div>'
-        + '<div class="axis-desc">' + ax.descExternal + '</div>'
-        + '<div class="selector-label">Avaliação — perspectiva dos clientes:</div>'
-        + '<div class="scale-group">' + btns + '</div>'
-        + '<div class="scale-legend"><span>Crítico</span><span>Fraco</span><span>Moderado</span><span>Bom</span><span>Excelente</span></div>';
-      container.appendChild(card);
-    })(i);
-  }
+function renderExternalAxes(){
+  var c=document.getElementById("externalAxes");c.innerHTML="";
+  for(var i=0;i<AXES.length;i++){(function(idx){
+    var ax=AXES[idx],card=document.createElement("div");
+    card.className="axis-card"+(state.external[idx].level!==null?" complete":"");card.id="ext-card-"+idx;
+    var btns="";
+    for(var k=0;k<SCALE_KEYS.length;k++){var lv=SCALE_KEYS[k],sel=state.external[idx].level===lv?" selected":"";
+      btns+='<button class="btn-scale level-'+(k+1)+sel+'" onclick="setExtLevel('+idx+',\''+lv+'\')"><span class="scale-num">'+SCALE_MAP[lv]+'</span>'+lv+'</button>';}
+    card.innerHTML='<div class="axis-header"><div class="axis-icon">'+ax.icon+'</div><span class="axis-name">'+ax.name+'</span><span class="axis-check">&#10003;</span></div>'
+      +'<div class="axis-desc">'+ax.descExternal+'</div>'
+      +'<div class="selector-label">Avaliação — perspectiva dos clientes:</div>'
+      +'<div class="scale-group">'+btns+'</div>'
+      +'<div class="scale-legend"><span>Crítico</span><span>Fraco</span><span>Moderado</span><span>Bom</span><span>Excelente</span></div>';
+    c.appendChild(card);
+  })(i);}
   updateExternalNav();
 }
-
-function setIntLevel(idx, level) {
-  state.internal[idx].level = level;
-  var card = document.getElementById("int-card-" + idx);
-  var btns = card.querySelectorAll(".btn-scale");
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].className = "btn-scale level-" + (i+1) + (SCALE_KEYS[i] === level ? " selected" : "");
-  }
-  card.className = "axis-card complete";
-  updateInternalNav();
+function setIntLevel(idx,level){
+  state.internal[idx].level=level;
+  var card=document.getElementById("int-card-"+idx),btns=card.querySelectorAll(".btn-scale");
+  for(var i=0;i<btns.length;i++)btns[i].className="btn-scale level-"+(i+1)+(SCALE_KEYS[i]===level?" selected":"");
+  card.className="axis-card complete";updateInternalNav();
 }
-
-function setExtLevel(idx, level) {
-  state.external[idx].level = level;
-  var card = document.getElementById("ext-card-" + idx);
-  var btns = card.querySelectorAll(".btn-scale");
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].className = "btn-scale level-" + (i+1) + (SCALE_KEYS[i] === level ? " selected" : "");
-  }
-  card.className = "axis-card complete";
-  updateExternalNav();
+function setExtLevel(idx,level){
+  state.external[idx].level=level;
+  var card=document.getElementById("ext-card-"+idx),btns=card.querySelectorAll(".btn-scale");
+  for(var i=0;i<btns.length;i++)btns[i].className="btn-scale level-"+(i+1)+(SCALE_KEYS[i]===level?" selected":"");
+  card.className="axis-card complete";updateExternalNav();
 }
-
-function calcEmpScore(idx) {
-  var level = state.internal[idx].level;
-  if (!level) return null;
-  return SCALE_MAP[level];
+function calcEmpScore(idx){var l=state.internal[idx].level;return l?SCALE_MAP[l]:null;}
+function calcCustScore(idx){var l=state.external[idx].level;return l?SCALE_MAP[l]:null;}
+function calcCentroids(){
+  var e=[],c=[];for(var i=0;i<5;i++){e.push(calcEmpScore(i));c.push(calcCustScore(i));}
+  var y=0,x=0;for(var i=0;i<5;i++){y+=e[i];x+=c[i];}
+  return{yBar:y/5,xBar:x/5,empScores:e,custScores:c};
 }
-
-function calcCustScore(idx) {
-  var level = state.external[idx].level;
-  if (!level) return null;
-  return SCALE_MAP[level];
+function getQuadrant(x,y){if(x>=50&&y>=50)return"q1";if(x<50&&y>=50)return"q2";if(x>=50&&y<50)return"q3";return"q4";}
+function countInternalDone(){var n=0;for(var i=0;i<5;i++)if(state.internal[i].level!==null)n++;return n;}
+function countExternalDone(){var n=0;for(var i=0;i<5;i++)if(state.external[i].level!==null)n++;return n;}
+function updateInternalNav(){var d=countInternalDone();document.getElementById("btnNext").disabled=d<5;document.getElementById("navCounter").textContent=d+" / 5 eixos";updateProgress(1,d/5);}
+function updateExternalNav(){var d=countExternalDone();document.getElementById("btnNext").disabled=d<5;document.getElementById("navCounter").textContent=d+" / 5 eixos";updateProgress(2,d/5);}
+function updateProgress(step,pct){
+  var fill=document.getElementById("progressFill"),pctL=document.getElementById("progressPct"),lbl=document.getElementById("progressLabel");
+  if(step===1){fill.style.width=(pct*50)+"%";lbl.textContent="Perspectiva Interna — Colaboradores";pctL.textContent=Math.round(pct*100)+"% desta etapa";}
+  else{fill.style.width=(50+pct*50)+"%";lbl.textContent="Perspectiva Externa — Clientes";pctL.textContent=Math.round(pct*100)+"% desta etapa";}
 }
-
-function calcCentroids() {
-  var empScores = [], custScores = [];
-  for (var i = 0; i < 5; i++) { empScores.push(calcEmpScore(i)); custScores.push(calcCustScore(i)); }
-  var yBar = 0, xBar = 0;
-  for (var i = 0; i < 5; i++) { yBar += empScores[i]; xBar += custScores[i]; }
-  return { yBar: yBar / 5, xBar: xBar / 5, empScores: empScores, custScores: custScores };
+function navBack(){if(state.step===1)showScreen(0);else if(state.step===2)showScreen(1);}
+function navNext(){if(state.step===1)showScreen(2);else if(state.step===2){showScreen(3);buildResults();}}
+function showScreen(n){
+  document.querySelectorAll(".screen").forEach(function(s){s.className="screen";});
+  document.getElementById("screen"+n).className="screen active";
+  state.step=n;
+  var pw=document.getElementById("progressWrap"),nb=document.getElementById("navBar"),btn=document.getElementById("btnNext");
+  if(n===0){pw.style.display="none";nb.style.display="none";}
+  else if(n===1){pw.style.display="block";nb.style.display="flex";btn.textContent="Próximo →";renderInternalAxes();updateInternalNav();window.scrollTo(0,0);}
+  else if(n===2){pw.style.display="block";nb.style.display="flex";btn.textContent="Ver Resultados →";renderExternalAxes();updateExternalNav();window.scrollTo(0,0);}
+  else if(n===3){pw.style.display="none";nb.style.display="none";window.scrollTo(0,0);}
 }
-
-function getQuadrant(xBar, yBar) {
-  if (xBar >= 50 && yBar >= 50) return "q1";
-  if (xBar < 50  && yBar >= 50) return "q2";
-  if (xBar >= 50 && yBar < 50)  return "q3";
-  return "q4";
+function buildResults(){
+  var data=calcCentroids(),yBar=data.yBar,xBar=data.xBar,empScores=data.empScores,custScores=data.custScores,qKey=getQuadrant(xBar,yBar);
+  document.getElementById("resultsTitle").textContent=state.company||"Diagnóstico Concluído";
+  document.getElementById("resultsSubtitle").textContent="Setor: "+(state.sector||"—")+" · Mapeamento de Hospitalidade Organizacional";
+  document.getElementById("gaugeInternalVal").textContent=yBar.toFixed(1);
+  document.getElementById("gaugeExternalVal").textContent=xBar.toFixed(1);
+  setTimeout(function(){
+    document.getElementById("gaugeInternal").style.strokeDashoffset=String(201*(1-yBar/100));
+    document.getElementById("gaugeExternal").style.strokeDashoffset=String(201*(1-xBar/100));
+  },100);
+  buildMatrix(xBar,yBar,qKey);buildAxisBars(empScores,custScores);buildQuadrantCard(qKey);buildPriorities(empScores,custScores);
 }
-
-function countInternalDone() { var n = 0; for (var i = 0; i < 5; i++) { if (state.internal[i].level !== null) n++; } return n; }
-function countExternalDone() { var n = 0; for (var i = 0; i < 5; i++) { if (state.external[i].level !== null) n++; } return n; }
-
-function updateInternalNav() {
-  var done = countInternalDone();
-  document.getElementById("btnNext").disabled = done < 5;
-  document.getElementById("navCounter").textContent = done + " / 5 eixos";
-  updateProgress(1, done / 5);
+function buildMatrix(xBar,yBar,qKey){
+  var svg=document.getElementById("matrixSvg"),W=320,H=320,pad=36,inner=W-pad*2;
+  function toX(s){return pad+(s/100)*inner;}function toY(s){return pad+inner-(s/100)*inner;}
+  var midX=toX(50),midY=toY(50),c="";
+  c+='<rect x="'+midX+'" y="'+pad+'" width="'+(W-pad-midX)+'" height="'+(midY-pad)+'" fill="#d1fae5" opacity="0.7"/>';
+  c+='<rect x="'+pad+'" y="'+pad+'" width="'+(midX-pad)+'" height="'+(midY-pad)+'" fill="#dbeafe" opacity="0.7"/>';
+  c+='<rect x="'+midX+'" y="'+midY+'" width="'+(W-pad-midX)+'" height="'+(H-pad-midY)+'" fill="#fef9c3" opacity="0.7"/>';
+  c+='<rect x="'+pad+'" y="'+midY+'" width="'+(midX-pad)+'" height="'+(H-pad-midY)+'" fill="#fee2e2" opacity="0.7"/>';
+  c+='<rect x="'+pad+'" y="'+pad+'" width="'+inner+'" height="'+inner+'" fill="none" stroke="#d1d5db" stroke-width="1.5"/>';
+  c+='<line x1="'+midX+'" y1="'+pad+'" x2="'+midX+'" y2="'+(H-pad)+'" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5,3"/>';
+  c+='<line x1="'+pad+'" y1="'+midY+'" x2="'+(W-pad)+'" y2="'+midY+'" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5,3"/>';
+  c+='<text x="'+(W/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="#6b7280" font-family="inherit">Perspectiva Externa (X̄)</text>';
+  c+='<text x="10" y="'+(H/2)+'" text-anchor="middle" font-size="10" fill="#6b7280" font-family="inherit" transform="rotate(-90,10,'+(H/2)+')">Perspectiva Interna (Ȳ)</text>';
+  c+='<text x="'+(midX+5)+'" y="'+(pad+13)+'" font-size="8" fill="#15803d" font-family="inherit" font-weight="700">Convergência I-E</text>';
+  c+='<text x="'+(pad+4)+'" y="'+(pad+13)+'" font-size="8" fill="#1d4ed8" font-family="inherit" font-weight="700">Pred. Interna</text>';
+  c+='<text x="'+(midX+5)+'" y="'+(H-pad-4)+'" font-size="8" fill="#a16207" font-family="inherit" font-weight="700">Pred. Externa</text>';
+  c+='<text x="'+(pad+4)+'" y="'+(H-pad-4)+'" font-size="8" fill="#b91c1c" font-family="inherit" font-weight="700">Baixa Intensidade</text>';
+  c+='<text x="'+toX(0)+'" y="'+(H-pad+12)+'" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">0</text>';
+  c+='<text x="'+toX(50)+'" y="'+(H-pad+12)+'" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">50</text>';
+  c+='<text x="'+toX(100)+'" y="'+(H-pad+12)+'" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">100</text>';
+  c+='<text x="'+(pad-5)+'" y="'+toY(0)+'" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">0</text>';
+  c+='<text x="'+(pad-5)+'" y="'+toY(50)+'" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">50</text>';
+  c+='<text x="'+(pad-5)+'" y="'+toY(100)+'" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">100</text>';
+  var px=toX(xBar),py=toY(yBar),qColor={q1:"#059669",q2:"#2563eb",q3:"#d97706",q4:"#dc2626"}[qKey]||"#6b7280";
+  c+='<circle cx="'+px+'" cy="'+py+'" r="12" fill="white" opacity="0.7"/>';
+  c+='<circle cx="'+px+'" cy="'+py+'" r="9" fill="'+qColor+'" opacity="0.3"/>';
+  c+='<circle cx="'+px+'" cy="'+py+'" r="7" fill="'+qColor+'"/>';
+  c+='<circle cx="'+px+'" cy="'+py+'" r="7" fill="none" stroke="white" stroke-width="2"/>';
+  var lx=px+10,ly=py-10;if(lx>W-70)lx=px-70;if(ly<pad+14)ly=py+18;
+  c+='<rect x="'+(lx-2)+'" y="'+(ly-11)+'" width="66" height="16" rx="4" fill="white" opacity="0.9"/>';
+  c+='<text x="'+lx+'" y="'+ly+'" font-size="9.5" fill="#374151" font-family="inherit" font-weight="600">X&#772;='+xBar.toFixed(1)+' &#562;='+yBar.toFixed(1)+'</text>';
+  svg.innerHTML=c;
 }
-
-function updateExternalNav() {
-  var done = countExternalDone();
-  document.getElementById("btnNext").disabled = done < 5;
-  document.getElementById("navCounter").textContent = done + " / 5 eixos";
-  updateProgress(2, done / 5);
-}
-
-function updateProgress(step, pct) {
-  var fill = document.getElementById("progressFill");
-  var pctLabel = document.getElementById("progressPct");
-  var label = document.getElementById("progressLabel");
-  if (step === 1) {
-    fill.style.width = (pct * 50) + "%";
-    label.textContent = "Perspectiva Interna — Colaboradores";
-    pctLabel.textContent = Math.round(pct * 100) + "% desta etapa";
-  } else {
-    fill.style.width = (50 + pct * 50) + "%";
-    label.textContent = "Perspectiva Externa — Clientes";
-    pctLabel.textContent = Math.round(pct * 100) + "% desta etapa";
-  }
-}
-
-function navBack() { if (state.step === 1) showScreen(0); else if (state.step === 2) showScreen(1); }
-function navNext() { if (state.step === 1) showScreen(2); else if (state.step === 2) { showScreen(3); buildResults(); } }
-
-function showScreen(n) {
-  document.querySelectorAll(".screen").forEach(function(s) { s.className = "screen"; });
-  document.getElementById("screen" + n).className = "screen active";
-  state.step = n;
-  var pw = document.getElementById("progressWrap"), nb = document.getElementById("navBar");
-  var btnNext = document.getElementById("btnNext");
-  if (n === 0) { pw.style.display = "none"; nb.style.display = "none"; }
-  else if (n === 1) { pw.style.display = "block"; nb.style.display = "flex"; btnNext.textContent = "Próximo →"; renderInternalAxes(); updateInternalNav(); window.scrollTo(0,0); }
-  else if (n === 2) { pw.style.display = "block"; nb.style.display = "flex"; btnNext.textContent = "Ver Resultados →"; renderExternalAxes(); updateExternalNav(); window.scrollTo(0,0); }
-  else if (n === 3) { pw.style.display = "none"; nb.style.display = "none"; window.scrollTo(0,0); }
-}
-
-function buildResults() {
-  var data = calcCentroids();
-  var yBar = data.yBar, xBar = data.xBar;
-  var empScores = data.empScores, custScores = data.custScores;
-  var qKey = getQuadrant(xBar, yBar);
-  document.getElementById("resultsTitle").textContent = state.company || "Diagnóstico Concluído";
-  document.getElementById("resultsSubtitle").textContent = "Setor: " + (state.sector || "—") + " · Mapeamento de Hospitalidade Organizacional";
-  document.getElementById("gaugeInternalVal").textContent = yBar.toFixed(1);
-  document.getElementById("gaugeExternalVal").textContent = xBar.toFixed(1);
-  setTimeout(function() {
-    document.getElementById("gaugeInternal").style.strokeDashoffset = String(201 * (1 - yBar / 100));
-    document.getElementById("gaugeExternal").style.strokeDashoffset = String(201 * (1 - xBar / 100));
-  }, 100);
-  buildMatrix(xBar, yBar, qKey);
-  buildAxisBars(empScores, custScores);
-  buildQuadrantCard(qKey);
-  buildPriorities(empScores, custScores);
-}
-
-function buildMatrix(xBar, yBar, qKey) {
-  var svg = document.getElementById("matrixSvg");
-  var W = 320, H = 320, pad = 36, inner = W - pad * 2;
-  function toX(s) { return pad + (s / 100) * inner; }
-  function toY(s) { return pad + inner - (s / 100) * inner; }
-  var midX = toX(50), midY = toY(50), c = "";
-  c += '<rect x="' + midX + '" y="' + pad + '" width="' + (W - pad - midX) + '" height="' + (midY - pad) + '" fill="#d1fae5" opacity="0.7"/>';
-  c += '<rect x="' + pad + '" y="' + pad + '" width="' + (midX - pad) + '" height="' + (midY - pad) + '" fill="#dbeafe" opacity="0.7"/>';
-  c += '<rect x="' + midX + '" y="' + midY + '" width="' + (W - pad - midX) + '" height="' + (H - pad - midY) + '" fill="#fef9c3" opacity="0.7"/>';
-  c += '<rect x="' + pad + '" y="' + midY + '" width="' + (midX - pad) + '" height="' + (H - pad - midY) + '" fill="#fee2e2" opacity="0.7"/>';
-  c += '<rect x="' + pad + '" y="' + pad + '" width="' + inner + '" height="' + inner + '" fill="none" stroke="#d1d5db" stroke-width="1.5"/>';
-  c += '<line x1="' + midX + '" y1="' + pad + '" x2="' + midX + '" y2="' + (H - pad) + '" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5,3"/>';
-  c += '<line x1="' + pad + '" y1="' + midY + '" x2="' + (W - pad) + '" y2="' + midY + '" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5,3"/>';
-  c += '<text x="' + (W/2) + '" y="' + (H-6) + '" text-anchor="middle" font-size="10" fill="#6b7280" font-family="inherit">Perspectiva Externa (X̄)</text>';
-  c += '<text x="10" y="' + (H/2) + '" text-anchor="middle" font-size="10" fill="#6b7280" font-family="inherit" transform="rotate(-90,10,' + (H/2) + ')">Perspectiva Interna (Ȳ)</text>';
-  c += '<text x="' + (midX+5) + '" y="' + (pad+13) + '" font-size="8" fill="#15803d" font-family="inherit" font-weight="700">Convergência I-E</text>';
-  c += '<text x="' + (pad+4) + '" y="' + (pad+13) + '" font-size="8" fill="#1d4ed8" font-family="inherit" font-weight="700">Pred. Interna</text>';
-  c += '<text x="' + (midX+5) + '" y="' + (H-pad-4) + '" font-size="8" fill="#a16207" font-family="inherit" font-weight="700">Pred. Externa</text>';
-  c += '<text x="' + (pad+4) + '" y="' + (H-pad-4) + '" font-size="8" fill="#b91c1c" font-family="inherit" font-weight="700">Baixa Intensidade</text>';
-  c += '<text x="' + toX(0) + '" y="' + (H-pad+12) + '" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">0</text>';
-  c += '<text x="' + toX(50) + '" y="' + (H-pad+12) + '" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">50</text>';
-  c += '<text x="' + toX(100) + '" y="' + (H-pad+12) + '" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="inherit">100</text>';
-  c += '<text x="' + (pad-5) + '" y="' + toY(0) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">0</text>';
-  c += '<text x="' + (pad-5) + '" y="' + toY(50) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">50</text>';
-  c += '<text x="' + (pad-5) + '" y="' + toY(100) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">100</text>';
-  var px = toX(xBar), py = toY(yBar);
-  var qColor = { q1: "#059669", q2: "#2563eb", q3: "#d97706", q4: "#dc2626" }[qKey] || "#6b7280";
-  c += '<circle cx="' + px + '" cy="' + py + '" r="12" fill="white" opacity="0.7"/>';
-  c += '<circle cx="' + px + '" cy="' + py + '" r="9" fill="' + qColor + '" opacity="0.3"/>';
-  c += '<circle cx="' + px + '" cy="' + py + '" r="7" fill="' + qColor + '"/>';
-  c += '<circle cx="' + px + '" cy="' + py + '" r="7" fill="none" stroke="white" stroke-width="2"/>';
-  var lx = px + 10, ly = py - 10;
-  if (lx > W - 70) lx = px - 70;
-  if (ly < pad + 14) ly = py + 18;
-  c += '<rect x="' + (lx-2) + '" y="' + (ly-11) + '" width="66" height="16" rx="4" fill="white" opacity="0.9"/>';
-  c += '<text x="' + lx + '" y="' + ly + '" font-size="9.5" fill="#374151" font-family="inherit" font-weight="600">X&#772;=' + xBar.toFixed(1) + ' &#562;=' + yBar.toFixed(1) + '</text>';
-  svg.innerHTML = c;
-}
-
-function buildAxisBars(empScores, custScores) {
-  var container = document.getElementById("axisBars");
-  container.innerHTML = "";
-  for (var i = 0; i < AXES.length; i++) {
-    var ax = AXES[i], es = empScores[i], cs = custScores[i];
-    var row = document.createElement("div");
-    row.className = "bar-row";
-    row.innerHTML =
-      '<div class="bar-meta"><span class="bar-name">' + ax.icon + ' ' + ax.name + '</span>'
-      + '<span class="bar-scores"><span style="color:#2563eb;font-weight:700;">' + es.toFixed(0) + '</span> / <span style="color:#059669;font-weight:700;">' + cs.toFixed(0) + '</span></span></div>'
-      + '<div class="bar-track"><div class="bar-fill internal" id="barInt' + i + '" style="width:0%"></div></div>'
-      + '<div class="bar-track"><div class="bar-fill external" id="barExt' + i + '" style="width:0%"></div></div>';
+function buildAxisBars(empScores,custScores){
+  var container=document.getElementById("axisBars");container.innerHTML="";
+  for(var i=0;i<AXES.length;i++){
+    var ax=AXES[i],es=empScores[i],cs=custScores[i],row=document.createElement("div");row.className="bar-row";
+    row.innerHTML='<div class="bar-meta"><span class="bar-name">'+ax.icon+' '+ax.name+'</span><span class="bar-scores"><span style="color:#2563eb;font-weight:700;">'+es.toFixed(0)+'</span> / <span style="color:#059669;font-weight:700;">'+cs.toFixed(0)+'</span></span></div>'
+      +'<div class="bar-track"><div class="bar-fill internal" id="barInt'+i+'" style="width:0%"></div></div>'
+      +'<div class="bar-track"><div class="bar-fill external" id="barExt'+i+'" style="width:0%"></div></div>';
     container.appendChild(row);
   }
-  setTimeout(function() {
-    for (var i = 0; i < 5; i++) {
-      (function(idx) {
-        var bI = document.getElementById("barInt" + idx);
-        var bE = document.getElementById("barExt" + idx);
-        if (bI) bI.style.width = empScores[idx] + "%";
-        if (bE) bE.style.width = custScores[idx] + "%";
-      })(i);
-    }
-  }, 200);
+  setTimeout(function(){for(var i=0;i<5;i++){(function(idx){var bI=document.getElementById("barInt"+idx),bE=document.getElementById("barExt"+idx);if(bI)bI.style.width=empScores[idx]+"%";if(bE)bE.style.width=custScores[idx]+"%";})(i);}},200);
 }
-
-function buildQuadrantCard(qKey) {
-  var q = QUADRANTS[qKey];
-  document.getElementById("quadrantCard").innerHTML =
-    '<div class="quadrant-card ' + q.cls + '">'
-    + '<div class="quadrant-name">' + q.emoji + ' Quadrante: ' + q.name + '</div>'
-    + '<div class="quadrant-desc">' + q.desc + '</div>'
-    + '<div class="quadrant-impl">' + q.impl + '</div>'
-    + '</div>';
+function buildQuadrantCard(qKey){
+  var q=QUADRANTS[qKey];
+  document.getElementById("quadrantCard").innerHTML='<div class="quadrant-card '+q.cls+'"><div class="quadrant-name">'+q.emoji+' Quadrante: '+q.name+'</div><div class="quadrant-desc">'+q.desc+'</div><div class="quadrant-impl">'+q.impl+'</div></div>';
 }
-
-function buildPriorities(empScores, custScores) {
-  var gaps = [];
-  for (var i = 0; i < 5; i++) {
-    gaps.push({ idx: i, gap: Math.abs(empScores[i] - custScores[i]), empScore: empScores[i], custScore: custScores[i], direction: empScores[i] > custScores[i] ? "int" : "ext" });
+function buildPriorities(empScores,custScores){
+  var gaps=[];
+  for(var i=0;i<5;i++)gaps.push({idx:i,gap:Math.abs(empScores[i]-custScores[i]),empScore:empScores[i],custScore:custScores[i],direction:empScores[i]>custScores[i]?"int":"ext"});
+  gaps.sort(function(a,b){return b.gap-a.gap;});
+  var html="";
+  for(var k=0;k<gaps.length;k++){
+    var g=gaps[k],ax=AXES[g.idx];
+    var dirLabel=g.direction==="int"?"Interno ("+g.empScore.toFixed(0)+") supera Externo ("+g.custScore.toFixed(0)+")":"Externo ("+g.custScore.toFixed(0)+") supera Interno ("+g.empScore.toFixed(0)+")";
+    var rec=g.direction==="int"?ax.recExternal:ax.recInternal;
+    if(g.gap<5)rec="Eixo equilibrado. Mantenha o monitoramento contínuo para preservar o alinhamento entre as duas perspectivas.";
+    html+='<div class="priority-item"><div class="priority-badge">'+(k+1)+'</div><div class="priority-content"><div class="priority-axis">'+ax.icon+' '+ax.name+'</div><div class="priority-gap">Gap: <span class="gap-num">'+g.gap.toFixed(0)+' pts</span> — '+dirLabel+'</div><div class="priority-rec">'+rec+'</div></div></div>';
   }
-  gaps.sort(function(a, b) { return b.gap - a.gap; });
-  var html = "";
-  for (var k = 0; k < gaps.length; k++) {
-    var g = gaps[k], ax = AXES[g.idx];
-    var dirLabel = g.direction === "int"
-      ? "Interno (" + g.empScore.toFixed(0) + ") supera Externo (" + g.custScore.toFixed(0) + ")"
-      : "Externo (" + g.custScore.toFixed(0) + ") supera Interno (" + g.empScore.toFixed(0) + ")";
-    var rec = g.direction === "int" ? ax.recExternal : ax.recInternal;
-    if (g.gap < 5) rec = "Eixo equilibrado. Mantenha o monitoramento contínuo para preservar o alinhamento entre as duas perspectivas.";
-    html += '<div class="priority-item"><div class="priority-badge">' + (k+1) + '</div><div class="priority-content">'
-      + '<div class="priority-axis">' + ax.icon + ' ' + ax.name + '</div>'
-      + '<div class="priority-gap">Gap: <span class="gap-num">' + g.gap.toFixed(0) + ' pts</span> — ' + dirLabel + '</div>'
-      + '<div class="priority-rec">' + rec + '</div>'
-      + '</div></div>';
-  }
-  document.getElementById("prioritiesList").innerHTML = html;
+  document.getElementById("prioritiesList").innerHTML=html;
 }
-
-function restartApp() {
-  state.company = ""; state.sector = "";
-  for (var i = 0; i < 5; i++) { state.internal[i] = { level: null }; state.external[i] = { level: null }; }
-  document.getElementById("companyName").value = "";
-  document.getElementById("sectorSelect").value = "";
-  document.getElementById("btnStep0Next").disabled = true;
-  document.getElementById("gaugeInternal").style.strokeDashoffset = "201";
-  document.getElementById("gaugeExternal").style.strokeDashoffset = "201";
+function restartApp(){
+  state.company="";state.sector="";
+  for(var i=0;i<5;i++){state.internal[i]={level:null};state.external[i]={level:null};}
+  document.getElementById("companyName").value="";
+  document.getElementById("sectorSelect").value="";
+  document.getElementById("btnStep0Next").disabled=true;
+  document.getElementById("gaugeInternal").style.strokeDashoffset="201";
+  document.getElementById("gaugeExternal").style.strokeDashoffset="201";
   showScreen(0);
 }
-
 initStep0();
 
 // ===== GOOGLE SHEETS =====
-var GS_KEY = 'hosp_gs_url';
-function gsGetUrl() { try { return localStorage.getItem(GS_KEY) || ''; } catch(e) { return ''; } }
-function gsSetUrl(u) { try { localStorage.setItem(GS_KEY, u); } catch(e) {} }
-function gsResetUrl() { try { localStorage.removeItem(GS_KEY); } catch(e) {} gsToast('Planilha desconfigurada. Clique em Salvar para configurar novamente.', ''); }
-function gsToast(msg, type) { var t = document.getElementById('gsToast'); if (!t) return; t.textContent = msg; t.className = 'gs-toast gs-toast--show' + (type ? ' gs-toast--' + type : ''); clearTimeout(t._timer); t._timer = setTimeout(function() { t.className = 'gs-toast'; }, 4000); }
-function gsSave() {
-  var url = gsGetUrl();
-  if (!url) {
-    url = window.prompt('Cole aqui a URL do Google Apps Script para salvar os resultados na sua planilha:\n\n(Será memorizada neste navegador — você só precisa fazer isso uma vez.)');
-    if (!url || !url.trim()) return;
-    gsSetUrl(url.trim());
-    url = url.trim();
-  }
-  var c = calcCentroids(); var qId = getQuadrant(c.xBar, c.yBar); var qObj = QUADRANTS[qId];
-  var axNames = ['culturalAlignment','managerialPractices','interpersonalClimate','structuralAccessibility','responsiveness'];
-  var axes = {};
-  for (var i = 0; i < 5; i++) { axes[axNames[i]] = { internal: Math.round(c.empScores[i]), external: Math.round(c.custScores[i]) }; }
-  var data = { app: 'opendata', companyName: state.company, sector: state.sector, internalCentroid: Math.round(c.yBar), externalCentroid: Math.round(c.xBar), quadrant: qObj ? qObj.name : qId, axes: axes };
-  gsToast('Salvando na planilha…', '');
-  fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
-    .then(function() { gsToast('✅ Salvo na planilha do Google Sheets!', 'success'); })
-    .catch(function() { gsToast('❌ Falha de rede. Verifique a URL do Apps Script.', 'error'); });
+var GS_URL='https://script.google.com/macros/s/AKfycbxhsOG5I0wkOtyX4WUI-OkNIDXa3PXroUW9kFbq4OmSwKTgL1Zgy9U172M92eDJuPm5/exec';
+function gsToast(msg,type){var t=document.getElementById('gsToast');if(!t)return;t.textContent=msg;t.className='gs-toast gs-toast--show'+(type?' gs-toast--'+type:'');clearTimeout(t._timer);t._timer=setTimeout(function(){t.className='gs-toast';},4000);}
+function gsSave(){
+  var c=calcCentroids(),qId=getQuadrant(c.xBar,c.yBar),qObj=QUADRANTS[qId];
+  var axNames=['culturalAlignment','managerialPractices','interpersonalClimate','structuralAccessibility','responsiveness'],axes={};
+  for(var i=0;i<5;i++)axes[axNames[i]]={internal:Math.round(c.empScores[i]),external:Math.round(c.custScores[i])};
+  var data={app:'opendata',companyName:state.company,sector:state.sector,internalCentroid:Math.round(c.yBar),externalCentroid:Math.round(c.xBar),quadrant:qObj?qObj.name:qId,axes:axes};
+  gsToast('Salvando na planilha…','');
+  fetch(GS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)})
+    .then(function(){gsToast('✅ Salvo na planilha do Google Sheets!','success');})
+    .catch(function(){gsToast('❌ Falha de rede.','error');});
 }
 </script>
 
