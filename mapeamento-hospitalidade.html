@@ -163,15 +163,6 @@
   .btn-gs{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s}
   .btn-gs-save{background:#16a34a;color:#fff}
   .btn-gs-save:hover{background:#15803d;transform:translateY(-1px)}
-  .btn-gs-config{background:#e2e8f0;color:#475569;padding:.65rem .9rem}
-  .btn-gs-config:hover{background:#cbd5e1}
-  .gs-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
-  .gs-modal{background:#fff;border-radius:12px;padding:1.8rem;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-  .gs-modal h3{font-size:1.1rem;margin-bottom:.5rem;color:#0f172a}
-  .gs-modal p{font-size:.82rem;color:#64748b;margin-bottom:1rem;line-height:1.6}
-  .gs-modal input{width:100%;border:1.5px solid #e2e8f0;border-radius:8px;padding:.6rem .9rem;font-size:.9rem;font-family:inherit;outline:none;margin-bottom:1rem;box-sizing:border-box}
-  .gs-modal input:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.15)}
-  .gs-modal-btns{display:flex;gap:.7rem;justify-content:flex-end}
   .gs-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:.7rem 1.4rem;border-radius:8px;font-size:.85rem;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;z-index:2000;white-space:nowrap;pointer-events:none}
   .gs-toast--show{opacity:1;transform:translateX(-50%) translateY(0)}
   .gs-toast--success{background:#16a34a}
@@ -324,8 +315,10 @@
 
     <button class="btn-restart" onclick="restartApp()">&#8635; Realizar novo diagnóstico</button>
     <div class="gs-save-row" style="margin-top:1rem;">
-      <button class="btn-gs btn-gs-save" onclick="gsSaveOpenData()">&#128202; Salvar no Google Sheets</button>
-      <button class="btn-gs btn-gs-config" onclick="gsOpenModal()" title="Configurar URL">&#9881;&#65039;</button>
+      <button class="btn-gs btn-gs-save" onclick="gsSave()">Salvar</button>
+    </div>
+    <div style="text-align:center;margin-bottom:30px;">
+      <a href="#" onclick="gsResetUrl();return false;" style="font-size:0.75rem;color:#9ca3af;text-decoration:underline;">reconfigurar planilha</a>
     </div>
   </div>
 </div>
@@ -377,7 +370,6 @@ var AXES = [
   }
 ];
 
-// Escala unificada: mesmos níveis para interno e externo
 var SCALE_MAP = { "Crítico": 10, "Fraco": 30, "Moderado": 50, "Bom": 70, "Excelente": 90 };
 var SCALE_KEYS = ["Crítico", "Fraco", "Moderado", "Bom", "Excelente"];
 
@@ -396,14 +388,12 @@ var QUADRANTS = {
     impl: "<strong>Implicação gerencial:</strong> Intervenção sistêmica com prioridade máxima. Recomenda-se diagnóstico organizacional aprofundado, revisão da estratégia de pessoas e clientes, e plano de transformação cultural com métricas claras e acompanhamento trimestral." }
 };
 
-// ===== ESTADO =====
 var state = { step: 0, company: "", sector: "", internal: [], external: [] };
 for (var i = 0; i < 5; i++) {
   state.internal.push({ level: null });
   state.external.push({ level: null });
 }
 
-// ===== TELA 0 =====
 function initStep0() {
   var nameInput = document.getElementById("companyName");
   var sectorInput = document.getElementById("sectorSelect");
@@ -419,7 +409,6 @@ function goToStep1() {
   showScreen(1);
 }
 
-// ===== RENDERIZAR EIXOS INTERNOS =====
 function renderInternalAxes() {
   var container = document.getElementById("internalAxes");
   container.innerHTML = "";
@@ -429,7 +418,6 @@ function renderInternalAxes() {
       var card = document.createElement("div");
       card.className = "axis-card" + (state.internal[idx].level !== null ? " complete" : "");
       card.id = "int-card-" + idx;
-
       var btns = "";
       for (var k = 0; k < SCALE_KEYS.length; k++) {
         var lv = SCALE_KEYS[k];
@@ -437,7 +425,6 @@ function renderInternalAxes() {
         btns += '<button class="btn-scale level-' + (k+1) + sel + '" onclick="setIntLevel(' + idx + ', \'' + lv + '\')">';
         btns += '<span class="scale-num">' + SCALE_MAP[lv] + '</span>' + lv + '</button>';
       }
-
       card.innerHTML =
         '<div class="axis-header">'
           + '<div class="axis-icon">' + ax.icon + '</div>'
@@ -448,14 +435,12 @@ function renderInternalAxes() {
         + '<div class="selector-label">Avaliação — perspectiva dos colaboradores:</div>'
         + '<div class="scale-group">' + btns + '</div>'
         + '<div class="scale-legend"><span>Crítico</span><span>Fraco</span><span>Moderado</span><span>Bom</span><span>Excelente</span></div>';
-
       container.appendChild(card);
     })(i);
   }
   updateInternalNav();
 }
 
-// ===== RENDERIZAR EIXOS EXTERNOS =====
 function renderExternalAxes() {
   var container = document.getElementById("externalAxes");
   container.innerHTML = "";
@@ -465,7 +450,6 @@ function renderExternalAxes() {
       var card = document.createElement("div");
       card.className = "axis-card" + (state.external[idx].level !== null ? " complete" : "");
       card.id = "ext-card-" + idx;
-
       var btns = "";
       for (var k = 0; k < SCALE_KEYS.length; k++) {
         var lv = SCALE_KEYS[k];
@@ -473,7 +457,6 @@ function renderExternalAxes() {
         btns += '<button class="btn-scale level-' + (k+1) + sel + '" onclick="setExtLevel(' + idx + ', \'' + lv + '\')">';
         btns += '<span class="scale-num">' + SCALE_MAP[lv] + '</span>' + lv + '</button>';
       }
-
       card.innerHTML =
         '<div class="axis-header">'
           + '<div class="axis-icon">' + ax.icon + '</div>'
@@ -484,14 +467,12 @@ function renderExternalAxes() {
         + '<div class="selector-label">Avaliação — perspectiva dos clientes:</div>'
         + '<div class="scale-group">' + btns + '</div>'
         + '<div class="scale-legend"><span>Crítico</span><span>Fraco</span><span>Moderado</span><span>Bom</span><span>Excelente</span></div>';
-
       container.appendChild(card);
     })(i);
   }
   updateExternalNav();
 }
 
-// ===== SETTERS =====
 function setIntLevel(idx, level) {
   state.internal[idx].level = level;
   var card = document.getElementById("int-card-" + idx);
@@ -514,7 +495,6 @@ function setExtLevel(idx, level) {
   updateExternalNav();
 }
 
-// ===== PONTUAÇÃO =====
 function calcEmpScore(idx) {
   var level = state.internal[idx].level;
   if (!level) return null;
@@ -542,7 +522,6 @@ function getQuadrant(xBar, yBar) {
   return "q4";
 }
 
-// ===== NAVEGAÇÃO =====
 function countInternalDone() { var n = 0; for (var i = 0; i < 5; i++) { if (state.internal[i].level !== null) n++; } return n; }
 function countExternalDone() { var n = 0; for (var i = 0; i < 5; i++) { if (state.external[i].level !== null) n++; } return n; }
 
@@ -590,23 +569,19 @@ function showScreen(n) {
   else if (n === 3) { pw.style.display = "none"; nb.style.display = "none"; window.scrollTo(0,0); }
 }
 
-// ===== RESULTADOS =====
 function buildResults() {
   var data = calcCentroids();
   var yBar = data.yBar, xBar = data.xBar;
   var empScores = data.empScores, custScores = data.custScores;
   var qKey = getQuadrant(xBar, yBar);
-
   document.getElementById("resultsTitle").textContent = state.company || "Diagnóstico Concluído";
   document.getElementById("resultsSubtitle").textContent = "Setor: " + (state.sector || "—") + " · Mapeamento de Hospitalidade Organizacional";
   document.getElementById("gaugeInternalVal").textContent = yBar.toFixed(1);
   document.getElementById("gaugeExternalVal").textContent = xBar.toFixed(1);
-
   setTimeout(function() {
     document.getElementById("gaugeInternal").style.strokeDashoffset = String(201 * (1 - yBar / 100));
     document.getElementById("gaugeExternal").style.strokeDashoffset = String(201 * (1 - xBar / 100));
   }, 100);
-
   buildMatrix(xBar, yBar, qKey);
   buildAxisBars(empScores, custScores);
   buildQuadrantCard(qKey);
@@ -619,7 +594,6 @@ function buildMatrix(xBar, yBar, qKey) {
   function toX(s) { return pad + (s / 100) * inner; }
   function toY(s) { return pad + inner - (s / 100) * inner; }
   var midX = toX(50), midY = toY(50), c = "";
-
   c += '<rect x="' + midX + '" y="' + pad + '" width="' + (W - pad - midX) + '" height="' + (midY - pad) + '" fill="#d1fae5" opacity="0.7"/>';
   c += '<rect x="' + pad + '" y="' + pad + '" width="' + (midX - pad) + '" height="' + (midY - pad) + '" fill="#dbeafe" opacity="0.7"/>';
   c += '<rect x="' + midX + '" y="' + midY + '" width="' + (W - pad - midX) + '" height="' + (H - pad - midY) + '" fill="#fef9c3" opacity="0.7"/>';
@@ -639,7 +613,6 @@ function buildMatrix(xBar, yBar, qKey) {
   c += '<text x="' + (pad-5) + '" y="' + toY(0) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">0</text>';
   c += '<text x="' + (pad-5) + '" y="' + toY(50) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">50</text>';
   c += '<text x="' + (pad-5) + '" y="' + toY(100) + '" text-anchor="end" font-size="9" fill="#9ca3af" font-family="inherit" dominant-baseline="middle">100</text>';
-
   var px = toX(xBar), py = toY(yBar);
   var qColor = { q1: "#059669", q2: "#2563eb", q3: "#d97706", q4: "#dc2626" }[qKey] || "#6b7280";
   c += '<circle cx="' + px + '" cy="' + py + '" r="12" fill="white" opacity="0.7"/>';
@@ -651,7 +624,6 @@ function buildMatrix(xBar, yBar, qKey) {
   if (ly < pad + 14) ly = py + 18;
   c += '<rect x="' + (lx-2) + '" y="' + (ly-11) + '" width="66" height="16" rx="4" fill="white" opacity="0.9"/>';
   c += '<text x="' + lx + '" y="' + ly + '" font-size="9.5" fill="#374151" font-family="inherit" font-weight="600">X&#772;=' + xBar.toFixed(1) + ' &#562;=' + yBar.toFixed(1) + '</text>';
-
   svg.innerHTML = c;
 }
 
@@ -714,7 +686,6 @@ function buildPriorities(empScores, custScores) {
   document.getElementById("prioritiesList").innerHTML = html;
 }
 
-// ===== REINICIAR =====
 function restartApp() {
   state.company = ""; state.sector = "";
   for (var i = 0; i < 5; i++) { state.internal[i] = { level: null }; state.external[i] = { level: null }; }
@@ -732,31 +703,28 @@ initStep0();
 var GS_KEY = 'hosp_gs_url';
 function gsGetUrl() { try { return localStorage.getItem(GS_KEY) || ''; } catch(e) { return ''; } }
 function gsSetUrl(u) { try { localStorage.setItem(GS_KEY, u); } catch(e) {} }
-function gsOpenModal() { document.getElementById('gsUrlInput').value = gsGetUrl(); document.getElementById('gsModal').style.display = 'flex'; }
-function gsConfigSave() { var u = (document.getElementById('gsUrlInput').value || '').trim(); gsSetUrl(u); document.getElementById('gsModal').style.display = 'none'; gsToast('URL configurada! Clique em Salvar novamente para enviar os dados.', 'success'); }
+function gsResetUrl() { try { localStorage.removeItem(GS_KEY); } catch(e) {} gsToast('Planilha desconfigurada. Clique em Salvar para configurar novamente.', ''); }
 function gsToast(msg, type) { var t = document.getElementById('gsToast'); if (!t) return; t.textContent = msg; t.className = 'gs-toast gs-toast--show' + (type ? ' gs-toast--' + type : ''); clearTimeout(t._timer); t._timer = setTimeout(function() { t.className = 'gs-toast'; }, 4000); }
-function gsPost(data) { var url = gsGetUrl(); if (!url) { gsOpenModal(); return; } gsToast('Enviando para a planilha…', ''); fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) }).then(function() { gsToast('✅ Salvo na planilha do Google Sheets!', 'success'); }).catch(function() { gsToast('❌ Falha de rede. Verifique a URL do Apps Script.', 'error'); }); }
-function gsSaveOpenData() {
+function gsSave() {
+  var url = gsGetUrl();
+  if (!url) {
+    url = window.prompt('Cole aqui a URL do Google Apps Script para salvar os resultados na sua planilha:\n\n(Será memorizada neste navegador — você só precisa fazer isso uma vez.)');
+    if (!url || !url.trim()) return;
+    gsSetUrl(url.trim());
+    url = url.trim();
+  }
   var c = calcCentroids(); var qId = getQuadrant(c.xBar, c.yBar); var qObj = QUADRANTS[qId];
   var axNames = ['culturalAlignment','managerialPractices','interpersonalClimate','structuralAccessibility','responsiveness'];
   var axes = {};
   for (var i = 0; i < 5; i++) { axes[axNames[i]] = { internal: Math.round(c.empScores[i]), external: Math.round(c.custScores[i]) }; }
-  gsPost({ app: 'opendata', companyName: state.company, sector: state.sector, internalCentroid: Math.round(c.yBar), externalCentroid: Math.round(c.xBar), quadrant: qObj ? qObj.name : qId, axes: axes });
+  var data = { app: 'opendata', companyName: state.company, sector: state.sector, internalCentroid: Math.round(c.yBar), externalCentroid: Math.round(c.xBar), quadrant: qObj ? qObj.name : qId, axes: axes };
+  gsToast('Salvando na planilha…', '');
+  fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
+    .then(function() { gsToast('✅ Salvo na planilha do Google Sheets!', 'success'); })
+    .catch(function() { gsToast('❌ Falha de rede. Verifique a URL do Apps Script.', 'error'); });
 }
 </script>
 
-<div class="gs-modal-overlay" id="gsModal" onclick="if(event.target===this)this.style.display='none'">
-  <div class="gs-modal">
-    <h3>&#128202; Configurar Google Sheets</h3>
-    <p>Cole a URL de implantação do Google Apps Script. Ele deve estar implantado como <strong>App da Web</strong> com acesso permitido a <strong>Qualquer pessoa</strong>.<br><br>
-    Acesse o arquivo <em>"Apps Script - Salvar Resultados de Hospitalidade"</em> no seu Google Drive (pasta Indicadores de Hospitalidade nas Empresas), copie o código, crie um novo projeto em <a href="https://script.google.com" target="_blank" style="color:#16a34a">script.google.com</a> e implante como App da Web.</p>
-    <input type="url" id="gsUrlInput" placeholder="https://script.google.com/macros/s/..." />
-    <div class="gs-modal-btns">
-      <button class="btn-gs btn-gs-config" onclick="document.getElementById('gsModal').style.display='none'">Cancelar</button>
-      <button class="btn-gs btn-gs-save" onclick="gsConfigSave()">Salvar configuração</button>
-    </div>
-  </div>
-</div>
 <div class="gs-toast" id="gsToast"></div>
 </body>
 </html>
