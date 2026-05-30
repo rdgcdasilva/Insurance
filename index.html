@@ -354,6 +354,51 @@
     .orientando-name { font-weight: 700; font-size: .825rem; margin-bottom: .25rem; }
     .orientando-tema { font-size: .75rem; color: var(--mid); line-height: 1.5; }
 
+    /* ── APP SHOWCASE ── */
+    #app { background: var(--white); }
+    .app-showcase {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .app-card-main {
+      background: linear-gradient(135deg, var(--accent), var(--teal));
+      border-radius: 16px; padding: 2.5rem;
+      color: #fff; box-shadow: 0 8px 40px rgba(90,62,140,.35);
+      position: relative; overflow: hidden;
+    }
+    .app-card-main::before {
+      content: ''; position: absolute; right: -60px; top: -60px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: rgba(255,255,255,.06); pointer-events: none;
+    }
+    .app-card-main::after {
+      content: ''; position: absolute; left: -40px; bottom: -40px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: rgba(255,255,255,.04); pointer-events: none;
+    }
+    .app-icon-big { font-size: 3rem; margin-bottom: 1.25rem; }
+    .app-name { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.5rem; margin-bottom: .5rem; }
+    .app-tagline { font-size: .875rem; opacity: .85; line-height: 1.6; margin-bottom: 1.75rem; }
+    .app-features { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 2rem; }
+    .app-feature { display: flex; align-items: center; gap: .6rem; font-size: .8rem; opacity: .9; }
+    .app-feature::before { content: '✓'; font-weight: 700; color: var(--gold2); flex-shrink: 0; }
+    .app-cta {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: #fff; color: var(--accent);
+      padding: .75rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: .875rem;
+      text-decoration: none; transition: opacity .2s, transform .2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,.15);
+    }
+    .app-cta:hover { opacity: .92; transform: translateY(-2px); }
+    .app-info { display: flex; flex-direction: column; gap: 1.25rem; }
+    .app-info-card {
+      background: var(--bg); border: 1px solid var(--dust);
+      border-radius: var(--radius); padding: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .app-info-icon { font-size: 1.25rem; margin-bottom: .5rem; }
+    .app-info-title { font-weight: 700; font-size: .875rem; margin-bottom: .3rem; }
+    .app-info-desc { font-size: .8rem; color: var(--mid); line-height: 1.6; }
+
     /* ── CONTACT ── */
     #contact { background: var(--bg); }
     .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
@@ -434,7 +479,7 @@
 <nav>
   <div class="nav-brand">
     <span class="nav-name">Prof. Dr. Rodrigo Cunha da Silva</span>
-    <span class="nav-role">PPG Hospitalidade UAM · EDP · FIA</span>
+    <span class="nav-role">PPG Hospitalidade UAM · EDP</span>
   </div>
   <ul class="nav-links">
     <li><a href="#about">Sobre</a></li>
@@ -442,6 +487,7 @@
     <li><a href="#research">Pesquisa</a></li>
     <li><a href="#publications">Publicações</a></li>
     <li><a href="#teaching">Docência</a></li>
+    <li><a href="#app">App</a></li>
     <li><a href="#contact">Contato</a></li>
   </ul>
   <a href="mailto:rdgcdasilva@gmail.com" class="nav-cta">Fale comigo</a>
@@ -460,7 +506,7 @@
       </p>
       <div class="hero-badges">
         <span class="badge"><span class="dot dot-accent"></span>PPG Hospitalidade · UAM</span>
-        <span class="badge"><span class="dot dot-teal"></span>EDP Energias do Brasil</span>
+        <span class="badge"><span class="dot dot-teal"></span>EDP · Workforce Design &amp; Intelligence</span>
         <span class="badge"><span class="dot dot-gold"></span>Doutor &amp; Pós-Doutor · USP</span>
         <span class="badge"><span class="dot dot-gold"></span>2 Patentes INPI</span>
       </div>
@@ -475,7 +521,7 @@
           <div class="avatar">RC</div>
           <div>
             <div class="card-name">Rodrigo Cunha da Silva</div>
-            <div class="card-title">Workforce Design &amp; Intelligence at EDP<br/>Professor Titular · UAM</div>
+            <div class="card-title">Workforce Design &amp; Intelligence · EDP<br/>Professor Titular · PPG Hospitalidade · UAM</div>
           </div>
         </div>
         <div class="card-stats">
@@ -485,7 +531,7 @@
           <div class="stat-box"><div class="stat-n">15+</div><div class="stat-l">Anos de experiência</div></div>
         </div>
         <div class="card-links">
-          <a href="https://www.linkedin.com/in/rodrigo-da-cunha-a5604035b/" target="_blank" rel="noopener" class="card-link">
+          <a href="https://www.linkedin.com/in/rodrigo-cunha-da-silva/" target="_blank" rel="noopener" class="card-link">
             <span>🔗 LinkedIn</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </a>
@@ -599,11 +645,11 @@
         <div class="career-chips"><span class="chip">Pesquisa</span><span class="chip">HospGap</span><span class="chip">NLP</span><span class="chip">Orientação</span></div>
       </div>
 
-      <div class="career-card current">
-        <div class="career-period"><span class="current-dot"></span>mar/2013 — atual</div>
+      <div class="career-card">
+        <div class="career-period">mar/2013 — 2024</div>
         <div class="career-role">Professor Convidado</div>
         <div class="career-org">FIA — MBA RH &amp; Gestão Estratégica de Pessoas</div>
-        <div class="career-desc">People Analytics e métodos quantitativos em RH para executivos e gestores em formação. Mais de 12 anos de docência continuada.</div>
+        <div class="career-desc">People Analytics e métodos quantitativos em RH para executivos e gestores em formação. Mais de 11 anos de docência continuada.</div>
         <div class="career-chips"><span class="chip">People Analytics</span><span class="chip">Docência</span><span class="chip">MBA</span></div>
       </div>
 
@@ -973,7 +1019,7 @@
             <div>
               <div class="inst-name">FIA — Administração e Negócios</div>
               <div class="inst-role">Professor Convidado · MBA RH &amp; Gestão Estratégica de Pessoas</div>
-              <div class="inst-period">mar/2013 — atual · +12 anos</div>
+              <div class="inst-period">mar/2013 — 2024 · 11 anos</div>
             </div>
           </div>
         </div>
@@ -1012,6 +1058,49 @@
   </div>
 </section>
 
+<!-- APP -->
+<section id="app">
+  <div class="inner">
+    <span class="section-eyebrow">Aplicativo</span>
+    <h2>HospMap — Mapeador de<br/>Hospitalidade Organizacional</h2>
+    <p class="section-lead">Ferramenta interativa que operacionaliza o constructo HospGap para diagnosticar a hospitalidade de qualquer organização a partir de dados públicos.</p>
+    <div class="app-showcase fade">
+      <div class="app-card-main">
+        <div class="app-icon-big">🗺️</div>
+        <div class="app-name">HospMap</div>
+        <div class="app-tagline">Diagnóstico de hospitalidade organizacional via dados públicos — Indeed, Glassdoor e Reclame Aqui processados por NLP.</div>
+        <div class="app-features">
+          <div class="app-feature">Análise de sentimento em avaliações de funcionários</div>
+          <div class="app-feature">Score HospGap em 5 dimensões (CA, MP, CI, AE, RE)</div>
+          <div class="app-feature">Comparativo intra-setor com z-score normalizado</div>
+          <div class="app-feature">Matriz Interno–Externo de hospitalidade</div>
+          <div class="app-feature">Relatório visual interativo por empresa</div>
+        </div>
+        <a href="[URL_DO_APP]" target="_blank" rel="noopener" class="app-cta">
+          Acessar o aplicativo →
+        </a>
+      </div>
+      <div class="app-info">
+        <div class="app-info-card">
+          <div class="app-info-icon">🔬</div>
+          <div class="app-info-title">Base científica</div>
+          <div class="app-info-desc">Construído sobre o framework HospGap — pesquisa com 212 relatos verbatim de 9 empresas brasileiras em 5 setores. Metodologia publicada e em submissão internacional.</div>
+        </div>
+        <div class="app-info-card">
+          <div class="app-info-icon">📊</div>
+          <div class="app-info-title">O que o app entrega</div>
+          <div class="app-info-desc">Diagnóstico comparativo da cultura de hospitalidade da organização versus concorrentes do mesmo setor, com visualizações interativas e indicadores acionáveis para gestores de pessoas.</div>
+        </div>
+        <div class="app-info-card">
+          <div class="app-info-icon">🎯</div>
+          <div class="app-info-title">Para quem é útil</div>
+          <div class="app-info-desc">Gestores de RH, pesquisadores de hospitalidade organizacional, consultores de cultura e líderes que querem medir o gap entre o que a empresa promete e o que pratica.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section id="contact">
   <div class="inner">
@@ -1027,7 +1116,7 @@
             <div class="cl-icon">📧</div>
             <div><div class="cl-label">E-mail principal</div><div class="cl-val">rdgcdasilva@gmail.com</div></div>
           </a>
-          <a href="https://www.linkedin.com/in/rodrigo-da-cunha-a5604035b/" target="_blank" rel="noopener" class="contact-link">
+          <a href="https://www.linkedin.com/in/rodrigo-cunha-da-silva/" target="_blank" rel="noopener" class="contact-link">
             <div class="cl-icon">🔗</div>
             <div><div class="cl-label">LinkedIn</div><div class="cl-val">linkedin.com/in/rodrigo-da-cunha</div></div>
           </a>
@@ -1074,14 +1163,14 @@
   <div class="footer-inner">
     <div>
       <div class="footer-name">Prof. Dr. Rodrigo Cunha da Silva</div>
-      <div class="footer-sub">PPG Hospitalidade · UAM &nbsp;|&nbsp; EDP &nbsp;|&nbsp; FIA &nbsp;|&nbsp; São Paulo, SP</div>
+      <div class="footer-sub">PPG Hospitalidade · UAM &nbsp;|&nbsp; EDP &nbsp;|&nbsp; São Paulo, SP</div>
     </div>
     <div class="footer-links">
       <a href="#about">Sobre</a>
       <a href="#research">Pesquisa</a>
       <a href="#publications">Publicações</a>
       <a href="mailto:rdgcdasilva@gmail.com">E-mail</a>
-      <a href="https://www.linkedin.com/in/rodrigo-da-cunha-a5604035b/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/rodrigo-cunha-da-silva/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </div>
 </footer>
