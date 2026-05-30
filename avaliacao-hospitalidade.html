@@ -98,19 +98,12 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .error-msg { color: #ef4444; font-size: .82rem; margin-top: .3rem; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .fade-in { animation: fadeIn .35s ease forwards; }
-.gs-save-row{display:flex;justify-content:center;gap:.7rem;margin:1.2rem 0 .5rem}
+
+/* ─── Google Sheets Integration ─────────────────────────────── */
+.gs-save-row{display:flex;justify-content:center;margin:1.2rem 0 1.5rem}
 .btn-gs{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.88rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s}
 .btn-gs-save{background:#16a34a;color:#fff}
 .btn-gs-save:hover{background:#15803d;transform:translateY(-1px)}
-.btn-gs-config{background:#e2e8f0;color:#475569;padding:.65rem .9rem}
-.btn-gs-config:hover{background:#cbd5e1}
-.gs-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
-.gs-modal{background:#fff;border-radius:12px;padding:1.8rem;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.gs-modal h3{font-size:1.1rem;margin-bottom:.5rem;color:#0f172a}
-.gs-modal p{font-size:.82rem;color:#64748b;margin-bottom:1rem;line-height:1.6}
-.gs-modal input{width:100%;border:1.5px solid #e2e8f0;border-radius:8px;padding:.6rem .9rem;font-size:.9rem;font-family:inherit;outline:none;margin-bottom:1rem;box-sizing:border-box}
-.gs-modal input:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.15)}
-.gs-modal-btns{display:flex;gap:.7rem;justify-content:flex-end}
 .gs-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:.7rem 1.4rem;border-radius:8px;font-size:.85rem;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;z-index:2000;white-space:nowrap;pointer-events:none}
 .gs-toast--show{opacity:1;transform:translateX(-50%) translateY(0)}
 .gs-toast--success{background:#16a34a}
@@ -120,6 +113,11 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 <body>
 <div id="app"></div>
 <script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+// Dawson, M., Abbott, J., & Shoemaker, S. (2011).
+// "The Hospitality Culture Scale: A measure organizational culture and personal attributes."
+// International Journal of Hospitality Management, 30(2), 290–300.
+
 const LIKERT = [
   { value: 1, label: "Discordo totalmente" },
   { value: 2, label: "Discordo" },
@@ -127,22 +125,145 @@ const LIKERT = [
   { value: 4, label: "Concordo" },
   { value: 5, label: "Concordo totalmente" },
 ];
+
 const PERSONAL_SECTIONS = [
-  { id: "principles", dimension: "Interações com Clientes", label: "Princípios Pessoais", color: "#2563eb", description: "Ética, integridade e conduta no trato com pessoas.", questions: ["Mantenho padrões éticos elevados em todas as minhas interações.","Trato cada pessoa com respeito e equidade.","Sou honesto(a) e transparente no exercício das minhas funções.","Cumpro compromissos assumidos mesmo em situações adversas."] },
-  { id: "propitiousness", dimension: "Interações com Clientes", label: "Propiciedade", color: "#7c3aed", description: "Adaptação do comportamento ao contexto e às pessoas.", questions: ["Adapto minha conduta conforme o perfil e as necessidades de cada cliente.","Percebo sinais sociais e ajusto minha abordagem de forma adequada.","Apresento-me de maneira profissional em qualquer situação.","Antecipo as necessidades dos clientes antes que elas sejam expressas."] },
-  { id: "leadership", dimension: "Liderança Organizacional", label: "Liderança Pessoal", color: "#0891b2", description: "Iniciativa, influência positiva e exemplo no ambiente de trabalho.", questions: ["Tomo iniciativa quando surgem problemas no trabalho.","Motivo e inspiro as pessoas ao meu redor.","Sirvo de exemplo positivo para meus colegas.","Oriento colegas menos experientes com paciência e clareza."] },
-  { id: "riskTaker", dimension: "Liderança Organizacional", label: "Disposição para Inovar", color: "#d97706", description: "Abertura a ideias novas e disposição para correr riscos calculados.", questions: ["Sinto-me confortável em propor ideias e abordagens inovadoras.","Encaro mudanças e novos desafios com entusiasmo.","Estou disposto(a) a correr riscos calculados para melhorar resultados.","Proponho melhorias mesmo quando há resistência do ambiente."] },
-  { id: "accuracy", dimension: "Clima de Trabalho", label: "Precisão e Qualidade", color: "#059669", description: "Atenção a detalhes e compromisso com excelência.", questions: ["Presto atenção cuidadosa aos detalhes do meu trabalho.","Garanto que meu trabalho atenda a padrões elevados de qualidade.","Verifico meu próprio trabalho para minimizar erros.","Busco consistência e exatidão nas minhas entregas."] },
-  { id: "composure", dimension: "Clima de Trabalho", label: "Equilíbrio Emocional", color: "#dc2626", description: "Serenidade e profissionalismo em situações de pressão.", questions: ["Mantenho a calma mesmo sob pressão intensa.","Lido com situações difíceis com profissionalismo.","Administro o estresse de forma eficaz no ambiente de trabalho.","Ofereço soluções tranquilas mesmo diante de conflitos."] },
+  {
+    id: "principles", dimension: "Interações com Clientes",
+    label: "Princípios Pessoais", color: "#2563eb",
+    description: "Ética, integridade e conduta no trato com pessoas.",
+    questions: [
+      "Mantenho padrões éticos elevados em todas as minhas interações.",
+      "Trato cada pessoa com respeito e equidade.",
+      "Sou honesto(a) e transparente no exercício das minhas funções.",
+      "Cumpro compromissos assumidos mesmo em situações adversas.",
+    ],
+  },
+  {
+    id: "propitiousness", dimension: "Interações com Clientes",
+    label: "Propiciedade", color: "#7c3aed",
+    description: "Adaptação do comportamento ao contexto e às pessoas.",
+    questions: [
+      "Adapto minha conduta conforme o perfil e as necessidades de cada cliente.",
+      "Percebo sinais sociais e ajusto minha abordagem de forma adequada.",
+      "Apresento-me de maneira profissional em qualquer situação.",
+      "Antecipo as necessidades dos clientes antes que elas sejam expressas.",
+    ],
+  },
+  {
+    id: "leadership", dimension: "Liderança Organizacional",
+    label: "Liderança Pessoal", color: "#0891b2",
+    description: "Iniciativa, influência positiva e exemplo no ambiente de trabalho.",
+    questions: [
+      "Tomo iniciativa quando surgem problemas no trabalho.",
+      "Motivo e inspiro as pessoas ao meu redor.",
+      "Sirvo de exemplo positivo para meus colegas.",
+      "Oriento colegas menos experientes com paciência e clareza.",
+    ],
+  },
+  {
+    id: "riskTaker", dimension: "Liderança Organizacional",
+    label: "Disposição para Inovar", color: "#d97706",
+    description: "Abertura a ideias novas e disposição para correr riscos calculados.",
+    questions: [
+      "Sinto-me confortável em propor ideias e abordagens inovadoras.",
+      "Encaro mudanças e novos desafios com entusiasmo.",
+      "Estou disposto(a) a correr riscos calculados para melhorar resultados.",
+      "Proponho melhorias mesmo quando há resistência do ambiente.",
+    ],
+  },
+  {
+    id: "accuracy", dimension: "Clima de Trabalho",
+    label: "Precisão e Qualidade", color: "#059669",
+    description: "Atenção a detalhes e compromisso com excelência.",
+    questions: [
+      "Presto atenção cuidadosa aos detalhes do meu trabalho.",
+      "Garanto que meu trabalho atenda a padrões elevados de qualidade.",
+      "Verifico meu próprio trabalho para minimizar erros.",
+      "Busco consistência e exatidão nas minhas entregas.",
+    ],
+  },
+  {
+    id: "composure", dimension: "Clima de Trabalho",
+    label: "Equilíbrio Emocional", color: "#dc2626",
+    description: "Serenidade e profissionalismo em situações de pressão.",
+    questions: [
+      "Mantenho a calma mesmo sob pressão intensa.",
+      "Lido com situações difíceis com profissionalismo.",
+      "Administro o estresse de forma eficaz no ambiente de trabalho.",
+      "Ofereço soluções tranquilas mesmo diante de conflitos.",
+    ],
+  },
 ];
+
 const ORG_SECTIONS = [
-  { id: "mgmtPrinciples", dimension: "Liderança Organizacional", label: "Princípios de Gestão", color: "#2563eb", description: "Ética e transparência da liderança da empresa.", questions: ["A gestão demonstra padrões éticos claros e consistentes.","A liderança comunica-se de forma eficaz e transparente com os colaboradores.","A empresa apoia ativamente o desenvolvimento profissional dos funcionários.","As decisões gerenciais são justas e bem fundamentadas."] },
-  { id: "customerRelationships", dimension: "Interações com Clientes", label: "Relacionamento com Clientes", color: "#7c3aed", description: "Foco e qualidade no atendimento ao cliente.", questions: ["A empresa prioriza a satisfação do cliente em todas as suas operações.","Existem processos eficazes de atendimento ao cliente.","A empresa coleta e age sobre o feedback dos clientes.","Os funcionários são treinados para superar as expectativas dos clientes."] },
-  { id: "jobVariety", dimension: "Clima de Trabalho", label: "Variedade de Funções", color: "#0891b2", description: "Diversidade de tarefas e possibilidades de aprendizado.", questions: ["Os colaboradores possuem variedade de tarefas e responsabilidades.","A empresa incentiva o aprendizado em diferentes áreas.","Os papéis na empresa são dinâmicos e permitem crescimento.","Os funcionários têm oportunidades de atuar em projetos variados."] },
-  { id: "jobSatisfaction", dimension: "Clima de Trabalho", label: "Satisfação no Trabalho", color: "#d97706", description: "Reconhecimento, engajamento e bem-estar dos funcionários.", questions: ["Os colaboradores são reconhecidos e recompensados pelo bom desempenho.","A empresa promove um ambiente de trabalho positivo.","Os funcionários sentem-se valorizados e engajados.","Há um equilíbrio saudável entre vida pessoal e profissional."] },
-  { id: "orgLeadership", dimension: "Liderança Organizacional", label: "Liderança Organizacional", color: "#059669", description: "Acessibilidade, justiça e desenvolvimento promovidos pela liderança.", questions: ["Os líderes são acessíveis e abertos ao diálogo.","As decisões de liderança são transparentes e equitativas.","A liderança investe ativamente no desenvolvimento de suas equipes.","Os gestores servem de modelo de conduta para os colaboradores."] },
-  { id: "workplaceClimate", dimension: "Clima de Trabalho", label: "Clima Organizacional", color: "#dc2626", description: "Inclusão, colaboração e cultura positiva na empresa.", questions: ["O ambiente de trabalho é inclusivo e acolhedor para todos.","Os colaboradores se apoiam mutuamente e trabalham em equipe.","A empresa mantém uma cultura organizacional positiva e saudável.","Novos funcionários são bem recebidos e integrados com cuidado."] },
+  {
+    id: "mgmtPrinciples", dimension: "Liderança Organizacional",
+    label: "Princípios de Gestão", color: "#2563eb",
+    description: "Ética e transparência da liderança da empresa.",
+    questions: [
+      "A gestão demonstra padrões éticos claros e consistentes.",
+      "A liderança comunica-se de forma eficaz e transparente com os colaboradores.",
+      "A empresa apoia ativamente o desenvolvimento profissional dos funcionários.",
+      "As decisões gerenciais são justas e bem fundamentadas.",
+    ],
+  },
+  {
+    id: "customerRelationships", dimension: "Interações com Clientes",
+    label: "Relacionamento com Clientes", color: "#7c3aed",
+    description: "Foco e qualidade no atendimento ao cliente.",
+    questions: [
+      "A empresa prioriza a satisfação do cliente em todas as suas operações.",
+      "Existem processos eficazes de atendimento ao cliente.",
+      "A empresa coleta e age sobre o feedback dos clientes.",
+      "Os funcionários são treinados para superar as expectativas dos clientes.",
+    ],
+  },
+  {
+    id: "jobVariety", dimension: "Clima de Trabalho",
+    label: "Variedade de Funções", color: "#0891b2",
+    description: "Diversidade de tarefas e possibilidades de aprendizado.",
+    questions: [
+      "Os colaboradores possuem variedade de tarefas e responsabilidades.",
+      "A empresa incentiva o aprendizado em diferentes áreas.",
+      "Os papéis na empresa são dinâmicos e permitem crescimento.",
+      "Os funcionários têm oportunidades de atuar em projetos variados.",
+    ],
+  },
+  {
+    id: "jobSatisfaction", dimension: "Clima de Trabalho",
+    label: "Satisfação no Trabalho", color: "#d97706",
+    description: "Reconhecimento, engajamento e bem-estar dos funcionários.",
+    questions: [
+      "Os colaboradores são reconhecidos e recompensados pelo bom desempenho.",
+      "A empresa promove um ambiente de trabalho positivo.",
+      "Os funcionários sentem-se valorizados e engajados.",
+      "Há um equilíbrio saudável entre vida pessoal e profissional.",
+    ],
+  },
+  {
+    id: "orgLeadership", dimension: "Liderança Organizacional",
+    label: "Liderança Organizacional", color: "#059669",
+    description: "Acessibilidade, justiça e desenvolvimento promovidos pela liderança.",
+    questions: [
+      "Os líderes são acessíveis e abertos ao diálogo.",
+      "As decisões de liderança são transparentes e equitativas.",
+      "A liderança investe ativamente no desenvolvimento de suas equipes.",
+      "Os gestores servem de modelo de conduta para os colaboradores.",
+    ],
+  },
+  {
+    id: "workplaceClimate", dimension: "Clima de Trabalho",
+    label: "Clima Organizacional", color: "#dc2626",
+    description: "Inclusão, colaboração e cultura positiva na empresa.",
+    questions: [
+      "O ambiente de trabalho é inclusivo e acolhedor para todos.",
+      "Os colaboradores se apoiam mutuamente e trabalham em equipe.",
+      "A empresa mantém uma cultura organizacional positiva e saudável.",
+      "Novos funcionários são bem recebidos e integrados com cuidado.",
+    ],
+  },
 ];
+
 const RATING_BANDS = [
   { min: 0,  max: 20,  label: "Muito Baixo", color: "#ef4444", emoji: "⛔" },
   { min: 20, max: 40,  label: "Baixo",        color: "#f97316", emoji: "⚠️" },
@@ -150,18 +271,41 @@ const RATING_BANDS = [
   { min: 60, max: 80,  label: "Bom",          color: "#22c55e", emoji: "✅" },
   { min: 80, max: 101, label: "Excelente",    color: "#2563eb", emoji: "⭐" },
 ];
+
 const DIMENSIONS = ["Interações com Clientes", "Liderança Organizacional", "Clima de Trabalho"];
 const DIM_ICONS  = { "Interações com Clientes": "🤝", "Liderança Organizacional": "🏆", "Clima de Trabalho": "🌱" };
-const state = { step: 0, personName: "", companyName: "", personalAnswers: {}, orgAnswers: {}, currentSectionIdx: 0, mode: "personal" };
-function getRating(score) { return RATING_BANDS.find(b => score >= b.min && score < b.max) || RATING_BANDS[RATING_BANDS.length - 1]; }
-function calcScore(vals) { if (!vals.length) return 0; return Math.round((vals.reduce((a,b) => a+b, 0) / (vals.length * 5)) * 100); }
-function calcGroupScore(sections, answers) { return calcScore(sections.flatMap(s => s.questions.map((_,i) => answers[`${s.id}-${i}`]).filter(v => v !== undefined))); }
-function calcSectionScore(sections, answers, id) { const s = sections.find(x => x.id === id); return calcScore(s.questions.map((_,i) => answers[`${id}-${i}`]).filter(v => v !== undefined)); }
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const state = {
+  step: 0, personName: "", companyName: "",
+  personalAnswers: {}, orgAnswers: {},
+  currentSectionIdx: 0, mode: "personal",
+};
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function getRating(score) {
+  return RATING_BANDS.find(b => score >= b.min && score < b.max) || RATING_BANDS[RATING_BANDS.length - 1];
+}
+function calcScore(vals) {
+  if (!vals.length) return 0;
+  return Math.round((vals.reduce((a,b) => a+b, 0) / (vals.length * 5)) * 100);
+}
+function calcGroupScore(sections, answers) {
+  return calcScore(sections.flatMap(s =>
+    s.questions.map((_,i) => answers[`${s.id}-${i}`]).filter(v => v !== undefined)
+  ));
+}
+function calcSectionScore(sections, answers, id) {
+  const s = sections.find(x => x.id === id);
+  return calcScore(s.questions.map((_,i) => answers[`${id}-${i}`]).filter(v => v !== undefined));
+}
 function completedSections() {
   const pd = PERSONAL_SECTIONS.filter(s => s.questions.every((_,i) => state.personalAnswers[`${s.id}-${i}`] !== undefined)).length;
   const od = ORG_SECTIONS.filter(s => s.questions.every((_,i) => state.orgAnswers[`${s.id}-${i}`] !== undefined)).length;
   return pd + od;
 }
+
+// ─── DOM HELPERS ──────────────────────────────────────────────────────────────
 function h(tag, attrs, ...children) {
   const el = document.createElement(tag);
   if (attrs) Object.entries(attrs).forEach(([k,v]) => {
@@ -170,13 +314,20 @@ function h(tag, attrs, ...children) {
     else if (k.startsWith("on")) el.addEventListener(k.slice(2).toLowerCase(), v);
     else el.setAttribute(k, v);
   });
-  children.flat().forEach(c => { if (c == null) return; el.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+  children.flat().forEach(c => {
+    if (c == null) return;
+    el.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+  });
   return el;
 }
+
+// ─── GAUGE ────────────────────────────────────────────────────────────────────
 function buildGauge(score, color) {
   const R = 54, cx = 60, cy = 60, circ = Math.PI * R;
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", "6 6 108 60"); svg.setAttribute("width", "120"); svg.setAttribute("height", "64");
+  svg.setAttribute("viewBox", "6 6 108 60");
+  svg.setAttribute("width", "120"); svg.setAttribute("height", "64");
+
   function arc(stroke, dasharray) {
     const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
     p.setAttribute("d", `M${cx-R},${cy} a${R},${R} 0 0,1 ${2*R},0`);
@@ -186,29 +337,65 @@ function buildGauge(score, color) {
     return p;
   }
   const fg = arc(color, `0 ${circ}`);
-  svg.appendChild(arc("#e2e8f0")); svg.appendChild(fg);
+  svg.appendChild(arc("#e2e8f0"));
+  svg.appendChild(fg);
   setTimeout(() => fg.setAttribute("stroke-dasharray", `${circ*(score/100)} ${circ}`), 60);
-  const scoreEl = document.createElement("div"); scoreEl.className = "gauge-score"; scoreEl.style.color = color; scoreEl.textContent = score;
-  const wrap = document.createElement("div"); wrap.className = "gauge-wrap"; wrap.appendChild(svg); wrap.appendChild(scoreEl);
+
+  const scoreEl = document.createElement("div");
+  scoreEl.className = "gauge-score";
+  scoreEl.style.color = color;
+  scoreEl.textContent = score;
+
+  const wrap = document.createElement("div");
+  wrap.className = "gauge-wrap";
+  wrap.appendChild(svg); wrap.appendChild(scoreEl);
   return wrap;
 }
+
+// ─── RENDER INTRO ─────────────────────────────────────────────────────────────
 function renderIntro() {
   const grid = h("div", { class: "form-grid" },
-    h("div", { class: "form-field" }, h("label", {}, "Nome da Pessoa"), h("input", { type:"text", placeholder:"Ex.: Maria Silva", id:"inp-person", value: state.personName })),
-    h("div", { class: "form-field" }, h("label", {}, "Nome da Empresa"), h("input", { type:"text", placeholder:"Ex.: Hotel Maravilha", id:"inp-company", value: state.companyName }))
+    h("div", { class: "form-field" },
+      h("label", {}, "Nome da Pessoa"),
+      h("input", { type:"text", placeholder:"Ex.: Maria Silva", id:"inp-person", value: state.personName })
+    ),
+    h("div", { class: "form-field" },
+      h("label", {}, "Nome da Empresa"),
+      h("input", { type:"text", placeholder:"Ex.: Hotel Maravilha", id:"inp-company", value: state.companyName })
+    )
   );
   const err = h("div", { class:"error-msg hidden", id:"intro-err" }, "Preencha ambos os campos para continuar.");
   const btn = h("button", { class:"btn btn-primary btn-lg", onClick() {
     const pv = document.getElementById("inp-person").value.trim();
     const cv = document.getElementById("inp-company").value.trim();
-    if (!pv || !cv) { err.classList.remove("hidden"); if (!pv) document.getElementById("inp-person").classList.add("error"); if (!cv) document.getElementById("inp-company").classList.add("error"); return; }
-    state.personName = pv; state.companyName = cv; state.step = 1; state.mode = "personal"; state.currentSectionIdx = 0; render();
+    if (!pv || !cv) {
+      err.classList.remove("hidden");
+      if (!pv) document.getElementById("inp-person").classList.add("error");
+      if (!cv) document.getElementById("inp-company").classList.add("error");
+      return;
+    }
+    state.personName = pv; state.companyName = cv;
+    state.step = 1; state.mode = "personal"; state.currentSectionIdx = 0;
+    render();
   }}, "Iniciar Avaliação →");
+
   return h("div", {},
-    h("div", { class:"card intro-card fade-in" }, h("div", { class:"intro-icon" }, "🏨"), h("h2", {}, "Avaliação de Hospitalidade"), h("p", {}, "Responda as perguntas para obter uma pontuação de hospitalidade baseada na Hospitality Culture Scale de Dawson, Abbott & Shoemaker (2011). A avaliação cobre atributos pessoais e cultura organizacional."), grid, err, h("div", { style:"margin-top:1.2rem" }, btn)),
-    h("div", { class:"footer-note" }, h("strong", {}, "Sobre o instrumento: "), "A Hospitality Culture Scale (HCS) identifica três grandes dimensões — Interações com Clientes, Liderança Organizacional e Clima de Trabalho — além de dez fatores derivados de análise de componentes principais (ACP) com 741 profissionais de hospitalidade. ", h("em", {}, "Dawson, M., Abbott, J., & Shoemaker, S. (2011). Int. Journal of Hospitality Management, 30(2), 290–300."))
+    h("div", { class:"card intro-card fade-in" },
+      h("div", { class:"intro-icon" }, "🏨"),
+      h("h2", {}, "Avaliação de Hospitalidade"),
+      h("p", {}, "Responda as perguntas para obter uma pontuação de hospitalidade baseada na Hospitality Culture Scale de Dawson, Abbott & Shoemaker (2011). A avaliação cobre atributos pessoais e cultura organizacional."),
+      grid, err,
+      h("div", { style:"margin-top:1.2rem" }, btn)
+    ),
+    h("div", { class:"footer-note" },
+      h("strong", {}, "Sobre o instrumento: "),
+      "A Hospitality Culture Scale (HCS) identifica três grandes dimensões — Interações com Clientes, Liderança Organizacional e Clima de Trabalho — além de dez fatores derivados de análise de componentes principais (ACP) com 741 profissionais de hospitalidade. ",
+      h("em", {}, "Dawson, M., Abbott, J., & Shoemaker, S. (2011). Int. Journal of Hospitality Management, 30(2), 290–300.")
+    )
   );
 }
+
+// ─── RENDER QUESTIONS ─────────────────────────────────────────────────────────
 function renderQuestions() {
   const isPersonal = state.mode === "personal";
   const sections = isPersonal ? PERSONAL_SECTIONS : ORG_SECTIONS;
@@ -217,8 +404,14 @@ function renderQuestions() {
   const totalS   = PERSONAL_SECTIONS.length + ORG_SECTIONS.length;
   const globalIdx = isPersonal ? state.currentSectionIdx : PERSONAL_SECTIONS.length + state.currentSectionIdx;
   const pct = Math.round((completedSections() / totalS) * 100);
-  function saveAnswer(secId, qi, val) { (isPersonal ? state.personalAnswers : state.orgAnswers)[`${secId}-${qi}`] = val; render(); }
-  function canAdvance() { return section.questions.every((_,i) => answers[`${section.id}-${i}`] !== undefined); }
+
+  function saveAnswer(secId, qi, val) {
+    (isPersonal ? state.personalAnswers : state.orgAnswers)[`${secId}-${qi}`] = val;
+    render();
+  }
+  function canAdvance() {
+    return section.questions.every((_,i) => answers[`${section.id}-${i}`] !== undefined);
+  }
   function goNext() {
     if (!canAdvance()) return;
     if (state.currentSectionIdx < sections.length - 1) { state.currentSectionIdx++; }
@@ -232,95 +425,213 @@ function renderQuestions() {
     else { state.step = 0; }
     render(); window.scrollTo(0,0);
   }
+
   const qItems = section.questions.map((q, i) => {
     const cur = answers[`${section.id}-${i}`];
-    return h("div", { class:"question-item" }, h("div", { class:"question-text" }, `${i+1}. ${q}`), h("div", { class:"likert-row" }, ...LIKERT.map(opt => h("button", { class: `likert-btn${cur === opt.value ? " selected" : ""}`, onClick() { saveAnswer(section.id, i, opt.value); } }, h("span", { class:"val" }, String(opt.value)), opt.label))));
+    return h("div", { class:"question-item" },
+      h("div", { class:"question-text" }, `${i+1}. ${q}`),
+      h("div", { class:"likert-row" },
+        ...LIKERT.map(opt =>
+          h("button", {
+            class: `likert-btn${cur === opt.value ? " selected" : ""}`,
+            onClick() { saveAnswer(section.id, i, opt.value); }
+          },
+            h("span", { class:"val" }, String(opt.value)),
+            opt.label
+          )
+        )
+      )
+    );
   });
+
   const nextLabel = globalIdx + 1 === totalS ? "Ver Resultado →" : "Próximo →";
-  const nextBtn = h("button", { class: "btn btn-primary", ...(canAdvance() ? {} : { disabled: "" }), onClick: goNext }, nextLabel);
+  const nextBtn = h("button", {
+    class: "btn btn-primary",
+    ...(canAdvance() ? {} : { disabled: "" }),
+    onClick: goNext
+  }, nextLabel);
+
   return h("div", {},
-    h("div", { class:"progress-wrap" }, h("span", { class:"progress-label" }, "Progresso"), h("div", { class:"progress-bar" }, h("div", { class:"progress-fill", style:`width:${pct}%` })), h("span", { class:"progress-pct" }, `${pct}%`)),
-    h("div", { class:"step-header" }, h("div", { class:"step-badge" }, isPersonal ? `Parte 1 de 2 · Atributos Pessoais (${state.personName})` : `Parte 2 de 2 · Cultura Organizacional (${state.companyName})`), h("h2", {}, isPersonal ? "Avalie os atributos pessoais" : "Avalie a cultura da empresa"), h("p", {}, isPersonal ? "Responda com base no comportamento habitual desta pessoa no ambiente de trabalho." : "Responda com base na sua percepção geral sobre a empresa e sua cultura.")),
-    h("div", { class:"card fade-in" }, h("div", { class:"section-header" }, h("div", { class:"section-dot", style:`background:${section.color}` }), h("div", {}, h("div", { class:"dim-tag" }, section.dimension), h("h3", {}, section.label), h("p", {}, section.description))), ...qItems, h("div", { class:"nav-row" }, h("button", { class:"btn btn-secondary", onClick: goBack }, "← Voltar"), h("div", { style:"font-size:.8rem;color:var(--muted);text-align:center" }, `${globalIdx+1} / ${totalS}`), nextBtn))
+    h("div", { class:"progress-wrap" },
+      h("span", { class:"progress-label" }, "Progresso"),
+      h("div", { class:"progress-bar" }, h("div", { class:"progress-fill", style:`width:${pct}%` })),
+      h("span", { class:"progress-pct" }, `${pct}%`)
+    ),
+    h("div", { class:"step-header" },
+      h("div", { class:"step-badge" },
+        isPersonal ? `Parte 1 de 2 · Atributos Pessoais (${state.personName})`
+                   : `Parte 2 de 2 · Cultura Organizacional (${state.companyName})`
+      ),
+      h("h2", {}, isPersonal ? "Avalie os atributos pessoais" : "Avalie a cultura da empresa"),
+      h("p", {}, isPersonal
+        ? "Responda com base no comportamento habitual desta pessoa no ambiente de trabalho."
+        : "Responda com base na sua percepção geral sobre a empresa e sua cultura."
+      )
+    ),
+    h("div", { class:"card fade-in" },
+      h("div", { class:"section-header" },
+        h("div", { class:"section-dot", style:`background:${section.color}` }),
+        h("div", {},
+          h("div", { class:"dim-tag" }, section.dimension),
+          h("h3", {}, section.label),
+          h("p", {}, section.description)
+        )
+      ),
+      ...qItems,
+      h("div", { class:"nav-row" },
+        h("button", { class:"btn btn-secondary", onClick: goBack }, "← Voltar"),
+        h("div", { style:"font-size:.8rem;color:var(--muted);text-align:center" }, `${globalIdx+1} / ${totalS}`),
+        nextBtn
+      )
+    )
   );
 }
+
+// ─── RENDER RESULTS ───────────────────────────────────────────────────────────
 function renderResults() {
   const ps = calcGroupScore(PERSONAL_SECTIONS, state.personalAnswers);
   const cs = calcGroupScore(ORG_SECTIONS, state.orgAnswers);
   const pr = getRating(ps), cr = getRating(cs);
+
   function buildBreakdown(sections, answers, title) {
     const bars = sections.map(s => {
       const sc = calcSectionScore(sections, answers, s.id);
       const rat = getRating(sc);
-      return h("div", { class:"bar-item" }, h("div", { class:"bar-top" }, h("span", { class:"bar-label" }, s.label), h("span", { class:"bar-score", style:`color:${rat.color}` }, `${sc}`)), h("div", { class:"bar-bg" }, h("div", { class:"bar-fill", style:`width:0%;background:${s.color}` })), h("div", { class:"bar-dim" }, s.dimension));
+      return h("div", { class:"bar-item" },
+        h("div", { class:"bar-top" },
+          h("span", { class:"bar-label" }, s.label),
+          h("span", { class:"bar-score", style:`color:${rat.color}` }, `${sc}`)
+        ),
+        h("div", { class:"bar-bg" }, h("div", { class:"bar-fill", style:`width:0%;background:${s.color}` })),
+        h("div", { class:"bar-dim" }, s.dimension)
+      );
     });
     const card = h("div", { class:"breakdown-card fade-in" }, h("h3", {}, title), ...bars);
-    setTimeout(() => { const fills = card.querySelectorAll(".bar-fill"); sections.forEach((s,i) => { fills[i].style.width = `${calcSectionScore(sections, answers, s.id)}%`; }); }, 100);
+    setTimeout(() => {
+      const fills = card.querySelectorAll(".bar-fill");
+      sections.forEach((s,i) => {
+        fills[i].style.width = `${calcSectionScore(sections, answers, s.id)}%`;
+      });
+    }, 100);
     return card;
   }
+
   function buildDimSummary() {
     const cells = DIMENSIONS.map(dim => {
       const allSecs = [...PERSONAL_SECTIONS, ...ORG_SECTIONS].filter(s => s.dimension === dim);
-      const allVals = allSecs.flatMap(s => { const a = PERSONAL_SECTIONS.includes(s) ? state.personalAnswers : state.orgAnswers; return s.questions.map((_,i) => a[`${s.id}-${i}`]).filter(v => v !== undefined); });
+      const allVals = allSecs.flatMap(s => {
+        const a = PERSONAL_SECTIONS.includes(s) ? state.personalAnswers : state.orgAnswers;
+        return s.questions.map((_,i) => a[`${s.id}-${i}`]).filter(v => v !== undefined);
+      });
       const sc = calcScore(allVals), rat = getRating(sc);
-      return h("div", { class:"dim-cell" }, h("div", { class:"dim-icon" }, DIM_ICONS[dim]), h("div", { class:"dim-name" }, dim), h("div", { class:"dim-score", style:`color:${rat.color}` }, `${sc}`), h("div", { class:"dim-rating" }, rat.label));
+      return h("div", { class:"dim-cell" },
+        h("div", { class:"dim-icon" }, DIM_ICONS[dim]),
+        h("div", { class:"dim-name" }, dim),
+        h("div", { class:"dim-score", style:`color:${rat.color}` }, `${sc}`),
+        h("div", { class:"dim-rating" }, rat.label)
+      );
     });
-    return h("div", { class:"dim-summary fade-in" }, h("h3", {}, "Resultado por Dimensão Principal (HCS)"), h("div", { class:"dim-row" }, ...cells));
+    return h("div", { class:"dim-summary fade-in" },
+      h("h3", {}, "Resultado por Dimensão Principal (HCS)"),
+      h("div", { class:"dim-row" }, ...cells)
+    );
   }
+
   const noteEl = h("div", { class:"footer-note" });
-  noteEl.innerHTML = `<strong>Interpretação da escala:</strong><br>${RATING_BANDS.map(b => `<span style="color:${b.color};font-weight:700">${b.emoji} ${b.label} (${b.min}–${b.min===80?100:b.max})</span>`).join(" &nbsp;·&nbsp; ")}<br><br>A pontuação é calculada a partir de uma escala Likert de 5 pontos (1&nbsp;=&nbsp;Discordo totalmente, 5&nbsp;=&nbsp;Concordo totalmente), convertida para 0–100. Os dez fatores refletem os construtos identificados por Dawson, Abbott &amp; Shoemaker (2011) por meio de análise de componentes principais (n = 741).<br><br><strong>Referência:</strong> Dawson, M., Abbott, J., &amp; Shoemaker, S. (2011). The Hospitality Culture Scale: A measure organizational culture and personal attributes. <em>International Journal of Hospitality Management</em>, 30(2), 290–300.`;
+  noteEl.innerHTML = `
+    <strong>Interpretação da escala:</strong><br>
+    ${RATING_BANDS.map(b => `<span style="color:${b.color};font-weight:700">${b.emoji} ${b.label} (${b.min}–${b.min===80?100:b.max})</span>`).join(" &nbsp;·&nbsp; ")}<br><br>
+    A pontuação é calculada a partir de uma escala Likert de 5 pontos (1&nbsp;=&nbsp;Discordo totalmente, 5&nbsp;=&nbsp;Concordo totalmente), convertida para 0–100.
+    Os dez fatores refletem os construtos identificados por Dawson, Abbott &amp; Shoemaker (2011) por meio de análise de componentes principais (n = 741).<br><br>
+    <strong>Referência:</strong> Dawson, M., Abbott, J., &amp; Shoemaker, S. (2011). The Hospitality Culture Scale: A measure organizational culture and personal attributes.
+    <em>International Journal of Hospitality Management</em>, 30(2), 290–300.
+    <a href="https://doi.org/10.1016/j.ijhm.2010.10.005" target="_blank" rel="noopener">https://doi.org/10.1016/j.ijhm.2010.10.005</a>
+  `;
+
   return h("div", {},
     h("div", { class:"results-grid" },
-      h("div", { class:"score-card fade-in" }, h("div", { class:"label" }, "Pessoa"), h("div", { class:"name" }, state.personName), buildGauge(ps, pr.color), h("div", { class:"rating-badge", style:`background:${pr.color}` }, pr.emoji, " ", pr.label), h("div", { style:"font-size:.78rem;color:var(--muted);margin-top:.3rem" }, "Atributos pessoais de hospitalidade")),
-      h("div", { class:"score-card fade-in" }, h("div", { class:"label" }, "Empresa"), h("div", { class:"name" }, state.companyName), buildGauge(cs, cr.color), h("div", { class:"rating-badge", style:`background:${cr.color}` }, cr.emoji, " ", cr.label), h("div", { style:"font-size:.78rem;color:var(--muted);margin-top:.3rem" }, "Cultura organizacional de hospitalidade"))
+      h("div", { class:"score-card fade-in" },
+        h("div", { class:"label" }, "Pessoa"),
+        h("div", { class:"name" }, state.personName),
+        buildGauge(ps, pr.color),
+        h("div", { class:"rating-badge", style:`background:${pr.color}` }, pr.emoji, " ", pr.label),
+        h("div", { style:"font-size:.78rem;color:var(--muted);margin-top:.3rem" }, "Atributos pessoais de hospitalidade")
+      ),
+      h("div", { class:"score-card fade-in" },
+        h("div", { class:"label" }, "Empresa"),
+        h("div", { class:"name" }, state.companyName),
+        buildGauge(cs, cr.color),
+        h("div", { class:"rating-badge", style:`background:${cr.color}` }, cr.emoji, " ", cr.label),
+        h("div", { style:"font-size:.78rem;color:var(--muted);margin-top:.3rem" }, "Cultura organizacional de hospitalidade")
+      )
     ),
     buildDimSummary(),
     buildBreakdown(PERSONAL_SECTIONS, state.personalAnswers, `Fatores Pessoais — ${state.personName}`),
     buildBreakdown(ORG_SECTIONS, state.orgAnswers, `Fatores Organizacionais — ${state.companyName}`),
     noteEl,
-    h("div", { class:"gs-save-row" }, h("button", { class:"btn-gs btn-gs-save", onClick: gsSaveDawson }, "📊 Salvar no Google Sheets"), h("button", { class:"btn-gs btn-gs-config", title:"Configurar URL", onClick: gsOpenModal }, "⚙️")),
-    h("div", { class:"restart-row" }, h("button", { class:"btn btn-secondary", onClick() { Object.assign(state, { step:0, personName:"", companyName:"", personalAnswers:{}, orgAnswers:{}, currentSectionIdx:0, mode:"personal" }); render(); window.scrollTo(0,0); }}, "↩ Nova Avaliação"))
+    h("div", { class:"gs-save-row" },
+      h("button", { class:"btn-gs btn-gs-save", onClick: gsSaveDawson }, "Salvar")
+    ),
+    h("div", { class:"restart-row" },
+      h("button", { class:"btn btn-secondary", onClick() {
+        Object.assign(state, { step:0, personName:"", companyName:"", personalAnswers:{}, orgAnswers:{}, currentSectionIdx:0, mode:"personal" });
+        render(); window.scrollTo(0,0);
+      }}, "↩ Nova Avaliação")
+    )
   );
 }
+
+// ─── MAIN RENDER ──────────────────────────────────────────────────────────────
 function render() {
   const app = document.getElementById("app");
   app.innerHTML = "";
-  app.appendChild(h("header", { class:"app-header" }, h("h1", {}, "🏨 Avaliação de Hospitalidade"), h("p", { class:"subtitle" }, "Baseado na Hospitality Culture Scale — mede atributos pessoais e cultura organizacional"), h("span", { class:"citation" }, "Dawson, Abbott & Shoemaker · Int. J. Hospitality Management · 2011")));
+  app.appendChild(
+    h("header", { class:"app-header" },
+      h("h1", {}, "🏨 Avaliação de Hospitalidade"),
+      h("p", { class:"subtitle" }, "Baseado na Hospitality Culture Scale — mede atributos pessoais e cultura organizacional"),
+      h("span", { class:"citation" }, "Dawson, Abbott & Shoemaker · Int. J. Hospitality Management · 2011")
+    )
+  );
   const container = h("div", { class:"container" });
   if (state.step === 0) container.appendChild(renderIntro());
   else if (state.step <= 2) container.appendChild(renderQuestions());
   else container.appendChild(renderResults());
   app.appendChild(container);
 }
-var GS_KEY = 'hosp_gs_url';
-function gsGetUrl() { try { return localStorage.getItem(GS_KEY) || ''; } catch(e) { return ''; } }
-function gsSetUrl(u) { try { localStorage.setItem(GS_KEY, u); } catch(e) {} }
-function gsOpenModal() { document.getElementById('gsUrlInput').value = gsGetUrl(); document.getElementById('gsModal').style.display = 'flex'; }
-function gsConfigSave() { var u = (document.getElementById('gsUrlInput').value || '').trim(); gsSetUrl(u); document.getElementById('gsModal').style.display = 'none'; gsToast('URL configurada! Clique em Salvar novamente para enviar os dados.', 'success'); }
-function gsToast(msg, type) { var t = document.getElementById('gsToast'); if (!t) return; t.textContent = msg; t.className = 'gs-toast gs-toast--show' + (type ? ' gs-toast--' + type : ''); clearTimeout(t._timer); t._timer = setTimeout(function() { t.className = 'gs-toast'; }, 4000); }
-function gsPost(data) { var url = gsGetUrl(); if (!url) { gsOpenModal(); return; } gsToast('Enviando para a planilha…', ''); fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) }).then(function() { gsToast('✅ Salvo na planilha do Google Sheets!', 'success'); }).catch(function() { gsToast('❌ Falha de rede. Verifique a URL do Apps Script.', 'error'); }); }
+
+
+// ─── Google Sheets Integration ───────────────────────────────
+var GS_URL = 'https://script.google.com/macros/s/AKfycbxhsOG5I0wkOtyX4WUI-OkNIDXa3PXroUW9kFbq4OmSwKTgL1Zgy9U172M92eDJuPm5/exec';
+function gsToast(msg, type) {
+  var t = document.getElementById('gsToast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'gs-toast gs-toast--show' + (type ? ' gs-toast--' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.className = 'gs-toast'; }, 4000);
+}
 function gsSaveDawson() {
   var ps = calcGroupScore(PERSONAL_SECTIONS, state.personalAnswers);
   var cs = calcGroupScore(ORG_SECTIONS, state.orgAnswers);
   var factors = {};
   var allSec = PERSONAL_SECTIONS.concat(ORG_SECTIONS);
-  allSec.forEach(function(s) { var isP = PERSONAL_SECTIONS.indexOf(s) >= 0; var ans = isP ? state.personalAnswers : state.orgAnswers; var secs = isP ? PERSONAL_SECTIONS : ORG_SECTIONS; factors[s.id] = calcSectionScore(secs, ans, s.id); });
-  gsPost({ app: 'dawson', personName: state.personName, companyName: state.companyName, personScore: ps, personRating: getRating(ps).label, companyScore: cs, companyRating: getRating(cs).label, factors: factors });
+  allSec.forEach(function(s) {
+    var isP = PERSONAL_SECTIONS.indexOf(s) >= 0;
+    var ans = isP ? state.personalAnswers : state.orgAnswers;
+    var secs = isP ? PERSONAL_SECTIONS : ORG_SECTIONS;
+    factors[s.id] = calcSectionScore(secs, ans, s.id);
+  });
+  var data = { app: 'dawson', personName: state.personName, companyName: state.companyName,
+    personScore: ps, personRating: getRating(ps).label,
+    companyScore: cs, companyRating: getRating(cs).label, factors: factors };
+  gsToast('Salvando na planilha…', '');
+  fetch(GS_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
+    .then(function() { gsToast('✅ Salvo na planilha do Google Sheets!', 'success'); })
+    .catch(function() { gsToast('❌ Falha de rede.', 'error'); });
 }
 document.addEventListener("DOMContentLoaded", render);
 </script>
-<div class="gs-modal-overlay" id="gsModal" onclick="if(event.target===this)this.style.display='none'">
-  <div class="gs-modal">
-    <h3>&#128202; Configurar Google Sheets</h3>
-    <p>Cole a URL de implantação do Google Apps Script. Ele deve estar implantado como <strong>App da Web</strong> com acesso permitido a <strong>Qualquer pessoa</strong>.<br><br>
-    Acesse o arquivo <em>"Apps Script - Salvar Resultados de Hospitalidade"</em> no seu Google Drive (pasta Indicadores de Hospitalidade nas Empresas), copie o código, crie um novo projeto em <a href="https://script.google.com" target="_blank" style="color:#16a34a">script.google.com</a> e implante como App da Web.</p>
-    <input type="url" id="gsUrlInput" placeholder="https://script.google.com/macros/s/..." />
-    <div class="gs-modal-btns">
-      <button class="btn-gs btn-gs-config" onclick="document.getElementById('gsModal').style.display='none'">Cancelar</button>
-      <button class="btn-gs btn-gs-save" onclick="gsConfigSave()">Salvar configuração</button>
-    </div>
-  </div>
-</div>
+
 <div class="gs-toast" id="gsToast"></div>
 </body>
 </html>
