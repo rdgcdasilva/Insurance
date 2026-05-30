@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rodrigo C. da Silva — Data & People Analytics</title>
+  <meta name="description" content="Portfólio de Rodrigo C. da Silva — Cientista de Dados especializado em People Analytics e Insurance Analytics." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0e1a;
+      --bg2: #0f1422;
+      --bg3: #141929;
+      --card: #161d2e;
+      --border: #1e2a42;
+      --accent: #4f8ef7;
+      --accent2: #7c3aed;
+      --accent3: #06b6d4;
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --text3: #64748b;
+      --green: #10b981;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(10,14,26,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-weight: 700; font-size: 1rem; letter-spacing: .5px;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text2); text-decoration: none; font-size: .875rem;
+      font-weight: 500; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff;
+      padding: .45rem 1.1rem; border-radius: 6px;
+      font-size: .8rem; font-weight: 600; text-decoration: none;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .85; }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      padding: 6rem 2rem 4rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 40%, rgba(79,142,247,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 70%, rgba(124,58,237,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 60% 20%, rgba(6,182,212,.05) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(79,142,247,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,142,247,.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    .hero-content {
+      max-width: 800px; text-align: center; position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(79,142,247,.1); border: 1px solid rgba(79,142,247,.2);
+      border-radius: 99px; padding: .35rem 1rem;
+      font-size: .75rem; font-weight: 600; color: var(--accent);
+      letter-spacing: .5px; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero-badge span { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+    h1 {
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 800; line-height: 1.1;
+      letter-spacing: -1.5px; margin-bottom: 1rem;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.15rem; color: var(--text2); max-width: 540px;
+      margin: 0 auto 2.5rem; font-weight: 400;
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      padding: .75rem 1.75rem; border-radius: 8px; font-weight: 600;
+      text-decoration: none; font-size: .9rem;
+      transition: transform .2s, opacity .2s; display: inline-flex; align-items: center; gap: .5rem;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent; color: var(--text);
+      padding: .75rem 1.75rem; border-radius: 8px; font-weight: 600;
+      text-decoration: none; font-size: .9rem; border: 1px solid var(--border);
+      transition: border-color .2s, transform .2s; display: inline-flex; align-items: center; gap: .5rem;
+    }
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 3rem;
+      margin-top: 3.5rem; padding-top: 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--accent); display: block; line-height: 1; }
+    .stat-label { font-size: .75rem; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-top: .3rem; }
+
+    /* SECTIONS */
+    section { padding: 6rem 2rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; font-size: .7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent);
+      margin-bottom: .75rem; font-family: 'JetBrains Mono', monospace;
+    }
+    .section-tag::before { content: '// '; opacity: .5; }
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800;
+      letter-spacing: -1px; margin-bottom: 1rem; line-height: 1.15;
+    }
+    .section-desc { color: var(--text2); font-size: 1rem; max-width: 520px; margin-bottom: 3rem; }
+
+    /* ABOUT */
+    #about { background: var(--bg2); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .about-visual {
+      position: relative;
+    }
+    .avatar-ring {
+      width: 260px; height: 260px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+      padding: 3px; margin: 0 auto;
+    }
+    .avatar-inner {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+    }
+    .about-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; justify-content: center; }
+    .tag {
+      background: rgba(79,142,247,.08); border: 1px solid rgba(79,142,247,.15);
+      color: var(--accent); padding: .3rem .75rem; border-radius: 6px;
+      font-size: .75rem; font-weight: 500; font-family: 'JetBrains Mono', monospace;
+    }
+    .about-text p { color: var(--text2); margin-bottom: 1rem; line-height: 1.8; }
+    .about-info { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+    .info-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+    .info-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .5px; color: var(--text3); margin-bottom: .25rem; }
+    .info-value { font-weight: 600; font-size: .875rem; }
+
+    /* SKILLS */
+    #skills { background: var(--bg); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .skill-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .skill-icon { font-size: 1.75rem; margin-bottom: .75rem; }
+    .skill-name { font-weight: 700; font-size: 1rem; margin-bottom: .25rem; }
+    .skill-desc { font-size: .825rem; color: var(--text2); margin-bottom: 1rem; }
+    .skill-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .skill-fill {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 1s ease;
+    }
+    .skill-pct { font-size: .7rem; color: var(--text3); text-align: right; margin-top: .3rem; font-family: 'JetBrains Mono', monospace; }
+
+    /* CAREER */
+    #career { background: var(--bg2); }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 4px; bottom: 4px;
+      width: 2px; background: linear-gradient(var(--accent), var(--accent2));
+    }
+    .timeline-item { position: relative; margin-bottom: 2.5rem; }
+    .timeline-dot {
+      position: absolute; left: -2rem; top: 4px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--bg2);
+      box-shadow: 0 0 0 3px rgba(79,142,247,.2);
+    }
+    .timeline-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      transition: border-color .2s;
+    }
+    .timeline-card:hover { border-color: var(--accent); }
+    .timeline-period {
+      font-size: .7rem; font-family: 'JetBrains Mono', monospace;
+      color: var(--accent); font-weight: 500; margin-bottom: .5rem; display: block;
+    }
+    .timeline-role { font-weight: 700; font-size: 1rem; margin-bottom: .2rem; }
+    .timeline-company { font-size: .825rem; color: var(--text2); margin-bottom: .75rem; }
+    .timeline-desc { font-size: .825rem; color: var(--text2); line-height: 1.7; }
+    .timeline-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .75rem; }
+    .chip {
+      background: rgba(6,182,212,.08); border: 1px solid rgba(6,182,212,.15);
+      color: var(--accent3); padding: .2rem .6rem; border-radius: 4px;
+      font-size: .7rem; font-weight: 500;
+    }
+
+    /* PROJECTS */
+    #projects { background: var(--bg); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    .project-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      transition: border-color .2s, transform .2s;
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .project-header {
+      padding: 1.5rem; border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(79,142,247,.05), rgba(124,58,237,.05));
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .project-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .project-title { font-weight: 700; font-size: .95rem; margin-bottom: .2rem; }
+    .project-subtitle { font-size: .75rem; color: var(--text2); }
+    .project-body { padding: 1.25rem; flex: 1; }
+    .project-desc { font-size: .825rem; color: var(--text2); line-height: 1.7; margin-bottom: 1rem; }
+    .project-tech { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .project-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); display: flex; gap: .75rem; }
+    .project-link {
+      font-size: .75rem; font-weight: 600; color: var(--accent);
+      text-decoration: none; display: flex; align-items: center; gap: .3rem;
+      transition: opacity .2s;
+    }
+    .project-link:hover { opacity: .7; }
+
+    /* PRODUCTIONS */
+    #productions { background: var(--bg2); }
+    .prod-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+    .prod-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      transition: border-color .2s, transform .2s;
+      position: relative; overflow: hidden;
+    }
+    .prod-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .prod-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .prod-type {
+      font-size: .65rem; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--accent3); font-weight: 700; margin-bottom: .75rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .prod-title { font-weight: 700; font-size: .95rem; margin-bottom: .5rem; line-height: 1.4; }
+    .prod-desc { font-size: .8rem; color: var(--text2); line-height: 1.7; margin-bottom: 1rem; }
+    .prod-meta { display: flex; align-items: center; justify-content: space-between; }
+    .prod-date { font-size: .7rem; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+    .prod-icon { font-size: 1.2rem; }
+
+    /* DATA INSIGHT WIDGET */
+    #insight { background: var(--bg); }
+    .insight-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+    }
+    .insight-title { font-size: 1.4rem; font-weight: 800; margin-bottom: .75rem; }
+    .insight-desc { color: var(--text2); font-size: .9rem; line-height: 1.7; margin-bottom: 1.5rem; }
+    .insight-list { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .insight-list li {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .85rem; color: var(--text2);
+    }
+    .insight-list li::before { content: '▹'; color: var(--green); font-size: .75rem; }
+    .chart-mock {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem;
+    }
+    .chart-title { font-size: .75rem; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; }
+    .bars { display: flex; align-items: flex-end; gap: .5rem; height: 100px; }
+    .bar-group { display: flex; flex-direction: column; align-items: center; gap: .3rem; flex: 1; }
+    .bar {
+      width: 100%; border-radius: 3px 3px 0 0;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      transition: height .8s ease;
+    }
+    .bar-label { font-size: .6rem; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+    .chart-legend { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: .3rem; font-size: .7rem; color: var(--text2); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+    .legend-dot.alt { background: var(--accent3); }
+
+    /* CONTACT */
+    #contact { background: var(--bg2); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+    .contact-item {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      text-decoration: none; color: var(--text);
+      transition: border-color .2s, transform .2s;
+    }
+    .contact-item:hover { border-color: var(--accent); transform: translateX(4px); }
+    .contact-ico { font-size: 1.25rem; }
+    .contact-label { font-size: .75rem; color: var(--text3); }
+    .contact-val { font-weight: 600; font-size: .9rem; }
+    .contact-form { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+    .form-row { margin-bottom: 1.25rem; }
+    label { display: block; font-size: .75rem; font-weight: 600; color: var(--text2); margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .5px; }
+    input, textarea {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 8px; padding: .75rem 1rem; color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: .875rem;
+      transition: border-color .2s; outline: none;
+    }
+    input:focus, textarea:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 120px; }
+    .form-btn {
+      width: 100%; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; padding: .85rem;
+      font-weight: 700; font-size: .9rem; cursor: pointer;
+      transition: opacity .2s, transform .2s;
+    }
+    .form-btn:hover { opacity: .88; transform: translateY(-1px); }
+    .form-note { font-size: .7rem; color: var(--text3); text-align: center; margin-top: .75rem; }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 2rem; text-align: center;
+    }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap }
+    .footer-copy { font-size: .8rem; color: var(--text3); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: .8rem; color: var(--text3); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem; }
+      .nav-links { display: none; }
+      .about-grid, .contact-grid, .insight-card { grid-template-columns: 1fr; }
+      .about-visual { margin-bottom: 2rem; }
+      .hero-stats { gap: 1.5rem; }
+      .footer-inner { flex-direction: column; gap: 1rem; }
+    }
+
+    /* FADE IN */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">rdgcdasilva</div>
+  <ul class="nav-links">
+    <li><a href="#about">Sobre</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#career">Carreira</a></li>
+    <li><a href="#projects">Projetos</a></li>
+    <li><a href="#productions">Produções</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+  <a href="mailto:rdgcdasilva@gmail.com" class="nav-cta">Fale comigo</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content fade-in">
+    <div class="hero-badge"><span></span>Disponível para novos projetos</div>
+    <h1>Rodrigo C. da Silva<br /><span class="gradient-text">Data &amp; People Analytics</span></h1>
+    <p class="hero-sub">Transformo dados em decisões estratégicas — de gestão de talentos a análise de risco em seguros.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Ver Projetos
+      </a>
+      <a href="#contact" class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        Entrar em contato
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-num">5+</span><span class="stat-label">Anos de experiência</span></div>
+      <div class="stat-item"><span class="stat-num">3</span><span class="stat-label">Domínios analíticos</span></div>
+      <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">Orientado a dados</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-visual fade-in">
+        <div class="avatar-ring"><div class="avatar-inner">🧑‍💻</div></div>
+        <div class="about-tags">
+          <span class="tag">Python</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Machine Learning</span>
+          <span class="tag">Jupyter</span>
+          <span class="tag">HR Analytics</span>
+          <span class="tag">Insurance</span>
+          <span class="tag">Data Science</span>
+        </div>
+      </div>
+      <div class="about-text fade-in">
+        <span class="section-tag">Sobre mim</span>
+        <h2>Da curiosidade aos <span class="gradient-text">insights</span></h2>
+        <p>Minha trajetória começou com uma pergunta simples: <em>o que os dados podem nos dizer sobre as pessoas?</em> Desde então, venho combinando estatística, programação e conhecimento de negócios para responder perguntas difíceis.</p>
+        <p>Com foco em <strong>People Analytics</strong> e <strong>Insurance Analytics</strong>, trabalho na intersecção entre dados e estratégia — ajudando organizações a tomar decisões mais inteligentes sobre talento, risco e performance.</p>
+        <p>Acredito que bons dados não bastam: é preciso saber contar a história certa para gerar impacto real.</p>
+        <div class="about-info">
+          <div class="info-item">
+            <div class="info-label">Localização</div>
+            <div class="info-value">Brasil 🇧🇷</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Foco atual</div>
+            <div class="info-value">Insurance Data</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">GitHub desde</div>
+            <div class="info-value">2019</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">E-mail</div>
+            <div class="info-value">rdgcdasilva@gmail.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <span class="section-tag">Habilidades</span>
+    <h2>Stack &amp; <span class="gradient-text">competências</span></h2>
+    <p class="section-desc">Ferramentas e conhecimentos que aplico no dia a dia para extrair valor dos dados.</p>
+    <div class="skills-grid">
+      <div class="skill-card fade-in">
+        <div class="skill-icon">🐍</div>
+        <div class="skill-name">Python &amp; Data Science</div>
+        <div class="skill-desc">Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn — análise e modelagem de ponta a ponta.</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        <div class="skill-pct">90%</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">📓</div>
+        <div class="skill-name">Jupyter Notebooks</div>
+        <div class="skill-desc">Desenvolvimento de análises reproduzíveis, documentadas e compartilháveis.</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+        <div class="skill-pct">92%</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">👥</div>
+        <div class="skill-name">People Analytics</div>
+        <div class="skill-desc">Análise de desempenho, gestão de talentos, turnover, engajamento e workforce planning.</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        <div class="skill-pct">85%</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">🛡️</div>
+        <div class="skill-name">Insurance Analytics</div>
+        <div class="skill-desc">Análise de sinistros, precificação, detecção de fraude e modelagem de risco.</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        <div class="skill-pct">80%</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">📊</div>
+        <div class="skill-name">Visualização de Dados</div>
+        <div class="skill-desc">Criação de dashboards e visualizações que comunicam insights com clareza.</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div>
+        <div class="skill-pct">82%</div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-icon">🤖</div>
+        <div class="skill-name">Machine Learning</div>
+        <div class="skill-desc">Modelos preditivos supervisionados e não-supervisionados aplicados a problemas reais de negócio.</div>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        <div class="skill-pct">75%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAREER -->
+<section id="career">
+  <div class="section-inner">
+    <span class="section-tag">Carreira</span>
+    <h2>Linha do <span class="gradient-text">tempo</span></h2>
+    <p class="section-desc">Uma jornada orientada a dados, do RH estratégico ao mundo dos seguros.</p>
+    <div class="timeline fade-in">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-period">2021 — presente</span>
+          <div class="timeline-role">Analista de Dados — Insurance</div>
+          <div class="timeline-company">Setor de Seguros</div>
+          <div class="timeline-desc">Análise de bases de dados de seguros para identificação de padrões de sinistros, modelagem preditiva de risco e suporte a decisões de precificação e subscrição.</div>
+          <div class="timeline-chips">
+            <span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">Risk Modeling</span><span class="chip">EDA</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-period">2019 — 2021</span>
+          <div class="timeline-role">Analista de People Analytics</div>
+          <div class="timeline-company">Gestão de Pessoas / RH Estratégico</div>
+          <div class="timeline-desc">Desenvolvimento de modelos e dashboards analíticos para gestão de desempenho, mapeamento de talentos e análise preditiva de turnover. Projetos de Data Science aplicados à área de RH.</div>
+          <div class="timeline-chips">
+            <span class="chip">People Analytics</span><span class="chip">Jupyter</span><span class="chip">Sklearn</span><span class="chip">HR Data</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-period">Antes de 2019</span>
+          <div class="timeline-role">Formação &amp; Início da jornada em dados</div>
+          <div class="timeline-company">Formação acadêmica</div>
+          <div class="timeline-desc">Base acadêmica em Administração, Estatística ou área correlata. Primeiros contatos com análise quantitativa e tecnologia, despertando a paixão por transformar dados em decisões.</div>
+          <div class="timeline-chips">
+            <span class="chip">Estatística</span><span class="chip">Excel</span><span class="chip">SQL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <span class="section-tag">Projetos</span>
+    <h2>O que já <span class="gradient-text">construí</span></h2>
+    <p class="section-desc">Projetos analíticos aplicados a problemas reais de negócio.</p>
+    <div class="projects-grid">
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-icon">🛡️</div>
+          <div><div class="project-title">Insurance Analytics</div><div class="project-subtitle">Análise de dados de seguros</div></div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Exploração e análise de uma base real de dados de seguros com mais de 1.300 registros. Inclui análise exploratória completa, identificação de padrões de sinistros, correlação entre variáveis de risco e visualizações estratégicas.</p>
+          <div class="project-tech">
+            <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">EDA</span><span class="tag">Insurance</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <a href="https://github.com/rdgcdasilva/Insurance" class="project-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            Ver no GitHub
+          </a>
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-icon" style="background:linear-gradient(135deg,#10b981,#06b6d4)">👥</div>
+          <div><div class="project-title">Gestão de Talentos</div><div class="project-subtitle">People Analytics aplicado</div></div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Modelo analítico para gestão estratégica de talentos. Mapeamento de competências, identificação de high-potentials, análise de lacunas de talento e modelos preditivos para retenção e desenvolvimento.</p>
+          <div class="project-tech">
+            <span class="tag">Jupyter</span><span class="tag">Sklearn</span><span class="tag">HR Analytics</span><span class="tag">ML</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <span class="project-link" style="cursor:default;opacity:.6">🔒 Repositório privado</span>
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">📈</div>
+          <div><div class="project-title">Gestão de Performance</div><div class="project-subtitle">Análise de desempenho organizacional</div></div>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">Análise quantitativa de ciclos de avaliação de desempenho. Correlação entre métricas de produtividade e engajamento, cluster de perfis de performance e recomendações data-driven para líderes.</p>
+          <div class="project-tech">
+            <span class="tag">Jupyter</span><span class="tag">NumPy</span><span class="tag">Clustering</span><span class="tag">Visualização</span>
+          </div>
+        </div>
+        <div class="project-footer">
+          <span class="project-link" style="cursor:default;opacity:.6">🔒 Repositório privado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTIONS -->
+<section id="productions">
+  <div class="section-inner">
+    <span class="section-tag">Produções</span>
+    <h2>Análises &amp; <span class="gradient-text">conteúdo</span></h2>
+    <p class="section-desc">Estudos, análises técnicas e conteúdo produzido ao longo da trajetória.</p>
+    <div class="prod-grid">
+      <div class="prod-card fade-in">
+        <div class="prod-type">📊 Análise de Dados</div>
+        <div class="prod-title">Exploratory Data Analysis — Insurance Dataset</div>
+        <div class="prod-desc">Análise exploratória completa de dados de seguros: distribuições, outliers, correlações e insights acionáveis sobre perfil de clientes e sinistros.</div>
+        <div class="prod-meta"><span class="prod-date">2021</span><span class="prod-icon">🔗</span></div>
+      </div>
+      <div class="prod-card fade-in">
+        <div class="prod-type">🤖 Machine Learning</div>
+        <div class="prod-title">Modelos Preditivos para Turnover</div>
+        <div class="prod-desc">Desenvolvimento de modelos de classificação para prever saída voluntária de colaboradores, usando features comportamentais e de desempenho.</div>
+        <div class="prod-meta"><span class="prod-date">2021</span><span class="prod-icon">📓</span></div>
+      </div>
+      <div class="prod-card fade-in">
+        <div class="prod-type">👥 People Analytics</div>
+        <div class="prod-title">Mapeamento de Talentos com Clustering</div>
+        <div class="prod-desc">Uso de algoritmos de clusterização para segmentar colaboradores por perfil de competências e recomendar trilhas de desenvolvimento personalizadas.</div>
+        <div class="prod-meta"><span class="prod-date">2020</span><span class="prod-icon">📓</span></div>
+      </div>
+      <div class="prod-card fade-in">
+        <div class="prod-type">📈 Dashboard</div>
+        <div class="prod-title">Dashboard de Performance Organizacional</div>
+        <div class="prod-desc">Painel analítico interativo para acompanhamento de indicadores-chave de desempenho, com drill-down por área, cargo e ciclo avaliativo.</div>
+        <div class="prod-meta"><span class="prod-date">2020</span><span class="prod-icon">📊</span></div>
+      </div>
+      <div class="prod-card fade-in">
+        <div class="prod-type">🛡️ Risk Analytics</div>
+        <div class="prod-title">Análise de Risco em Seguros</div>
+        <div class="prod-desc">Estudo de variáveis preditoras de sinistros em carteiras de seguros, com modelagem estatística e recomendações de precificação diferenciada.</div>
+        <div class="prod-meta"><span class="prod-date">2021</span><span class="prod-icon">📓</span></div>
+      </div>
+      <div class="prod-card fade-in">
+        <div class="prod-type">💡 Metodologia</div>
+        <div class="prod-title">Framework de Análise de Dados em RH</div>
+        <div class="prod-desc">Construção de um framework metodológico próprio para estruturar projetos de People Analytics — da coleta de dados à tomada de decisão.</div>
+        <div class="prod-meta"><span class="prod-date">2019</span><span class="prod-icon">📄</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA INSIGHT WIDGET -->
+<section id="insight">
+  <div class="section-inner">
+    <div class="insight-card fade-in">
+      <div>
+        <span class="section-tag">Por que dados?</span>
+        <div class="insight-title">Dados mudam <span class="gradient-text">decisões</span></div>
+        <p class="insight-desc">Trabalho para transformar a cultura analítica das organizações — mostrando que dados bem estruturados reduzem incerteza, aumentam eficiência e criam vantagem competitiva real.</p>
+        <ul class="insight-list">
+          <li>Empresas data-driven têm 23x mais chance de adquirir clientes</li>
+          <li>People Analytics reduz turnover em até 35%</li>
+          <li>Modelos preditivos de risco reduzem sinistros imprevistos</li>
+          <li>Decisões baseadas em dados são 5x mais rápidas</li>
+        </ul>
+      </div>
+      <div>
+        <div class="chart-mock">
+          <div class="chart-title">Impacto analítico por domínio</div>
+          <div class="bars">
+            <div class="bar-group"><div class="bar" style="height:85px"></div><div class="bar-label">RH</div></div>
+            <div class="bar-group"><div class="bar" style="height:70px;background:linear-gradient(180deg,#06b6d4,#4f8ef7)"></div><div class="bar-label">Seguros</div></div>
+            <div class="bar-group"><div class="bar" style="height:60px;background:linear-gradient(180deg,#7c3aed,#4f8ef7)"></div><div class="bar-label">Risco</div></div>
+            <div class="bar-group"><div class="bar" style="height:78px"></div><div class="bar-label">Perf.</div></div>
+            <div class="bar-group"><div class="bar" style="height:65px;background:linear-gradient(180deg,#10b981,#06b6d4)"></div><div class="bar-label">ML</div></div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot"></div>Projetos entregues</div>
+            <div class="legend-item"><div class="legend-dot alt"></div>Insights gerados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <span class="section-tag">Contato</span>
+    <h2>Vamos <span class="gradient-text">conversar?</span></h2>
+    <div class="contact-grid">
+      <div>
+        <p style="color:var(--text2);margin-bottom:1rem">Estou aberto a projetos analíticos, consultorias, parcerias e novas oportunidades. Se você tem um problema de dados para resolver, entre em contato.</p>
+        <div class="contact-links">
+          <a href="mailto:rdgcdasilva@gmail.com" class="contact-item">
+            <span class="contact-ico">📧</span>
+            <div><div class="contact-label">E-mail</div><div class="contact-val">rdgcdasilva@gmail.com</div></div>
+          </a>
+          <a href="https://github.com/rdgcdasilva" target="_blank" rel="noopener" class="contact-item">
+            <span class="contact-ico">🐙</span>
+            <div><div class="contact-label">GitHub</div><div class="contact-val">github.com/rdgcdasilva</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="contact-form">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem">Enviar mensagem</h3>
+        <form onsubmit="handleForm(event)">
+          <div class="form-row"><label>Nome</label><input type="text" placeholder="Seu nome" required /></div>
+          <div class="form-row"><label>E-mail</label><input type="email" placeholder="seuemail@exemplo.com" required /></div>
+          <div class="form-row"><label>Mensagem</label><textarea placeholder="Conte sobre seu projeto ou dúvida..." required></textarea></div>
+          <button type="submit" class="form-btn" id="form-btn">Enviar mensagem</button>
+          <p class="form-note" id="form-msg"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner" style="max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+    <div class="footer-copy">© 2024 Rodrigo C. da Silva — Feito com dados e cuidado.</div>
+    <div class="footer-links">
+      <a href="#hero">Início</a>
+      <a href="https://github.com/rdgcdasilva">GitHub</a>
+      <a href="mailto:rdgcdasilva@gmail.com">E-mail</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Form handler
+  function handleForm(e) {
+    e.preventDefault();
+    const btn = document.getElementById('form-btn');
+    const msg = document.getElementById('form-msg');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = '✓ Mensagem enviada!';
+      msg.textContent = 'Obrigado! Responderei em breve.';
+      msg.style.color = '#10b981';
+      setTimeout(() => {
+        btn.textContent = 'Enviar mensagem';
+        btn.disabled = false;
+        msg.textContent = '';
+        e.target.reset();
+      }, 3000);
+    }, 1200);
+  }
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+    });
+  });
+</script>
+</body>
+</html>
