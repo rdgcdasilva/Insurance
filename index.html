@@ -359,6 +359,9 @@
     .app-showcase {
       display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
     }
+    .apps-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;
+    }
     .app-card-main {
       background: linear-gradient(135deg, var(--accent), var(--teal));
       border-radius: 16px; padding: 2.5rem;
@@ -464,7 +467,7 @@
       .nav-links { display: none; }
       .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
       .inner { padding: 0 1.5rem; }
-      .about-grid, .career-grid, .research-grid, .contact-layout, .teaching-grid, .patents-grid, .skills-layout { grid-template-columns: 1fr; }
+      .about-grid, .career-grid, .research-grid, .contact-layout, .teaching-grid, .patents-grid, .skills-layout, .apps-grid { grid-template-columns: 1fr; }
       .orientandos-grid { grid-template-columns: 1fr; }
     }
 
@@ -1061,42 +1064,45 @@
 <!-- APP -->
 <section id="app">
   <div class="inner">
-    <span class="section-eyebrow">Aplicativo</span>
-    <h2>HospMap — Mapeador de<br/>Hospitalidade Organizacional</h2>
-    <p class="section-lead">Ferramenta interativa que operacionaliza o constructo HospGap para diagnosticar a hospitalidade de qualquer organização a partir de dados públicos.</p>
-    <div class="app-showcase fade">
+    <span class="section-eyebrow">Aplicativos</span>
+    <h2>Ferramentas de hospitalidade<br/>em uso real</h2>
+    <p class="section-lead">Dois sistemas desenvolvidos para operacionalizar a pesquisa em hospitalidade — um para diagnóstico organizacional, outro para avaliação individual.</p>
+    <div class="apps-grid fade">
+
+      <!-- APP 1 -->
       <div class="app-card-main">
         <div class="app-icon-big">🗺️</div>
         <div class="app-name">HospMap</div>
         <div class="app-tagline">Diagnóstico de hospitalidade organizacional via dados públicos — Indeed, Glassdoor e Reclame Aqui processados por NLP.</div>
         <div class="app-features">
-          <div class="app-feature">Análise de sentimento em avaliações de funcionários</div>
           <div class="app-feature">Score HospGap em 5 dimensões (CA, MP, CI, AE, RE)</div>
           <div class="app-feature">Comparativo intra-setor com z-score normalizado</div>
           <div class="app-feature">Matriz Interno–Externo de hospitalidade</div>
           <div class="app-feature">Relatório visual interativo por empresa</div>
         </div>
+        <div style="margin-top:.75rem;font-size:.68rem;opacity:.75;margin-bottom:1.5rem">Nível: Organizacional · Base: HospGap Framework</div>
         <a href="https://rdgcdasilva.github.io/Insurance/mapeamento-hospitalidade.html" target="_blank" rel="noopener" class="app-cta">
-          Acessar o aplicativo →
+          Acessar o HospMap →
         </a>
       </div>
-      <div class="app-info">
-        <div class="app-info-card">
-          <div class="app-info-icon">🔬</div>
-          <div class="app-info-title">Base científica</div>
-          <div class="app-info-desc">Construído sobre o framework HospGap — pesquisa com 212 relatos verbatim de 9 empresas brasileiras em 5 setores. Metodologia publicada e em submissão internacional.</div>
+
+      <!-- APP 2 -->
+      <div class="app-card-main" style="background: linear-gradient(135deg, var(--teal), var(--gold));">
+        <div class="app-icon-big">🤝</div>
+        <div class="app-name">Avaliação de Hospitalidade</div>
+        <div class="app-tagline">Avaliação do perfil de hospitalidade individual baseada na obra de Dawson — mede a disposição pessoal para acolher o outro.</div>
+        <div class="app-features">
+          <div class="app-feature">Escala validada com base em Dawson</div>
+          <div class="app-feature">Diagnóstico do perfil individual de hospitalidade</div>
+          <div class="app-feature">Resultado imediato com interpretação</div>
+          <div class="app-feature">Aplicável a gestores, docentes e pesquisadores</div>
         </div>
-        <div class="app-info-card">
-          <div class="app-info-icon">📊</div>
-          <div class="app-info-title">O que o app entrega</div>
-          <div class="app-info-desc">Diagnóstico comparativo da cultura de hospitalidade da organização versus concorrentes do mesmo setor, com visualizações interativas e indicadores acionáveis para gestores de pessoas.</div>
-        </div>
-        <div class="app-info-card">
-          <div class="app-info-icon">🎯</div>
-          <div class="app-info-title">Para quem é útil</div>
-          <div class="app-info-desc">Gestores de RH, pesquisadores de hospitalidade organizacional, consultores de cultura e líderes que querem medir o gap entre o que a empresa promete e o que pratica.</div>
-        </div>
+        <div style="margin-top:.75rem;font-size:.68rem;opacity:.75;margin-bottom:1.5rem">Nível: Individual · Base: Dawson (obra de referência)</div>
+        <a href="https://rdgcdasilva.github.io/Insurance/hospitality-app/avaliacao-hospitalidade.html" target="_blank" rel="noopener" class="app-cta" style="color:var(--teal);">
+          Fazer a avaliação →
+        </a>
       </div>
+
     </div>
   </div>
 </section>
