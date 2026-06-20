@@ -11,52 +11,64 @@ header{background:linear-gradient(135deg,#1e3a8a,#2563eb 55%,#0d9488);color:#fff
 header h1{font-size:clamp(1.4rem,4vw,2rem);font-weight:800;margin-bottom:.4rem}
 header p{font-size:.9rem;opacity:.85;max-width:560px;margin:0 auto}
 .badge{display:inline-block;margin-top:.9rem;font-size:.75rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:.25rem .9rem}
-main{flex:1;max-width:760px;margin:0 auto;padding:2rem 1rem 4rem;width:100%}
-h2{font-size:1rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.8px;margin-bottom:1.2rem}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+main{flex:1;max-width:760px;margin:0 auto;padding:2.5rem 1rem 4rem;width:100%}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
 @media(max-width:540px){.cards{grid-template-columns:1fr}}
-.card{background:#fff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.05);padding:1.8rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:.8rem;transition:box-shadow .2s,transform .2s}
-.card:hover{box-shadow:0 8px 32px rgba(0,0,0,.12);transform:translateY(-2px)}
-.card-icon{font-size:2.4rem}
-.card-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:.2rem .7rem;border-radius:20px;display:inline-block;width:fit-content}
-.card-label.blue{background:#eff6ff;color:#2563eb}
-.card-label.teal{background:#f0fdfa;color:#0d9488}
-.card h3{font-size:1.05rem;font-weight:700}
-.card p{font-size:.83rem;color:#64748b;line-height:1.6}
-.card-authors{font-size:.75rem;color:#94a3b8;margin-top:auto;padding-top:.6rem;border-top:1px solid #f1f5f9}
-.card-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.2rem;border-radius:8px;font-size:.85rem;font-weight:600;margin-top:.3rem;width:fit-content}
+.card{background:#fff;border-radius:16px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.05);text-decoration:none;color:inherit;display:flex;flex-direction:column;overflow:hidden;transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:0 12px 36px rgba(0,0,0,.14);transform:translateY(-4px)}
+.card-image{height:180px;display:flex;align-items:center;justify-content:center;position:relative}
+.card-image.employee{background:linear-gradient(160deg,#2563eb,#1e3a8a)}
+.card-image.org{background:linear-gradient(160deg,#0d9488,#0f766e)}
+.card-image svg{width:84px;height:84px}
+.card-body{padding:1.4rem 1.2rem 1.6rem;display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center}
+.card h3{font-size:1.1rem;font-weight:700}
+.card-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.4rem;border-radius:8px;font-size:.85rem;font-weight:600}
 .btn-blue{background:#2563eb;color:#fff}
 .btn-teal{background:#0d9488;color:#fff}
-footer{text-align:center;padding:1.5rem;font-size:.75rem;color:#94a3b8;border-top:1px solid #e2e8f0}
 </style>
 </head>
 <body>
 <header>
   <h1>🏨 Avaliação de Hospitalidade</h1>
-  <p>Instrumentos baseados em pesquisa científica para medir hospitalidade individual, organizacional e por dados abertos</p>
+  <p>Instrumentos baseados em pesquisa científica para medir hospitalidade individual e organizacional</p>
   <span class="badge">Universidade Anhembi Morumbi · Grupo de Pesquisa em Hospitalidade</span>
 </header>
 <main>
-  <h2>Selecione o instrumento</h2>
   <div class="cards">
     <a class="card" href="hospitality-app/avaliacao-hospitalidade.html">
-      <div class="card-icon">📋</div>
-      <span class="card-label blue">Questionário · Escala Likert</span>
-      <h3>Escala de Cultura de Hospitalidade</h3>
-      <p>Avalia atributos pessoais e cultura organizacional com base nos 10 fatores identificados por análise de componentes principais (n = 741).</p>
-      <div class="card-authors">Dawson, Abbott &amp; Shoemaker · <em>Int. J. Hospitality Management</em> · 2011</div>
-      <span class="card-btn btn-blue">Abrir instrumento →</span>
+      <div class="card-image employee">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="20" r="11" fill="#fff" fill-opacity=".95"/>
+          <path d="M10 56c0-12.15 9.85-22 22-22s22 9.85 22 22" fill="#fff" fill-opacity=".95"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Avaliação da Hospitalidade do Empregado</h3>
+        <span class="card-btn btn-blue">Abrir instrumento →</span>
+      </div>
     </a>
     <a class="card" href="mapeamento-hospitalidade.html">
-      <div class="card-icon">📊</div>
-      <span class="card-label teal">Dados Abertos · Tipologia 2×2</span>
-      <h3>Mapeamento por Dados Abertos</h3>
-      <p>Posiciona empresas em 5 eixos analíticos (alinhamento cultural, práticas gerenciais, clima, acessibilidade e resposta) com base em plataformas públicas.</p>
-      <div class="card-authors">Silva, Wada, Ferro, Cavenaghi et al. · <em>Anhembi Morumbi</em> · No prelo</div>
-      <span class="card-btn btn-teal">Abrir instrumento →</span>
+      <div class="card-image org">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="22" width="18" height="34" fill="#fff" fill-opacity=".95"/>
+          <rect x="30" y="10" width="26" height="46" fill="#fff" fill-opacity=".8"/>
+          <rect x="13" y="28" width="4" height="4" fill="#0f766e"/>
+          <rect x="13" y="38" width="4" height="4" fill="#0f766e"/>
+          <rect x="13" y="48" width="4" height="4" fill="#0f766e"/>
+          <rect x="36" y="16" width="4" height="4" fill="#0f766e"/>
+          <rect x="46" y="16" width="4" height="4" fill="#0f766e"/>
+          <rect x="36" y="26" width="4" height="4" fill="#0f766e"/>
+          <rect x="46" y="26" width="4" height="4" fill="#0f766e"/>
+          <rect x="36" y="36" width="4" height="4" fill="#0f766e"/>
+          <rect x="46" y="36" width="4" height="4" fill="#0f766e"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Avaliação da Hospitalidade da Organização</h3>
+        <span class="card-btn btn-teal">Abrir instrumento →</span>
+      </div>
     </a>
   </div>
 </main>
-<footer>Ambos os instrumentos salvam resultados na sua planilha do Google Sheets via Apps Script.</footer>
 </body>
 </html>
